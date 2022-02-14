@@ -1,0 +1,6 @@
+module Pods_wordlegame_wordlegameTests {
+  umbrella header "Pods-wordlegame-wordlegameTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
