@@ -1,67 +1,29 @@
-import React, {useRef} from 'react';
+import React, {useEffect} from 'react';
 import {
   Alert,
-  Dimensions,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
-  Animated,
-  Easing,
 } from 'react-native';
-const {width, height} = Dimensions.get('window');
-const SIZE = 55;
-const SIZE_QWERTY = width / 10;
-
-export type Exist = 0 | 1 | 2;
-
-const existTypeColor: Record<Exist, string> = {
-  0: '#FFFFFF',
-  1: '#4CAF50',
-  2: '#FFEB3B',
-};
-
-export interface CellStruct {
-  x: number;
-  y: number;
-  value: string;
-  exist: Exist; // can be 0=no exist, 1 exist and is the same position, and 2, exist but not in the same position
-}
-
-const qwerty = [
-  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ñ'],
-  ['0', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '1'],
-];
-
-export type GridStruct = CellStruct[][];
-export interface GridLayout {
-  evaluate: boolean;
-  row: Array<CellStruct>;
-}
-
-export type GridLayoutType = Array<GridLayout>;
-
-const gridBuilder = (size: number): GridLayoutType => {
-  return [...Array(size)].map((_, x: number): GridLayout => {
-    return {
-      evaluate: false,
-      row: [...Array(5)].map((_, y: number) => {
-        return {x, y, value: '', exist: 0};
-      }),
-    };
-  });
-};
-
-const generateQwertyKeyboard = () => {};
+import {CellStruct, Exist, GridLayout, GridLayoutType} from './src/types';
+import {gridBuilder} from './src/utils/Builders';
+import {
+  existTypeColor,
+  existTypeColorText,
+  SIZE,
+  SIZE_QWERTY,
+  _qwerty,
+} from './src/utils/Const';
 
 type Props = {};
 
 const App = (props: Props) => {
   const [grid, setGrid] = React.useState<GridLayoutType>(gridBuilder(6));
   const [isSolved, setIsSolved] = React.useState(false);
+  const [qwerty, setQuerty] = React.useState(_qwerty);
+  const [letters, setLetters] = React.useState<Array<CellStruct>>([]);
   const [evaluatingRow, setIsEvaluatingRow] = React.useState(false);
   const [actualRow, setActualRow] = React.useState(0);
   const [actualColum, setActualColum] = React.useState(0);
@@ -69,6 +31,7 @@ const App = (props: Props) => {
 
   const returnGrid = () => {
     return grid.map((column, index) => {
+      const rowIsEvaluated = column.evaluate;
       return (
         <View key={index} style={{flexDirection: 'row', paddingHorizontal: 16}}>
           {column.row.map((row, ind) => {
@@ -81,7 +44,7 @@ const App = (props: Props) => {
                   borderColor: '#BDBDBD',
                   width: SIZE,
                   height: SIZE,
-                  backgroundColor: evaluatingRow
+                  backgroundColor: rowIsEvaluated
                     ? existTypeColor[row.exist]
                     : 'white',
                   marginRight: 3,
@@ -89,7 +52,14 @@ const App = (props: Props) => {
                   marginBottom: 3,
                   borderRadius: 3,
                 }}>
-                <Text style={{fontSize: 20, textAlign: 'center'}}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    textAlign: 'center',
+                    color: rowIsEvaluated
+                      ? existTypeColorText[row.exist]
+                      : 'black',
+                  }}>
                   {row.value}
                 </Text>
               </View>
@@ -98,6 +68,45 @@ const App = (props: Props) => {
         </View>
       );
     });
+  };
+
+  const evaluateBackButton = (letter: string) => {
+    const newGrid = [...grid];
+
+    setIsEvaluatingRow(false);
+    const column = actualColum == 4 ? actualColum : actualColum - 1;
+    newGrid[actualRow].row[column].value = '';
+    if (actualColum > 0) {
+      setActualColum(column);
+    }
+    setGrid(newGrid);
+  };
+
+  const evaluateEnterButton = (letter: string) => {
+    const newGrid = [...grid];
+    // enter
+    setIsEvaluatingRow(true);
+    // si es una palabra valida
+    // evaluamos la palabra
+    // repintamos el grid
+    // aumentamos la fila
+    const word = newGrid[actualRow].row.map(colum => colum.value).join('');
+    // Aqui hago la llamada al diccionario rae
+    const validWord = word;
+    if (validWord) {
+      const result = findDiff(word);
+      result.map((wordResult, index) => {
+        newGrid[actualRow].row[index].exist = wordResult.exist;
+      });
+      newGrid[actualRow].evaluate = true;
+      setGrid(newGrid);
+      if (actualRow < 5) {
+        setActualRow(actualRow + 1);
+        setActualColum(0);
+      }
+    } else {
+      Alert.alert('Palabra no valida');
+    }
   };
 
   const updateLetter = async (letter: string) => {
@@ -111,38 +120,15 @@ const App = (props: Props) => {
       }
       setGrid(newGrid);
     }
+
+    //Back button
     if (letter === '0') {
-      setIsEvaluatingRow(false);
-      newGrid[actualRow].row[actualColum].value = '';
-      if (actualColum > 0) {
-        setActualColum(actualColum - 1);
-      }
-      setGrid(newGrid);
+      evaluateBackButton(letter);
     }
 
+    //Enter button
     if (letter === '1') {
-      setIsEvaluatingRow(true);
-      // si es una palabra valida
-      // evaluamos la palabra
-      // repintamos el grid
-      // aumentamos la fila
-      const word = newGrid[actualRow].row.map(colum => colum.value).join('');
-      // Aqui hago la llamada al diccionario rae
-      const validWord = word;
-      console.log({word});
-      if (validWord) {
-        const result = findDiff(word);
-        result.map((wordResult, index) => {
-          newGrid[actualRow].row[index].exist = wordResult.exist;
-        });
-        setGrid(newGrid);
-        if (actualRow < 5) {
-          setActualRow(actualRow + 1);
-          setActualColum(0);
-        }
-      } else {
-        Alert.alert('Palabra no valida');
-      }
+      evaluateEnterButton(letter);
     }
   };
 
@@ -183,8 +169,6 @@ const App = (props: Props) => {
     position: number,
     string: string,
   ): Exist => {
-    var a = [],
-      i = -1;
     let samePosition = false;
     let exist = false;
     let isIn = false;
@@ -212,56 +196,75 @@ const App = (props: Props) => {
     return letter.toUpperCase();
   };
 
+  useEffect(() => {
+    const letters: any = [];
+    grid.map(row => {
+      if (row.evaluate) {
+        row.row.map(letter => {
+          if (letter.value !== '') {
+            letters.push(letter);
+          }
+        });
+      }
+    });
+    setLetters(letters);
+  }, [grid, evaluatingRow]);
+
+  useEffect(() => {
+    const qwertyLetters = [...qwerty];
+    letters.map(letterMarked => {
+      qwertyLetters.map(quertyRow => {
+        return quertyRow.map(quertyLetter => {
+          if (letterMarked.value === quertyLetter.letter.toUpperCase()) {
+            quertyLetter.color = existTypeColor[letterMarked.exist];
+            quertyLetter.textColor = existTypeColorText[letterMarked.exist];
+          }
+        });
+      });
+    });
+    setQuerty(qwerty);
+  }, [actualRow]);
+
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View
-        style={{
-          flex: 1,
-          marginTop: 55,
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-        }}>
-        {returnGrid()}
-      </View>
-      <View style={{flex: 1, alignItems: 'center'}}>
-        <View style={{marginTop: 75}}>
-          {qwerty.map((row, index) => {
-            return (
-              <View
-                key={index + Math.random()}
-                style={{flexDirection: 'row', marginBottom: 10}}>
-                {row.map((letter, letterIndex) => {
-                  return (
-                    <TouchableOpacity
-                      key={letter}
-                      onPress={() => {
-                        updateLetter(letter);
-                      }}>
-                      <View
-                        style={{
+      <View style={styles.gridContainer}>{returnGrid()}</View>
+      <View style={styles.qwertyContainer}>
+        {qwerty.map((row, index) => {
+          return (
+            <View key={index + Math.random()} style={styles.qwertyRow}>
+              {row.map(letter => {
+                return (
+                  <TouchableOpacity
+                    key={letter.letter}
+                    onPress={() => {
+                      updateLetter(letter.letter);
+                    }}>
+                    <View
+                      style={[
+                        {
                           width:
-                            letter === '1' || letter === '0'
+                            letter.letter === '1' || letter.letter === '0'
                               ? SIZE_QWERTY + 15
                               : SIZE_QWERTY - 3,
                           height: SIZE_QWERTY + 10,
-                          borderWidth: 1,
-                          marginRight: 1,
-                          marginLeft: 1,
-                          justifyContent: 'center',
-                          borderColor: '#c6c6c6',
-                          borderRadius: 5,
-                        }}>
-                        <Text style={{fontSize: 16, textAlign: 'center'}}>
-                          {returnLetter(letter)}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            );
-          })}
-        </View>
+                          backgroundColor: letter.color,
+                        },
+                        styles.qwertyLetterContainer,
+                      ]}>
+                      <Text
+                        style={[
+                          styles.qwertyLetter,
+                          {color: letter.textColor},
+                        ]}>
+                        {returnLetter(letter.letter)}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          );
+        })}
       </View>
     </SafeAreaView>
   );
@@ -269,4 +272,32 @@ const App = (props: Props) => {
 
 export default App;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  gridContainer: {
+    flex: 1,
+    marginTop: 55,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  qwertyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    marginTop: 150,
+  },
+  qwertyRow: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  qwertyLetterContainer: {
+    borderWidth: 1,
+    marginRight: 1,
+    marginLeft: 1,
+    justifyContent: 'center',
+    borderColor: '#c6c6c6',
+    borderRadius: 5,
+  },
+  qwertyLetter: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+});
