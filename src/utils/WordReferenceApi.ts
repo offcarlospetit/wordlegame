@@ -1,15 +1,22 @@
-// //@ts-ignore
-// import Wr from 'wordreference-api'
-// /**
-//  * wr
-//  * Gets the result for the given word, available languages: 'es', 'en', 'it', 'fr'
-//  * @param  {String} word Word to be searched
-//  * @param  {String} from from language, default 'en'
-//  * @param  {String} to   to language, default 'es'
-//  * @return {Object}      Object with the word data
-//  */
-// export const wordReference = async (word: string) => {
-//     const wordResult = await Wr('Rainbow')
-//     console.log({ wordResult })
-//     return wordResult
-// }
+import { Word } from "../sdk";
+import { SDKConfig } from "../sdk/types";
+
+export const ApiCall = async (wordPayload: string): Promise<boolean> => {
+    try {
+        const sdkConfig: SDKConfig = {
+            appId: "nalgas",
+            clientStorage: null,
+            platformId: 'app',
+            url: 'https://api.dictionaryapi.dev',
+        }
+        const word = new Word(sdkConfig)
+        const response = await word.wordRequest({ word: wordPayload })
+        if (response.status.code == 200)
+            return true
+
+        return false
+    } catch (error) {
+        console.log({ error })
+        return false
+    }
+}
