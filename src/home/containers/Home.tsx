@@ -126,15 +126,16 @@ const Home = (props: Props) => {
     exist: Exist;
   }[] => {
     const charEvaluate: Array<string> = [];
+    let same = false;
+    if (word === wordOfTheDay?.word) same = true;
     const result = word.split('').map((char: string, index: number) => {
-      const struct: {letter: string; exist: Exist} = {letter: char, exist: 0};
-      // if (!charEvaluate.find(letter => letter == char)) {
-      const word = wordOfTheDay?.word ?? '';
-
-      const resultFind = locations(char, index, word);
-      struct.exist = resultFind;
+      const struct: {letter: string; exist: Exist} = {letter: char, exist: 1};
+      if (!same) {
+        const word = wordOfTheDay?.word ?? '';
+        const resultFind = locations(char, index, word);
+        struct.exist = resultFind;
+      }
       charEvaluate.push(char);
-      // }
       return struct;
     });
 

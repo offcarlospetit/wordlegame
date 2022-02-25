@@ -58,7 +58,6 @@ buck-out
 .gradle
 local.properties
 *.iml
-/android/
 
 # Node
 node_modules
@@ -69,6 +68,9 @@ package-lock.json
 
 # OS X
 .DS_Store
+
+# Hermes
+/sdks/hermes
 
 # Test generated files
 /ReactAndroid/src/androidTest/assets/AndroidTestBundle.js
