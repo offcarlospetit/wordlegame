@@ -19,7 +19,6 @@ const GridCell = (props: Props) => {
   const letterGridTextDynamic = {
     color: rowIsEvaluated ? TEXT_COLOR_BY_TYPE[exist] : Colors.black,
   } as TextStyle;
-  console.log({letterGridDynamic});
   return (
     <View style={[letterGridDynamic, styles.letterGrid]}>
       <TextUI style={{...letterGridTextDynamic, ...styles.letterGridText}}>

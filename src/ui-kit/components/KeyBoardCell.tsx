@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {TextUI} from '..';
 import Colors from '../constants/Colors';
 import ConstValues from '../constants/ConstValues';
@@ -33,6 +27,7 @@ const KeyBoardCell = (props: Props) => {
     return letter.toUpperCase();
   };
   const letterContainer = getStyle(letter, color);
+
   return (
     <TouchableOpacity
       key={letter}
@@ -59,4 +54,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  animatedBox: {
+    padding: 5,
+    alignItems: 'center',
+  },
 });
+
+{
+  /* <TouchableOpacity
+key={letter}
+onPress={() => {
+  updateLetter(letter);
+}}>
+{color !== Colors.white ? (
+  <Animated.View
+    entering={FlipInEasyY.delay(3000)}
+    style={[letterContainer, styles.qwertyLetterContainer]}>
+    <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
+  </Animated.View>
+) : null}
+{color == Colors.white ? (
+  <Animated.View style={[letterContainer, styles.qwertyLetterContainer]}>
+    <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
+  </Animated.View>
+) : null}
+</TouchableOpacity> */
+}

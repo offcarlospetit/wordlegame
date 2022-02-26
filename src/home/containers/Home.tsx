@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {Alert, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import Animated, {FadeIn, FlipInEasyY} from 'react-native-reanimated';
 import {GridLayoutType, CellStruct, DailyWord} from '../types';
 import Grid from '../components/Grid';
 import Qwerty from '../components/Qwerty';
@@ -16,6 +17,7 @@ const Home = (props: Props) => {
   const [qwerty, setQuerty] = React.useState(_QWERTY);
   const [letters, setLetters] = React.useState<Array<CellStruct>>([]);
   const [evaluatingRow, setIsEvaluatingRow] = React.useState(false);
+  const [show, setShow] = React.useState(false);
   const [actualRow, setActualRow] = React.useState(0);
   const [actualColum, setActualColum] = React.useState(0);
   const [wordOfTheDay, setWordOfTheDay] = React.useState<DailyWord>();
@@ -115,6 +117,7 @@ const Home = (props: Props) => {
 
     //Enter button
     if (letter === '1') {
+      setShow(true);
       evaluateEnterButton(letter);
     }
   };
@@ -192,9 +195,6 @@ const Home = (props: Props) => {
       <View style={styles.qwertyContainer}>
         <Qwerty qwerty={qwerty} updateLetter={updateLetter} />
       </View>
-      <Text style={{alignSelf: 'center', backgroundColor: 'red'}}>
-        {wordOfTheDay?.word}
-      </Text>
     </SafeAreaView>
   );
 };
