@@ -1,6 +1,0 @@
-module Pods_wordlegame {
-  umbrella header "Pods-wordlegame-umbrella.h"
-
-  export *
-  module * { export * }
-}
