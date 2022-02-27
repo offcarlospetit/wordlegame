@@ -1,10 +1,6 @@
 import React from 'react';
-import {Home} from './src/home';
+import BottomTabs from './src/navigation';
 
-type Props = {};
-
-const App = (props: Props) => {
-  return <Home />;
-};
+const App = () => <BottomTabs />;
 
 export default App;

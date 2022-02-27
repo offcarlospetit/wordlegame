@@ -10,14 +10,16 @@
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
     },
     "dependencies": {
-        "@react-navigation/native": "6.0.6",
+        "@react-navigation/bottom-tabs": "^6.2.0",
+        "@react-navigation/native": "^6.0.6",
+        "@react-navigation/native-stack": "^6.5.0",
         "axios": "0.26.0",
         "jsonata": "1.8.6",
         "react": "17.0.2",
         "react-native": "0.66.4",
         "react-native-reanimated": "^2.4.1",
-        "react-native-safe-area-context": "3.3.2",
-        "react-native-screens": "3.10.2",
+        "react-native-safe-area-context": "^3.3.2",
+        "react-native-screens": "^3.10.2",
         "react-native-vector-icons": "9.0.0"
     },
     "devDependencies": {
