@@ -5,6 +5,7 @@ const Colors = {
     black: '#000000',
     white: '#FFFFFF',
     silver: '#BDBDBD',
-    silverSand: '#C6C6C6'
+    silverSand: '#C6C6C6',
+    gold: '#FFE140'
 }
 export default Colors

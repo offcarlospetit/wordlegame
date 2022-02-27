@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 import Animated, { FlipInEasyX } from 'react-native-reanimated';
+import Icon from 'react-native-vector-icons/AntDesign';
 import { TextUI } from '..';
 import Colors from '../constants/Colors';
 import ConstValues from '../constants/ConstValues';
 import { SIZE_QWERTY } from '../utils/Scale';
-const { ONE, BACk, ENTER, ZERO } = ConstValues;
+const { ONE, BACk, ENTER, ZERO, BACK_ICON, ENTER_ICON } = ConstValues;
 type Props = {
   letter: string;
   textColor: string;
@@ -20,15 +21,13 @@ const KeyBoardCell = (props: Props) => {
     return {
       width:
         letter === ONE || letter === ZERO ? SIZE_QWERTY + 15 : SIZE_QWERTY - 3,
-      backgroundColor: color,
+      backgroundColor: letter === ONE || letter === ZERO ? Colors.gold : color,
     } as ViewStyle;
   };
-  const returnLetter = (letter: string): string => {
-    if (letter === ONE) return ENTER;
-    if (letter === ZERO) return BACk;
-    return letter.toUpperCase();
-  };
+  const returnLetter = (letter: string): string => letter.toUpperCase();
+
   const letterContainer = getStyle(letter, color);
+  const returnName = (letter: string): string => letter === ONE ? ENTER_ICON : BACK_ICON;
 
   return (
     <TouchableOpacity
@@ -45,7 +44,11 @@ const KeyBoardCell = (props: Props) => {
       ) : null}
       {color == Colors.white ? (
         <Animated.View style={[letterContainer, styles.qwertyLetterContainer]}>
-          <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
+          {
+            letter === ONE || letter === ZERO ? (
+              <Icon name={returnName(letter)} size={18} color={Colors.silver} />
+            ) : <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
+          }
         </Animated.View>
       ) : null}
     </TouchableOpacity>
