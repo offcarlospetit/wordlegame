@@ -1,15 +1,16 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {KeyBoardCell} from '../../ui-kit';
-import {QwertyTypeArray} from '../types';
+import { StyleSheet, View } from 'react-native';
+import { KeyBoardCell } from '../../ui-kit';
+import { QwertyTypeArray } from '../types';
 
 type Props = {
   qwerty: QwertyTypeArray;
   updateLetter: (letter: string) => {};
+  evaluatingRow: boolean;
 };
 
 const Qwerty = (props: Props) => {
-  const {qwerty, updateLetter} = props;
+  const { qwerty, updateLetter, evaluatingRow } = props;
   return (
     <>
       {qwerty.map((row, index) => {
@@ -23,6 +24,7 @@ const Qwerty = (props: Props) => {
                   color={letter.color}
                   textColor={letter.textColor}
                   updateLetter={updateLetter}
+                  evaluatingRow={evaluatingRow}
                 />
               );
             })}

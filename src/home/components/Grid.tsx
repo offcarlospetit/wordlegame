@@ -1,25 +1,26 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {GridCell} from '../../ui-kit';
-import {GridLayoutType} from '../types';
+import { StyleSheet, Text, View } from 'react-native';
+import { GridCell } from '../../ui-kit';
+import { GridLayoutType } from '../types';
 
 export interface PropsGrid {
   grid: GridLayoutType;
+  evaluatingRow: boolean;
 }
 
 const Grid = (props: PropsGrid) => {
-  const {grid} = props;
+  const { grid, evaluatingRow } = props;
   return (
     <>
-      {grid.map((column, index) => {
-        const rowIsEvaluated = column.evaluate;
+      {grid.map((row, index) => {
+        const rowIsEvaluated = row.evaluate;
         return (
           <View key={index} style={styles.gridLetterColum}>
-            {column.row.map((row, ind) => {
+            {row.row.map((column, ind) => {
               return (
                 <GridCell
-                  value={row.value}
-                  exist={row.exist}
+                  value={column.value}
+                  exist={column.exist}
                   rowIsEvaluated={rowIsEvaluated}
                   key={ind + Math.random() + ''}
                 />

@@ -1,14 +1,13 @@
-import React, {useEffect} from 'react';
-import {Alert, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import Animated, {FadeIn, FlipInEasyY} from 'react-native-reanimated';
-import {GridLayoutType, CellStruct, DailyWord} from '../types';
+import React, { useEffect } from 'react';
+import { Alert, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { GridLayoutType, CellStruct, DailyWord } from '../types';
 import Grid from '../components/Grid';
 import Qwerty from '../components/Qwerty';
-import {gridBuilder} from '../utils/Builders';
-import {DAILY_WORDS, _QWERTY} from '../utils/Const';
-import {COLOR_BY_TYPE, TEXT_COLOR_BY_TYPE} from '../../ui-kit';
-import {Exist} from '../../ui-kit/types';
-import {ApiCall} from '../../utils/WordReferenceApi';
+import { gridBuilder } from '../utils/Builders';
+import { DAILY_WORDS, _QWERTY } from '../utils/Const';
+import { COLOR_BY_TYPE, TEXT_COLOR_BY_TYPE } from '../../ui-kit';
+import { Exist } from '../../ui-kit/types';
+import { ApiCall } from '../../utils/WordReferenceApi';
 type Props = {};
 
 const Home = (props: Props) => {
@@ -17,10 +16,10 @@ const Home = (props: Props) => {
   const [qwerty, setQuerty] = React.useState(_QWERTY);
   const [letters, setLetters] = React.useState<Array<CellStruct>>([]);
   const [evaluatingRow, setIsEvaluatingRow] = React.useState(false);
-  const [show, setShow] = React.useState(false);
   const [actualRow, setActualRow] = React.useState(0);
   const [actualColum, setActualColum] = React.useState(0);
   const [wordOfTheDay, setWordOfTheDay] = React.useState<DailyWord>();
+  const [isFinish, setIsFinish] = React.useState(false);
 
   useEffect(() => {
     if (!wordOfTheDay) {
@@ -55,25 +54,37 @@ const Home = (props: Props) => {
         });
       });
     });
+    setIsFinish(true)
     setQuerty(qwerty);
   }, [actualRow]);
 
-  const evaluateBackButton = (letter: string) => {
+  useEffect(() => {
+    if (isFinish) {
+      setIsFinish(false)
+      setIsEvaluatingRow(false);
+    }
+  }, [qwerty, isFinish]);
+
+  const evaluateBackButton = () => {
     const newGrid = [...grid];
-
     setIsEvaluatingRow(false);
-
-    newGrid[actualRow].row[actualColum].value = '';
+    let col = actualColum
+    if (newGrid[actualRow].row[actualColum].value === '') {
+      if (actualColum !== 0) {
+        col = actualColum - 1;
+      }
+    }
+    newGrid[actualRow].row[col].value = '';
     if (actualColum > 0) {
-      setActualColum(actualColum - 1);
+      setActualColum(col);
     }
     setGrid(newGrid);
   };
 
-  const evaluateEnterButton = async (letter: string) => {
+  const evaluateEnterButton = async () => {
     const newGrid = [...grid];
     // enter
-    setIsEvaluatingRow(true);
+    if (!evaluatingRow) setIsEvaluatingRow(true);
     // si es una palabra valida
     // evaluamos la palabra
     // repintamos el grid
@@ -94,6 +105,7 @@ const Home = (props: Props) => {
         setActualColum(0);
       }
     } else {
+      setIsEvaluatingRow(false);
       Alert.alert('Palabra no valida');
     }
   };
@@ -112,13 +124,12 @@ const Home = (props: Props) => {
 
     //Back button
     if (letter === '0') {
-      evaluateBackButton(letter);
+      evaluateBackButton();
     }
 
     //Enter button
     if (letter === '1') {
-      setShow(true);
-      evaluateEnterButton(letter);
+      evaluateEnterButton();
     }
   };
 
@@ -128,32 +139,29 @@ const Home = (props: Props) => {
     letter: string;
     exist: Exist;
   }[] => {
-    const charEvaluate: Array<string> = [];
+    let charEvaluate: { [key: string]: { index: number; evaluate: Exist } };
     let same = false;
     if (word === wordOfTheDay?.word) same = true;
-    const result = word.split('').map((char: string, index: number) => {
-      const struct: {letter: string; exist: Exist} = {letter: char, exist: 1};
+    const result: Array<{ letter: string; exist: Exist }> = []
+    word.split('').map((char: string, index: number) => {
+      const struct: { letter: string; exist: Exist } = { letter: char, exist: 1 };
       if (!same) {
         const word = wordOfTheDay?.word ?? '';
-        const resultFind = locations(char, index, word);
-        struct.exist = resultFind;
+        let resultFind: Exist = 1;
+        if (charEvaluate && charEvaluate[char] && charEvaluate[char].evaluate && charEvaluate[char].evaluate == 2) {
+          struct.exist = 0;
+        } else {
+          resultFind = locations(char, index, word);
+          struct.exist = resultFind;
+        }
+        result.push(struct);
       }
-      charEvaluate.push(char);
+      charEvaluate = {
+        [char]: { index, evaluate: struct.exist },
+        ...charEvaluate,
+      };
       return struct;
     });
-
-    for (let indexA = 0; indexA < result.length; indexA++) {
-      const elementA = result[indexA];
-      for (let indexB = 0; indexB < result.length; indexB++) {
-        const elementB = result[indexB];
-        if (indexA !== indexB && elementA.letter == elementB.letter) {
-          if (elementA.exist == 1 && elementB.exist == 2)
-            result[indexB].exist = 0;
-          if (elementA.exist == 2 && elementB.exist == 1)
-            result[indexA].exist = 0;
-        }
-      }
-    }
     return result;
   };
 
@@ -171,7 +179,7 @@ const Home = (props: Props) => {
         exist = true;
         isIn = false;
       }
-      if (x == substring && position !== index) {
+      if (x == substring && position !== index && !samePosition) {
         samePosition = false;
         isIn = true;
         exist = true;
@@ -180,7 +188,7 @@ const Home = (props: Props) => {
     if (exist && samePosition) return 1;
     if (exist && isIn && !samePosition) return 2;
     if (!exist && !isIn && !samePosition) return 0;
-    return 0;
+    return 1
   };
 
   const makeApiCall = async (word: string) => {
@@ -188,12 +196,12 @@ const Home = (props: Props) => {
     return response;
   };
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.gridContainer}>
-        <Grid grid={grid} />
+        <Grid grid={grid} evaluatingRow={evaluatingRow} />
       </View>
       <View style={styles.qwertyContainer}>
-        <Qwerty qwerty={qwerty} updateLetter={updateLetter} />
+        <Qwerty qwerty={qwerty} updateLetter={updateLetter} evaluatingRow={evaluatingRow} />
       </View>
     </SafeAreaView>
   );
@@ -202,6 +210,9 @@ const Home = (props: Props) => {
 export default Home;
 
 const styles = StyleSheet.create({
+  safeAreaContainer: {
+    flex: 1
+  },
   gridContainer: {
     flex: 1,
     marginTop: 55,

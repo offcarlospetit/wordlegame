@@ -1,19 +1,21 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
-import {TextUI} from '..';
+import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import Animated, { FlipInEasyX } from 'react-native-reanimated';
+import { TextUI } from '..';
 import Colors from '../constants/Colors';
 import ConstValues from '../constants/ConstValues';
-import {SIZE_QWERTY} from '../utils/Scale';
-const {ONE, BACk, ENTER, ZERO} = ConstValues;
+import { SIZE_QWERTY } from '../utils/Scale';
+const { ONE, BACk, ENTER, ZERO } = ConstValues;
 type Props = {
   letter: string;
   textColor: string;
   color: string;
   updateLetter: (letter: string) => {};
+  evaluatingRow: boolean;
 };
 
 const KeyBoardCell = (props: Props) => {
-  const {letter, textColor, updateLetter, color} = props;
+  const { letter, textColor, updateLetter, color, evaluatingRow } = props;
   const getStyle = (letter: string, color: string) => {
     return {
       width:
@@ -34,9 +36,18 @@ const KeyBoardCell = (props: Props) => {
       onPress={() => {
         updateLetter(letter);
       }}>
-      <View style={[letterContainer, styles.qwertyLetterContainer]}>
-        <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
-      </View>
+      {color !== Colors.white ? (
+        <Animated.View
+          entering={evaluatingRow ? FlipInEasyX : undefined}
+          style={[letterContainer, styles.qwertyLetterContainer]}>
+          <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
+        </Animated.View>
+      ) : null}
+      {color == Colors.white ? (
+        <Animated.View style={[letterContainer, styles.qwertyLetterContainer]}>
+          <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
+        </Animated.View>
+      ) : null}
     </TouchableOpacity>
   );
 };
