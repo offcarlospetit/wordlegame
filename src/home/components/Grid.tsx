@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { GridCell } from '../../ui-kit';
 import { GridLayoutType } from '../types';
@@ -8,8 +8,8 @@ export interface PropsGrid {
   evaluatingRow: boolean;
 }
 
-const Grid = (props: PropsGrid) => {
-  const { grid, evaluatingRow } = props;
+const Grid = memo(function GridMemo(props: PropsGrid) {
+  const { grid } = props;
   return (
     <>
       {grid.map((row, index) => {
@@ -31,7 +31,7 @@ const Grid = (props: PropsGrid) => {
       })}
     </>
   );
-};
+});
 
 export default Grid;
 

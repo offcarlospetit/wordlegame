@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { KeyBoardCell } from '../../ui-kit';
 import { QwertyTypeArray } from '../types';
@@ -9,7 +9,7 @@ type Props = {
   evaluatingRow: boolean;
 };
 
-const Qwerty = (props: Props) => {
+const Qwerty = memo(function QwertyMemo(props: Props) {
   const { qwerty, updateLetter, evaluatingRow } = props;
   return (
     <>
@@ -33,7 +33,7 @@ const Qwerty = (props: Props) => {
       })}
     </>
   );
-};
+});
 
 export default Qwerty;
 

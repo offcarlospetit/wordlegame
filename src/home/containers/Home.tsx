@@ -12,8 +12,8 @@ type Props = {};
 
 const Home = (props: Props) => {
   const [grid, setGrid] = React.useState<GridLayoutType>(gridBuilder(6));
-  const [isSolved, setIsSolved] = React.useState(false);
   const [qwerty, setQuerty] = React.useState(_QWERTY);
+  const [isSolved, setIsSolved] = React.useState(false);
   const [letters, setLetters] = React.useState<Array<CellStruct>>([]);
   const [evaluatingRow, setIsEvaluatingRow] = React.useState(false);
   const [actualRow, setActualRow] = React.useState(0);
@@ -29,33 +29,37 @@ const Home = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    const letters: any = [];
-    grid.map(row => {
-      if (row.evaluate) {
-        row.row.map(letter => {
-          if (letter.value !== '') {
-            letters.push(letter);
-          }
-        });
-      }
-    });
-    setLetters(letters);
+    if (evaluatingRow) {
+      const letters: any = [];
+      grid.map(row => {
+        if (row.evaluate) {
+          row.row.map(letter => {
+            if (letter.value !== '') {
+              letters.push(letter);
+            }
+          });
+        }
+      });
+      setLetters(letters);
+    }
   }, [grid, evaluatingRow]);
 
   useEffect(() => {
-    const qwertyLetters = [...qwerty];
-    letters.map(letterMarked => {
-      qwertyLetters.map(quertyRow => {
-        return quertyRow.map(quertyLetter => {
-          if (letterMarked.value === quertyLetter.letter.toUpperCase()) {
-            quertyLetter.color = COLOR_BY_TYPE[letterMarked.exist];
-            quertyLetter.textColor = TEXT_COLOR_BY_TYPE[letterMarked.exist];
-          }
+    if (evaluatingRow) {
+      const qwertyLetters = [...qwerty];
+      letters.map(letterMarked => {
+        qwertyLetters.map(quertyRow => {
+          return quertyRow.map(quertyLetter => {
+            if (letterMarked.value === quertyLetter.letter.toUpperCase()) {
+              quertyLetter.color = COLOR_BY_TYPE[letterMarked.exist];
+              quertyLetter.textColor = TEXT_COLOR_BY_TYPE[letterMarked.exist];
+            }
+          });
         });
       });
-    });
-    setIsFinish(true)
-    setQuerty(qwerty);
+      setIsFinish(true)
+      setQuerty(qwerty);
+    }
   }, [actualRow]);
 
   useEffect(() => {
@@ -83,7 +87,6 @@ const Home = (props: Props) => {
 
   const evaluateEnterButton = async () => {
     const newGrid = [...grid];
-    // enter
     if (!evaluatingRow) setIsEvaluatingRow(true);
     // si es una palabra valida
     // evaluamos la palabra
@@ -154,8 +157,8 @@ const Home = (props: Props) => {
           resultFind = locations(char, index, word);
           struct.exist = resultFind;
         }
-        result.push(struct);
       }
+      result.push(struct);
       charEvaluate = {
         [char]: { index, evaluate: struct.exist },
         ...charEvaluate,
@@ -195,13 +198,20 @@ const Home = (props: Props) => {
     const response = await ApiCall(word);
     return response;
   };
+
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.gridContainer}>
         <Grid grid={grid} evaluatingRow={evaluatingRow} />
       </View>
       <View style={styles.qwertyContainer}>
-        <Qwerty qwerty={qwerty} updateLetter={updateLetter} evaluatingRow={evaluatingRow} />
+        {
+          <Qwerty
+            qwerty={qwerty}
+            updateLetter={updateLetter}
+            evaluatingRow={evaluatingRow}
+          />
+        }
       </View>
     </SafeAreaView>
   );

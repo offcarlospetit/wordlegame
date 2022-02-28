@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 import Animated, { FlipInEasyX } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { TextUI } from '..';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+import { TextUI } from '../index';
 import Colors from '../constants/Colors';
 import ConstValues from '../constants/ConstValues';
 import { SIZE_QWERTY } from '../utils/Scale';
@@ -15,24 +17,30 @@ type Props = {
   evaluatingRow: boolean;
 };
 
-const KeyBoardCell = (props: Props) => {
+const options = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: false
+};
+const KeyBoardCell = memo((props: Props) => {
   const { letter, textColor, updateLetter, color, evaluatingRow } = props;
   const getStyle = (letter: string, color: string) => {
     return {
       width:
         letter === ONE || letter === ZERO ? SIZE_QWERTY + 15 : SIZE_QWERTY - 3,
-      backgroundColor: letter === ONE || letter === ZERO ? Colors.gold : color,
+      backgroundColor: color,
     } as ViewStyle;
   };
   const returnLetter = (letter: string): string => letter.toUpperCase();
 
   const letterContainer = getStyle(letter, color);
   const returnName = (letter: string): string => letter === ONE ? ENTER_ICON : BACK_ICON;
+  const returnIcon = (letter: string) => { return letter === ZERO ? <Ionicons name={returnName(letter)} size={18} color={Colors.black} /> : <Icon name={returnName(letter)} size={18} color={Colors.black} /> }
 
   return (
     <TouchableOpacity
       key={letter}
       onPress={() => {
+        ReactNativeHapticFeedback.trigger("impactLight", options);
         updateLetter(letter);
       }}>
       {color !== Colors.white ? (
@@ -46,14 +54,14 @@ const KeyBoardCell = (props: Props) => {
         <Animated.View style={[letterContainer, styles.qwertyLetterContainer]}>
           {
             letter === ONE || letter === ZERO ? (
-              <Icon name={returnName(letter)} size={18} color={Colors.silver} />
+              returnIcon(letter)
             ) : <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
           }
         </Animated.View>
       ) : null}
     </TouchableOpacity>
   );
-};
+});
 
 export default KeyBoardCell;
 
