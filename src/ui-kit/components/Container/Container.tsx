@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { Colors } from '../../index'
-
+import { StyleSheet, View } from 'react-native'
+import Colors from '../../constants/Colors'
 type Props = {
     children: ReactElement;
 }
