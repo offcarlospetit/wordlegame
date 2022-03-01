@@ -1,10 +1,10 @@
-import React, {useContext, useEffect} from 'react';
-import {Alert, SafeAreaView, StyleSheet, View} from 'react-native';
-import {GridLayoutType, CellStruct, DailyWord} from '../types';
+import React, { useContext, useEffect } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
+import { GridLayoutType, CellStruct, DailyWord } from '../types';
 import Grid from '../components/Grid';
 import Qwerty from '../components/Qwerty';
-import {gridBuilder} from '../utils/Builders';
-import {DAILY_WORDS, _QWERTY} from '../utils/Const';
+import { gridBuilder } from '../utils/Builders';
+import { DAILY_WORDS, _QWERTY } from '../utils/Const';
 import {
   COLOR_BY_TYPE,
   TEXT_COLOR_BY_TYPE,
@@ -12,14 +12,19 @@ import {
   Container,
   Colors,
 } from '../../ui-kit';
-import {Exist} from '../../ui-kit/types';
-import {ApiCall} from '../../utils/WordReferenceApi';
-import {ContextCore} from '../../core';
-const {ZERO, ONE} = ConstValues;
-type Props = {};
+import { Exist } from '../../ui-kit/types';
+import { ApiCall } from '../../utils/WordReferenceApi';
+import { ContextCore } from '../../core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HomeStackParams } from '../../navigation/HomeStack';
+const { ZERO, ONE } = ConstValues;
+export interface HomeProps
+  extends NativeStackScreenProps<HomeStackParams> { }
 
-const Home = (props: Props) => {
-  const {hapticFeedback} = useContext(ContextCore);
+
+const Home = (props: HomeProps) => {
+  const { navigation } = props;
+  const { hapticFeedback } = useContext(ContextCore);
   const [grid, setGrid] = React.useState<GridLayoutType>(gridBuilder(6));
   const [qwerty, setQuerty] = React.useState(_QWERTY);
   const [isSolved, setIsSolved] = React.useState(false);
@@ -78,6 +83,14 @@ const Home = (props: Props) => {
     }
   }, [qwerty, isFinish]);
 
+  useEffect(() => {
+    if (isSolved) {
+      setTimeout(() => {
+        navigation.navigate("Result")
+      }, 1500);
+    }
+  }, [isSolved]);
+
   const evaluateBackButton = () => {
     const newGrid = [...grid];
     setIsEvaluatingRow(false);
@@ -106,8 +119,8 @@ const Home = (props: Props) => {
     const validWord = await makeApiCall(word);
 
     if (validWord) {
-      const result = findDiff(word);
-      result.map((wordResult, index) => {
+      const response = findDiff(word);
+      response.result.map((wordResult, index) => {
         newGrid[actualRow].row[index].exist = wordResult.exist;
       });
       newGrid[actualRow].evaluate = true;
@@ -115,6 +128,7 @@ const Home = (props: Props) => {
       if (actualRow < 5) {
         setActualRow(actualRow + 1);
         setActualColum(0);
+        if (response.same) setIsSolved(true);
       }
     } else {
       setIsEvaluatingRow(false);
@@ -149,15 +163,17 @@ const Home = (props: Props) => {
   const findDiff = (
     word: string,
   ): {
-    letter: string;
-    exist: Exist;
-  }[] => {
-    let charEvaluate: {[key: string]: {index: number; evaluate: Exist}};
+    result: {
+      letter: string;
+      exist: Exist;
+    }[], same: boolean
+  } => {
+    let charEvaluate: { [key: string]: { index: number; evaluate: Exist } };
     let same = false;
     if (word === wordOfTheDay?.word) same = true;
-    const result: Array<{letter: string; exist: Exist}> = [];
+    const result: Array<{ letter: string; exist: Exist }> = [];
     word.split('').map((char: string, index: number) => {
-      const struct: {letter: string; exist: Exist} = {letter: char, exist: 1};
+      const struct: { letter: string; exist: Exist } = { letter: char, exist: 1 };
       if (!same) {
         const word = wordOfTheDay?.word ?? '';
         let resultFind: Exist = 1;
@@ -175,12 +191,12 @@ const Home = (props: Props) => {
       }
       result.push(struct);
       charEvaluate = {
-        [char]: {index, evaluate: struct.exist},
+        [char]: { index, evaluate: struct.exist },
         ...charEvaluate,
       };
       return struct;
     });
-    return result;
+    return { result, same };
   };
 
   const locations = (
@@ -214,8 +230,10 @@ const Home = (props: Props) => {
     return response;
   };
 
+
+
   return (
-    <Container style={{backgroundColor: Colors.white}}>
+    <Container style={{ backgroundColor: Colors.white }}>
       <View style={styles.gridContainer}>
         <Grid grid={grid} evaluatingRow={evaluatingRow} />
       </View>
