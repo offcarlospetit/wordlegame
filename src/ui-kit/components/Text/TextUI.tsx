@@ -11,7 +11,7 @@ const TextUI = (props: TextUIProps) => {
     <Text
       {...props}
       style={{
-        ...{fontSize: 16, lineHeight: 24, fontFamily: 'Gill Sans'},
+        ...styles.textStyleBase,
         ...style,
       }}
     />
@@ -20,4 +20,9 @@ const TextUI = (props: TextUIProps) => {
 
 export default TextUI;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  textStyleBase: {
+    fontSize: 16,
+    fontFamily: 'Gill Sans',
+  },
+});

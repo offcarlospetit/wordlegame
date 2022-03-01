@@ -1,16 +1,25 @@
-import React, { useEffect } from 'react';
-import { Alert, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { GridLayoutType, CellStruct, DailyWord } from '../types';
+import React, {useContext, useEffect} from 'react';
+import {Alert, SafeAreaView, StyleSheet, View} from 'react-native';
+import {GridLayoutType, CellStruct, DailyWord} from '../types';
 import Grid from '../components/Grid';
 import Qwerty from '../components/Qwerty';
-import { gridBuilder } from '../utils/Builders';
-import { DAILY_WORDS, _QWERTY } from '../utils/Const';
-import { COLOR_BY_TYPE, TEXT_COLOR_BY_TYPE } from '../../ui-kit';
-import { Exist } from '../../ui-kit/types';
-import { ApiCall } from '../../utils/WordReferenceApi';
+import {gridBuilder} from '../utils/Builders';
+import {DAILY_WORDS, _QWERTY} from '../utils/Const';
+import {
+  COLOR_BY_TYPE,
+  TEXT_COLOR_BY_TYPE,
+  ConstValues,
+  Container,
+  Colors,
+} from '../../ui-kit';
+import {Exist} from '../../ui-kit/types';
+import {ApiCall} from '../../utils/WordReferenceApi';
+import {ContextCore} from '../../core';
+const {ZERO, ONE} = ConstValues;
 type Props = {};
 
 const Home = (props: Props) => {
+  const {hapticFeedback} = useContext(ContextCore);
   const [grid, setGrid] = React.useState<GridLayoutType>(gridBuilder(6));
   const [qwerty, setQuerty] = React.useState(_QWERTY);
   const [isSolved, setIsSolved] = React.useState(false);
@@ -57,14 +66,14 @@ const Home = (props: Props) => {
           });
         });
       });
-      setIsFinish(true)
+      setIsFinish(true);
       setQuerty(qwerty);
     }
   }, [actualRow]);
 
   useEffect(() => {
     if (isFinish) {
-      setIsFinish(false)
+      setIsFinish(false);
       setIsEvaluatingRow(false);
     }
   }, [qwerty, isFinish]);
@@ -72,7 +81,7 @@ const Home = (props: Props) => {
   const evaluateBackButton = () => {
     const newGrid = [...grid];
     setIsEvaluatingRow(false);
-    let col = actualColum
+    let col = actualColum;
     if (newGrid[actualRow].row[actualColum].value === '') {
       if (actualColum !== 0) {
         col = actualColum - 1;
@@ -109,13 +118,14 @@ const Home = (props: Props) => {
       }
     } else {
       setIsEvaluatingRow(false);
+      hapticFeedback();
       Alert.alert('Palabra no valida');
     }
   };
 
   const updateLetter = async (letter: string) => {
     const newGrid = [...grid];
-    if (letter !== '1' && letter !== '0') {
+    if (letter !== ONE && letter !== ZERO) {
       const hasValue = newGrid[actualRow].row[actualColum].value;
       if (!hasValue)
         newGrid[actualRow].row[actualColum].value = letter.toUpperCase();
@@ -126,12 +136,12 @@ const Home = (props: Props) => {
     }
 
     //Back button
-    if (letter === '0') {
+    if (letter === ZERO) {
       evaluateBackButton();
     }
 
     //Enter button
-    if (letter === '1') {
+    if (letter === ONE) {
       evaluateEnterButton();
     }
   };
@@ -142,16 +152,21 @@ const Home = (props: Props) => {
     letter: string;
     exist: Exist;
   }[] => {
-    let charEvaluate: { [key: string]: { index: number; evaluate: Exist } };
+    let charEvaluate: {[key: string]: {index: number; evaluate: Exist}};
     let same = false;
     if (word === wordOfTheDay?.word) same = true;
-    const result: Array<{ letter: string; exist: Exist }> = []
+    const result: Array<{letter: string; exist: Exist}> = [];
     word.split('').map((char: string, index: number) => {
-      const struct: { letter: string; exist: Exist } = { letter: char, exist: 1 };
+      const struct: {letter: string; exist: Exist} = {letter: char, exist: 1};
       if (!same) {
         const word = wordOfTheDay?.word ?? '';
         let resultFind: Exist = 1;
-        if (charEvaluate && charEvaluate[char] && charEvaluate[char].evaluate && charEvaluate[char].evaluate == 2) {
+        if (
+          charEvaluate &&
+          charEvaluate[char] &&
+          charEvaluate[char].evaluate &&
+          charEvaluate[char].evaluate == 2
+        ) {
           struct.exist = 0;
         } else {
           resultFind = locations(char, index, word);
@@ -160,7 +175,7 @@ const Home = (props: Props) => {
       }
       result.push(struct);
       charEvaluate = {
-        [char]: { index, evaluate: struct.exist },
+        [char]: {index, evaluate: struct.exist},
         ...charEvaluate,
       };
       return struct;
@@ -191,7 +206,7 @@ const Home = (props: Props) => {
     if (exist && samePosition) return 1;
     if (exist && isIn && !samePosition) return 2;
     if (!exist && !isIn && !samePosition) return 0;
-    return 1
+    return 1;
   };
 
   const makeApiCall = async (word: string) => {
@@ -200,7 +215,7 @@ const Home = (props: Props) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeAreaContainer}>
+    <Container style={{backgroundColor: Colors.white}}>
       <View style={styles.gridContainer}>
         <Grid grid={grid} evaluatingRow={evaluatingRow} />
       </View>
@@ -213,7 +228,7 @@ const Home = (props: Props) => {
           />
         }
       </View>
-    </SafeAreaView>
+    </Container>
   );
 };
 
@@ -221,7 +236,7 @@ export default Home;
 
 const styles = StyleSheet.create({
   safeAreaContainer: {
-    flex: 1
+    flex: 1,
   },
   gridContainer: {
     flex: 1,

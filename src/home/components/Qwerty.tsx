@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { KeyBoardCell } from '../../ui-kit';
-import { QwertyTypeArray } from '../types';
+import React, {memo} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {KeyBoardCell} from '../../ui-kit';
+import {QwertyTypeArray} from '../types';
 
 type Props = {
   qwerty: QwertyTypeArray;
@@ -10,9 +10,9 @@ type Props = {
 };
 
 const Qwerty = memo(function QwertyMemo(props: Props) {
-  const { qwerty, updateLetter, evaluatingRow } = props;
+  const {qwerty, updateLetter, evaluatingRow} = props;
   return (
-    <>
+    <View>
       {qwerty.map((row, index) => {
         return (
           <View key={index + Math.random()} style={styles.qwertyRow}>
@@ -31,7 +31,7 @@ const Qwerty = memo(function QwertyMemo(props: Props) {
           </View>
         );
       })}
-    </>
+    </View>
   );
 });
 

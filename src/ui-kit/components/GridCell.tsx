@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     marginRight: 3,
     marginLeft: 3,
     marginBottom: 3,
-    borderRadius: 3,
+    borderRadius: 5,
   },
   letterGridText: {
     fontSize: 20,

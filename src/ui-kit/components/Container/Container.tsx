@@ -1,24 +1,22 @@
-import React, { ReactElement } from 'react'
-import { StyleSheet, View } from 'react-native'
-import Colors from '../../constants/Colors'
-type Props = {
-    children: ReactElement;
+import React, {ReactNode} from 'react';
+import {StyleSheet, View, ViewProps} from 'react-native';
+import Colors from '../../constants/Colors';
+export interface PropsContainer extends ViewProps {
+  children: ReactNode;
 }
 
-const Container = (props: Props) => {
-    return (
-        <View style={styles.container}>
-            {props.children}
-        </View>
-    )
-}
+const Container = (props: PropsContainer) => {
+  return (
+    <View style={[{...styles.container}, props.style]}>{props.children}</View>
+  );
+};
 
-export default Container
+export default Container;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Colors.silver,
-        paddingHorizontal: 16,
-    }
-})
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    paddingHorizontal: 16,
+  },
+});

@@ -1,14 +1,14 @@
-import React, { memo } from 'react';
-import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
-import Animated, { FlipInEasyX } from 'react-native-reanimated';
+import React, {memo, useContext} from 'react';
+import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
+import Animated, {FlipInEasyX} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import ReactNativeHapticFeedback from "react-native-haptic-feedback";
-import { TextUI } from '../index';
+import {TextUI} from '../index';
 import Colors from '../constants/Colors';
 import ConstValues from '../constants/ConstValues';
-import { SIZE_QWERTY } from '../utils/Scale';
-const { ONE, BACk, ENTER, ZERO, BACK_ICON, ENTER_ICON } = ConstValues;
+import {SIZE_QWERTY} from '../utils/Scale';
+import {ContextCore} from '../../core';
+const {ONE, BACk, ENTER, ZERO, BACK_ICON, ENTER_ICON} = ConstValues;
 type Props = {
   letter: string;
   textColor: string;
@@ -17,12 +17,9 @@ type Props = {
   evaluatingRow: boolean;
 };
 
-const options = {
-  enableVibrateFallback: true,
-  ignoreAndroidSystemSettings: false
-};
 const KeyBoardCell = memo((props: Props) => {
-  const { letter, textColor, updateLetter, color, evaluatingRow } = props;
+  const {hapticFeedback} = useContext(ContextCore);
+  const {letter, textColor, updateLetter, color, evaluatingRow} = props;
   const getStyle = (letter: string, color: string) => {
     return {
       width:
@@ -33,30 +30,37 @@ const KeyBoardCell = memo((props: Props) => {
   const returnLetter = (letter: string): string => letter.toUpperCase();
 
   const letterContainer = getStyle(letter, color);
-  const returnName = (letter: string): string => letter === ONE ? ENTER_ICON : BACK_ICON;
-  const returnIcon = (letter: string) => { return letter === ZERO ? <Ionicons name={returnName(letter)} size={18} color={Colors.black} /> : <Icon name={returnName(letter)} size={18} color={Colors.black} /> }
+  const returnName = (letter: string): string =>
+    letter === ONE ? ENTER_ICON : BACK_ICON;
+  const returnIcon = (letter: string) => {
+    return letter === ZERO ? (
+      <Ionicons name={returnName(letter)} size={18} color={Colors.black} />
+    ) : (
+      <Icon name={returnName(letter)} size={18} color={Colors.black} />
+    );
+  };
 
   return (
     <TouchableOpacity
       key={letter}
       onPress={() => {
-        ReactNativeHapticFeedback.trigger("impactLight", options);
+        hapticFeedback();
         updateLetter(letter);
       }}>
       {color !== Colors.white ? (
         <Animated.View
-          entering={evaluatingRow ? FlipInEasyX : undefined}
+          entering={evaluatingRow ? undefined : undefined}
           style={[letterContainer, styles.qwertyLetterContainer]}>
-          <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
+          <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
         </Animated.View>
       ) : null}
       {color == Colors.white ? (
         <Animated.View style={[letterContainer, styles.qwertyLetterContainer]}>
-          {
-            letter === ONE || letter === ZERO ? (
-              returnIcon(letter)
-            ) : <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
-          }
+          {letter === ONE || letter === ZERO ? (
+            returnIcon(letter)
+          ) : (
+            <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
+          )}
         </Animated.View>
       ) : null}
     </TouchableOpacity>
@@ -81,24 +85,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-{
-  /* <TouchableOpacity
-key={letter}
-onPress={() => {
-  updateLetter(letter);
-}}>
-{color !== Colors.white ? (
-  <Animated.View
-    entering={FlipInEasyY.delay(3000)}
-    style={[letterContainer, styles.qwertyLetterContainer]}>
-    <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
-  </Animated.View>
-) : null}
-{color == Colors.white ? (
-  <Animated.View style={[letterContainer, styles.qwertyLetterContainer]}>
-    <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
-  </Animated.View>
-) : null}
-</TouchableOpacity> */
-}
