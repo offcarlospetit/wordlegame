@@ -1,14 +1,15 @@
-import React, {memo, useContext} from 'react';
-import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
-import Animated, {FlipInEasyX} from 'react-native-reanimated';
+import React, { memo, useContext } from 'react';
+import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import Animated, { FlipInEasyX } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {TextUI} from '../index';
+import { TextUI } from '../index';
 import Colors from '../constants/Colors';
 import ConstValues from '../constants/ConstValues';
-import {SIZE_QWERTY} from '../utils/Scale';
-import {ContextCore} from '../../core';
-const {ONE, ZERO, BACK_ICON, ENTER_ICON} = ConstValues;
+import { SIZE_QWERTY } from '../utils/Scale';
+import Scale from '../utils/Scale';
+import { ContextCore } from '../../core';
+const { ONE, ZERO, BACK_ICON, ENTER_ICON } = ConstValues;
 type Props = {
   letter: string;
   textColor: string;
@@ -18,12 +19,12 @@ type Props = {
 };
 
 const KeyBoardCell = memo((props: Props) => {
-  const {hapticFeedback} = useContext(ContextCore);
-  const {letter, textColor, updateLetter, color, evaluatingRow} = props;
+  const { hapticFeedback } = useContext(ContextCore);
+  const { letter, textColor, updateLetter, color, evaluatingRow } = props;
   const getStyle = (letter: string, color: string) => {
     return {
       width:
-        letter === ONE || letter === ZERO ? SIZE_QWERTY + 15 : SIZE_QWERTY - 3,
+        letter === ONE || letter === ZERO ? SIZE_QWERTY + Scale(15) : SIZE_QWERTY - Scale(3),
       backgroundColor: color,
     } as ViewStyle;
   };
@@ -51,7 +52,7 @@ const KeyBoardCell = memo((props: Props) => {
         <Animated.View
           entering={evaluatingRow ? undefined : undefined}
           style={[letterContainer, styles.qwertyLetterContainer]}>
-          <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
+          <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
         </Animated.View>
       ) : null}
       {color == Colors.white ? (
@@ -59,7 +60,7 @@ const KeyBoardCell = memo((props: Props) => {
           {letter === ONE || letter === ZERO ? (
             returnIcon(letter)
           ) : (
-            <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
+            <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
           )}
         </Animated.View>
       ) : null}
@@ -71,17 +72,17 @@ export default KeyBoardCell;
 
 const styles = StyleSheet.create({
   qwertyLetterContainer: {
-    borderWidth: 1,
-    marginRight: 1,
-    marginLeft: 1,
+    borderWidth: Scale(1),
+    marginRight: Scale(1),
+    marginLeft: Scale(1),
     borderColor: Colors.silverSand,
-    borderRadius: 5,
-    height: SIZE_QWERTY + 10,
+    borderRadius: Scale(5),
+    height: SIZE_QWERTY + Scale(10),
     alignItems: 'center',
     justifyContent: 'center',
   },
   animatedBox: {
-    padding: 5,
+    padding: Scale(5),
     alignItems: 'center',
   },
 });

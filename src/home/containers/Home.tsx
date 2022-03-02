@@ -1,29 +1,30 @@
-import React, {useContext, useEffect, useLayoutEffect} from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
-import {GridLayoutType, CellStruct, DailyWord} from '../types';
+import React, { useContext, useEffect, useLayoutEffect } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
+import { GridLayoutType, CellStruct, DailyWord, RowResult } from '../types';
 import Grid from '../components/Grid';
 import Qwerty from '../components/Qwerty';
-import {gridBuilder} from '../utils/Builders';
-import {DAILY_WORDS, _QWERTY_EN, _QWERTY_ES} from '../utils/Const';
+import { gridBuilder } from '../utils/Builders';
+import { DAILY_WORDS, _QWERTY_EN, _QWERTY_ES } from '../utils/Const';
 import {
   COLOR_BY_TYPE,
   TEXT_COLOR_BY_TYPE,
   ConstValues,
   Container,
   Colors,
+  Scale,
 } from '../../ui-kit';
-import {Exist} from '../../ui-kit/types';
-import {ApiCall} from '../../utils/WordReferenceApi';
-import {ContextCore} from '../../core';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParams} from '../../navigation/HomeStack';
-import {Settings} from '../../utils/Settings';
-const {ZERO, ONE} = ConstValues;
-export interface HomeProps extends NativeStackScreenProps<HomeStackParams> {}
+import { Exist } from '../../ui-kit/types';
+import { ApiCall } from '../../utils/WordReferenceApi';
+import { ContextCore } from '../../core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HomeStackParams } from '../../navigation/HomeStack';
+import { Settings } from '../../utils/Settings';
+const { ZERO, ONE } = ConstValues;
+export interface HomeProps extends NativeStackScreenProps<HomeStackParams> { }
 const keyBoard = Settings.language == 'es' ? _QWERTY_ES : _QWERTY_EN;
 const Home = (props: HomeProps) => {
-  const {navigation} = props;
-  const {hapticFeedback} = useContext(ContextCore);
+  const { navigation } = props;
+  const { hapticFeedback } = useContext(ContextCore);
   const [grid, setGrid] = React.useState<GridLayoutType>(gridBuilder(6));
   const [qwerty, setQuerty] = React.useState(keyBoard);
   const [isSolved, setIsSolved] = React.useState(false);
@@ -91,7 +92,7 @@ const Home = (props: HomeProps) => {
   }, [isSolved]);
 
   useLayoutEffect(() => {
-    navigation.setOptions({headerTitle: 'Game'});
+    navigation.setOptions({ headerTitle: 'Game' });
   }, [navigation]);
 
   const evaluateBackButton = () => {
@@ -130,6 +131,7 @@ const Home = (props: HomeProps) => {
       });
       newGrid[actualRow].evaluate = true;
       setGrid(newGrid);
+
       if (actualRow < 5) {
         setActualRow(actualRow + 1);
         setActualColum(0);
@@ -172,12 +174,12 @@ const Home = (props: HomeProps) => {
     }[];
     same: boolean;
   } => {
-    let charEvaluate: {[key: string]: {index: number; evaluate: Exist}};
+    let charEvaluate: { [key: string]: { index: number; evaluate: Exist } };
     let same = false;
     if (word === wordOfTheDay?.word) same = true;
-    const result: Array<{letter: string; exist: Exist}> = [];
+    const result: Array<{ letter: string; exist: Exist }> = [];
     word.split('').map((char: string, index: number) => {
-      const struct: {letter: string; exist: Exist} = {letter: char, exist: 1};
+      const struct: { letter: string; exist: Exist } = { letter: char, exist: 1 };
       if (!same) {
         const word = wordOfTheDay?.word ?? '';
         let resultFind: Exist = 1;
@@ -195,12 +197,12 @@ const Home = (props: HomeProps) => {
       }
       result.push(struct);
       charEvaluate = {
-        [char]: {index, evaluate: struct.exist},
+        [char]: { index, evaluate: struct.exist },
         ...charEvaluate,
       };
       return struct;
     });
-    return {result, same};
+    return { result, same };
   };
 
   const locations = (
@@ -235,13 +237,12 @@ const Home = (props: HomeProps) => {
   };
 
   return (
-    <Container style={{backgroundColor: Colors.white}}>
+    <Container style={{ backgroundColor: Colors.white }}>
       <View style={styles.gridContainer}>
         <Grid grid={grid} evaluatingRow={evaluatingRow} />
       </View>
       <View style={styles.qwertyContainer}>
         <Qwerty
-          language={'en'}
           qwerty={qwerty}
           updateLetter={updateLetter}
           evaluatingRow={evaluatingRow}
@@ -254,18 +255,14 @@ const Home = (props: HomeProps) => {
 export default Home;
 
 const styles = StyleSheet.create({
-  safeAreaContainer: {
-    flex: 1,
-  },
   gridContainer: {
     flex: 1,
-    marginTop: 55,
+    marginTop: Scale(55),
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   qwertyContainer: {
     flex: 1,
-    alignItems: 'center',
-    marginTop: 150,
+    marginTop: Scale(150),
   },
 });

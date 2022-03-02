@@ -6,6 +6,10 @@ const Colors = {
     white: '#FFFFFF',
     silver: '#BDBDBD',
     silverSand: '#C6C6C6',
-    gold: '#FFE140'
+    gold: '#FFE140',
+    danger: '#df4759',
+    success: '#42ba96',
+    warning: '#eed202'
 }
+
 export default Colors

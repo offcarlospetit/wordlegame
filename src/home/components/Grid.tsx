@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { GridCell } from '../../ui-kit';
+import { StyleSheet, View } from 'react-native';
+import { GridCell, Scale } from '../../ui-kit';
 import { GridLayoutType } from '../types';
 
 export interface PropsGrid {
@@ -38,6 +38,6 @@ export default Grid;
 const styles = StyleSheet.create({
   gridLetterColum: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
+    paddingHorizontal: Scale(16),
   },
 });

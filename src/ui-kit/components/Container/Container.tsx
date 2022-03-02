@@ -1,5 +1,6 @@
-import React, {ReactNode} from 'react';
-import {StyleSheet, View, ViewProps} from 'react-native';
+import React, { ReactNode } from 'react';
+import { StyleSheet, View, ViewProps } from 'react-native';
+import Scale from '../../utils/Scale';
 import Colors from '../../constants/Colors';
 export interface PropsContainer extends ViewProps {
   children?: ReactNode;
@@ -7,7 +8,7 @@ export interface PropsContainer extends ViewProps {
 
 const Container = (props: PropsContainer) => {
   return (
-    <View style={[{...styles.container}, props.style]}>{props?.children}</View>
+    <View style={[{ ...styles.container }, props.style]}>{props?.children}</View>
   );
 };
 
@@ -17,6 +18,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-    paddingHorizontal: 16,
+    paddingHorizontal: Scale(16),
   },
 });

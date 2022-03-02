@@ -1,8 +1,8 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
-import {Colors, TextUI} from '../..';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { Colors, Scale, TextUI } from '../../index';
 
 type StackNames = 'Game' | 'Profile' | 'About';
 
@@ -12,18 +12,18 @@ const iconNameMap: Record<StackNames, string> = {
   About: 'information-circle-outline',
 };
 
-function TabBar({state, descriptors, navigation}: BottomTabBarProps) {
+function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   return (
     <View
-      style={{flexDirection: 'row', height: 79, backgroundColor: Colors.white}}>
+      style={{ flexDirection: 'row', height: Scale(79), borderTopWidth: Scale(1), borderColor: Colors.silver, backgroundColor: Colors.white }}>
       {state.routes.map((route, index) => {
-        const {options} = descriptors[route.key];
+        const { options } = descriptors[route.key];
         const label =
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-            ? options.title
-            : route.name;
+              ? options.title
+              : route.name;
 
         const isFocused = state.index === index;
 
@@ -37,7 +37,7 @@ function TabBar({state, descriptors, navigation}: BottomTabBarProps) {
           if (!isFocused && !event.defaultPrevented) {
             // The `merge: true` option makes sure that the params inside the tab screen are preserved
             //@ts-ignore
-            navigation.navigate({name: route.name, merge: true});
+            navigation.navigate({ name: route.name, merge: true });
           }
         };
 
@@ -52,7 +52,7 @@ function TabBar({state, descriptors, navigation}: BottomTabBarProps) {
           <TouchableOpacity
             key={route.name}
             accessibilityRole="button"
-            accessibilityState={isFocused ? {selected: true} : {}}
+            accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarTestID}
             onPress={onPress}
@@ -60,7 +60,7 @@ function TabBar({state, descriptors, navigation}: BottomTabBarProps) {
             style={{
               flex: 1,
               justifyContent: 'flex-start',
-              marginTop: 4,
+              marginTop: Scale(4),
               alignItems: 'center',
             }}>
             <Icon
@@ -69,7 +69,7 @@ function TabBar({state, descriptors, navigation}: BottomTabBarProps) {
               size={24}
             />
             <TextUI
-              style={{color: isFocused ? Colors.black : Colors.silverSand}}>
+              style={{ color: isFocused ? Colors.black : Colors.silverSand }}>
               {label}
             </TextUI>
           </TouchableOpacity>

@@ -15,6 +15,11 @@ export interface GridLayout {
   row: Array<CellStruct>;
 }
 
+export interface RowResult {
+  try: number;
+  result: number;
+}
+
 export type GridLayoutType = Array<GridLayout>;
 export type DailyWord = { word: string; useDate: string };
 
