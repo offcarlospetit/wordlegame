@@ -8,7 +8,7 @@ import Colors from '../constants/Colors';
 import ConstValues from '../constants/ConstValues';
 import {SIZE_QWERTY} from '../utils/Scale';
 import {ContextCore} from '../../core';
-const {ONE, BACk, ENTER, ZERO, BACK_ICON, ENTER_ICON} = ConstValues;
+const {ONE, ZERO, BACK_ICON, ENTER_ICON} = ConstValues;
 type Props = {
   letter: string;
   textColor: string;

@@ -1,16 +1,17 @@
 import React, {memo} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {KeyBoardCell} from '../../ui-kit';
-import {QwertyTypeArray} from '../types';
+import {Language, QwertyTypeArray} from '../types';
 
 type Props = {
   qwerty: QwertyTypeArray;
   updateLetter: (letter: string) => {};
   evaluatingRow: boolean;
+  language: Language;
 };
 
 const Qwerty = memo(function QwertyMemo(props: Props) {
-  const {qwerty, updateLetter, evaluatingRow} = props;
+  const {qwerty, updateLetter, evaluatingRow, language} = props;
   return (
     <View>
       {qwerty.map((row, index) => {
@@ -41,5 +42,6 @@ const styles = StyleSheet.create({
   qwertyRow: {
     flexDirection: 'row',
     marginBottom: 10,
+    justifyContent: 'center',
   },
 });

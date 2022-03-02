@@ -2,7 +2,7 @@ import { DailyWord, QwertyTypeArray } from "../types";
 import { Colors } from "../../ui-kit";
 
 
-export const _QWERTY: QwertyTypeArray = [
+export const _QWERTY_ES: QwertyTypeArray = [
     [
         { letter: 'q', color: Colors.white, textColor: Colors.black },
         { letter: 'w', color: Colors.white, textColor: Colors.black },
@@ -26,6 +26,44 @@ export const _QWERTY: QwertyTypeArray = [
         { letter: 'k', color: Colors.white, textColor: Colors.black },
         { letter: 'l', color: Colors.white, textColor: Colors.black },
         { letter: 'ñ', color: Colors.white, textColor: Colors.black },
+    ],
+    [
+        { letter: '0', color: Colors.white, textColor: Colors.black },
+        { letter: 'z', color: Colors.white, textColor: Colors.black },
+        { letter: 'x', color: Colors.white, textColor: Colors.black },
+        { letter: 'c', color: Colors.white, textColor: Colors.black },
+        { letter: 'v', color: Colors.white, textColor: Colors.black },
+        { letter: 'b', color: Colors.white, textColor: Colors.black },
+        { letter: 'n', color: Colors.white, textColor: Colors.black },
+        { letter: 'm', color: Colors.white, textColor: Colors.black },
+        { letter: '1', color: Colors.white, textColor: Colors.black },
+    ],
+];
+
+
+export const _QWERTY_EN: QwertyTypeArray = [
+    [
+        { letter: 'q', color: Colors.white, textColor: Colors.black },
+        { letter: 'w', color: Colors.white, textColor: Colors.black },
+        { letter: 'e', color: Colors.white, textColor: Colors.black },
+        { letter: 'r', color: Colors.white, textColor: Colors.black },
+        { letter: 't', color: Colors.white, textColor: Colors.black },
+        { letter: 'y', color: Colors.white, textColor: Colors.black },
+        { letter: 'u', color: Colors.white, textColor: Colors.black },
+        { letter: 'i', color: Colors.white, textColor: Colors.black },
+        { letter: 'o', color: Colors.white, textColor: Colors.black },
+        { letter: 'p', color: Colors.white, textColor: Colors.black },
+    ],
+    [
+        { letter: 'a', color: Colors.white, textColor: Colors.black },
+        { letter: 's', color: Colors.white, textColor: Colors.black },
+        { letter: 'd', color: Colors.white, textColor: Colors.black },
+        { letter: 'f', color: Colors.white, textColor: Colors.black },
+        { letter: 'g', color: Colors.white, textColor: Colors.black },
+        { letter: 'h', color: Colors.white, textColor: Colors.black },
+        { letter: 'j', color: Colors.white, textColor: Colors.black },
+        { letter: 'k', color: Colors.white, textColor: Colors.black },
+        { letter: 'l', color: Colors.white, textColor: Colors.black },
     ],
     [
         { letter: '0', color: Colors.white, textColor: Colors.black },

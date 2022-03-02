@@ -1,15 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import { Container } from '../../ui-kit';
+import {StyleSheet, Text, View} from 'react-native';
+import React, {useLayoutEffect} from 'react';
+import {Container, TextUI} from '../../ui-kit';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {HomeStackParams} from '../../navigation/HomeStack';
 
-type Props = {};
+export interface ResultProps extends NativeStackScreenProps<HomeStackParams> {}
 
-const Result = (props: Props) => {
-  return (
-    <Container>
-      <Text>Result</Text>
-    </Container>
-  );
+const Result = (props: ResultProps) => {
+  const {navigation} = props;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View>
+          <TextUI>Test</TextUI>
+        </View>
+      ),
+    });
+  }, [navigation]);
+
+  return <Container></Container>;
 };
 
 export default Result;

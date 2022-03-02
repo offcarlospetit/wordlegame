@@ -7,6 +7,8 @@ export interface CellStruct {
   exist: Exist; // can be 0=no exist, 1 exist and is the same position, and 2, exist but not in the same position
 }
 
+export type Language = 'es' | 'en'
+
 export type GridStruct = CellStruct[][];
 export interface GridLayout {
   evaluate: boolean;

@@ -11,7 +11,9 @@ const Tab = createBottomTabNavigator();
 function BottomTabs() {
   return (
     <NavigationContainer>
-      <Tab.Navigator tabBar={props => <TabBar {...props} />}>
+      <Tab.Navigator
+        screenOptions={{headerShown: false}}
+        tabBar={props => <TabBar {...props} />}>
         <Tab.Screen
           name="Game"
           component={HomeStack}
