@@ -1,6 +1,9 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, TouchableOpacityProps, View } from 'react-native'
-import { BasicShadow, Colors, Scale, TextUI } from '../../index'
+import Scale from '../../utils/Scale'
+import Colors from '../../constants/Colors'
+import { BasicShadow } from '../../constants/ConstValues'
+import TextUI from '../../components/Text/TextUI'
 export type ButtomType = 'secondary' | 'primary' | 'danger' | 'success' | 'warning'
 export type ButtomSize = 'small' | 'medium' | 'large'
 interface Props extends TouchableOpacityProps {
@@ -39,7 +42,7 @@ const Button = (props: Props) => {
         }
     }
     return (
-        <View style={{ ...styles.buttonContainer, ...{ paddingHorizontal: returnSize(), } }}>
+        <View style={{ ...styles.buttonContainer, ...{ paddingHorizontal: Scale(16), } }}>
             <TouchableOpacity onPress={onPress} {...rest} activeOpacity={0.8}>
                 <View style={[{ backgroundColor: returnType() }, styles.buttonTextContainer]}>
                     <TextUI style={styles.text}>{text}</TextUI>
@@ -52,7 +55,9 @@ const Button = (props: Props) => {
 export default Button
 
 const styles = StyleSheet.create({
-    buttonContainer: { paddingVertical: Scale(16) },
+    buttonContainer: {
+        paddingVertical: Scale(16)
+    },
     buttonTextContainer: {
         borderRadius: Scale(5),
         justifyContent: 'center',

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer} from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 import HomeStack from './HomeStack';
 import ProfileStack from './ProfileStack';
-import {Colors, TabBar} from '../ui-kit';
+import { Colors, TabBar } from '../ui-kit';
 import AboutStack from './AboutStack';
 
 const Tab = createBottomTabNavigator();
@@ -12,7 +12,7 @@ function BottomTabs() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        screenOptions={{headerShown: false}}
+        screenOptions={{ headerShown: false }}
         tabBar={props => <TabBar {...props} />}>
         <Tab.Screen
           name="Game"

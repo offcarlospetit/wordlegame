@@ -13,31 +13,33 @@ const Result = (props: ResultProps) => {
     navigation.setOptions({});
   }, [navigation]);
 
-  return <Container>
-    <View style={styles.containerWordleResult}>
-      {
-        [...Array(6)].map((row) => {
-          return (
-            <View style={styles.rowContainer}>
-              <View style={styles.containerTry}>
-                <TextUI style={styles.text}>try one</TextUI>
+  return (
+    <Container>
+      <View style={styles.containerWordleResult}>
+        {
+          [...Array(6)].map((row) => {
+            return (
+              <View key={Math.random()} style={styles.rowContainer}>
+                <View style={styles.containerTry}>
+                  <TextUI style={styles.text}>try one</TextUI>
+                </View>
+                <View style={styles.containerWordle}>
+                  <TextUI style={styles.text}>◼◼◼◼◼◼</TextUI>
+                </View>
+                <View style={styles.containerPercent}>
+                  <TextUI style={styles.text}>60%</TextUI>
+                </View>
               </View>
-              <View style={styles.containerWordle}>
-                <TextUI style={styles.text}>◼◼◼◼◼◼</TextUI>
-              </View>
-              <View style={styles.containerPercent}>
-                <TextUI style={styles.text}>60%</TextUI>
-              </View>
-            </View>
-          )
-        })
-      }
-    </View>
-    <View style={styles.buttonContainer}>
-      <Button onPress={() => { null }} text={"Accept"} />
-      <Button size='small' type='success' onPress={() => { null }} text={"Share"} />
-    </View>
-  </Container>
+            )
+          })
+        }
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button onPress={() => { null }} text={"Accept"} />
+        <Button size='small' type='success' onPress={() => { null }} text={"Share"} />
+      </View>
+    </Container>
+  )
 };
 
 export default Result;
