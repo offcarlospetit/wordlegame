@@ -30,6 +30,8 @@ export class SDK {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
+                'app_id': "	64d1c0fb",
+                'app_key': "0dfa5d7965097affa6fe3e8790c4cc91"
             },
             timeout: this.timeout,
         });

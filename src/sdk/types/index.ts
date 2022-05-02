@@ -5,39 +5,47 @@ export { SDKError, SDK } from '../core';
 
 
 export interface WordResponse {
-    data: Array<{
-        word: string
-        phonetic: string
-        phonetics: [
-
-            {
-                text: string
-                audio?: string
-                sourceUrl?: string
-            }
-        ],
-        meanings: [
-            {
-                partOfSpeech: string,
-                definitions: [
-                    {
-                        definition: string
-                        example: string
+    id: string,
+    metadata: {
+        operation: string,
+        provider: string,
+        schema: string
+    },
+    results: [
+        {
+            id: string,
+            language: string,
+            lexicalEntries: [
+                {
+                    entries: [
+                        {
+                            senses: [
+                                {
+                                    definitions: Array<string>,
+                                    id: string,
+                                    subsenses: Array<{ definitions: Array<string>, id: string }>
+                                },
+                            ]
+                        }
+                    ],
+                    language: string,
+                    lexicalCategory: {
+                        id: string,
+                        text: string
                     },
-                ]
-            },
-
-        ],
-        license: {
-            name: string
-            url: string
-        },
-        sourceUrls: Array<string>
-    }>
+                    text: string
+                },
+            ],
+            type: string,
+            word: string
+        }
+    ],
+    word: string
 }
 
 export interface WordReq {
-    word: string
+    word: string;
+    language: 'es' | 'en-u';
 }
 
 export interface WordResAdapt {

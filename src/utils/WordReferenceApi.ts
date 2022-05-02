@@ -7,10 +7,10 @@ export const ApiCall = async (wordPayload: string): Promise<boolean> => {
             appId: "nalgas",
             clientStorage: null,
             platformId: 'app',
-            url: 'https://api.dictionaryapi.dev',
+            url: 'https://od-api.oxforddictionaries.com',
         }
         const word = new Word(sdkConfig)
-        const response = await word.wordRequest({ word: wordPayload })
+        const response = await word.wordRequest({ word: wordPayload.toLowerCase(), language: 'es' })
         if (response.status.code == 200)
             return true
 
@@ -20,3 +20,4 @@ export const ApiCall = async (wordPayload: string): Promise<boolean> => {
         return false
     }
 }
+

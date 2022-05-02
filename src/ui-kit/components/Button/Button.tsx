@@ -27,6 +27,10 @@ const Button = (props: Props) => {
                 return Scale(16);
         }
     }
+/**
+ * It returns a color based on the type of button
+ * @returns A function
+ */
     const returnType = () => {
         switch (type) {
             case "primary":

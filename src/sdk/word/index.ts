@@ -16,16 +16,12 @@ export class Word extends SDK {
     public async wordRequest(payload: WordReq): Promise<WordResAdapt> {
         const reqConfig: RequestConfig = {
             isPublic: true,
-            url: `/api/v2/entries/en/${payload.word}`,
+            url: `/api/v2/entries/${payload.language}/${payload.word}?fields=definitions&strictMatch=false`,
             method: 'GET',
         };
-
         try {
             const rawResponse = await this.httpClient.request<WordResponse>(reqConfig);
-            return this.adaptResponse<WordResponse, WordResAdapt>(
-                rawResponse,
-                wordAdapter,
-            );
+            return this.adaptResponse<WordResponse, WordResAdapt>(rawResponse.data, wordAdapter);
         } catch (error) {
             throw new SDKError(error as Error);
         }

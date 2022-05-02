@@ -3,12 +3,17 @@ export const wordAdapter = `{
         "code": 200,
         "message": "OK"
     },
-    "data": $not($exists(data[0].word))
+    "data": $not($exists(results[0].lexicalEntries[0].entries[0].senses[0].definitions[0]))
         ? null /* For errors data will be null */
         : {
-            "word":data[0].word,
-            "meanings":data[0].meanings[0].definitions[0].definition
+            "word":results[0].id,
+            "meaning":results[0].lexicalEntries[0].entries[0].senses[0].definitions[0]
             /* Fields: oauth are being omitted */
         }
 }`;
 
+
+
+// {
+//     "error": "No entry found matching supplied source_lang, word and provided filters"
+//   }

@@ -22,7 +22,7 @@ export interface ContextCoreProps {
 export const ContextCore = React.createContext({} as ContextCoreProps);
 
 export function ContextCoreWrapper(props: ProviderProps) {
-  const {children} = props;
+  const { children } = props;
 
   const hapticFeedback = (
     hapticType: HapticFeedbackTypes = 'impactHeavy',
@@ -38,6 +38,7 @@ export function ContextCoreWrapper(props: ProviderProps) {
     <ContextCore.Provider
       value={{
         hapticFeedback,
+
       }}>
       {children}
     </ContextCore.Provider>
