@@ -1,15 +1,15 @@
-import React, { memo, useContext } from 'react';
-import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
-import Animated, { FlipInEasyX } from 'react-native-reanimated';
+import React, {memo, useContext} from 'react';
+import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
+import Animated, {FlipInEasyX} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { TextUI } from '../index';
+import {TextUI} from '../index';
 import Colors from '../constants/Colors';
 import ConstValues from '../constants/ConstValues';
-import { SIZE_QWERTY } from '../utils/Scale';
+import {SIZE_QWERTY} from '../utils/Scale';
 import Scale from '../utils/Scale';
-import { ContextCore } from '../../core';
-const { ONE, ZERO, BACK_ICON, ENTER_ICON } = ConstValues;
+import {ContextCore} from '../../core';
+const {ONE, ZERO, BACK_ICON, ENTER_ICON} = ConstValues;
 type Props = {
   letter: string;
   textColor: string;
@@ -19,20 +19,24 @@ type Props = {
 };
 
 const KeyBoardCell = memo((props: Props) => {
-  const { hapticFeedback } = useContext(ContextCore);
-  const { letter, textColor, updateLetter, color, evaluatingRow } = props;
+  const {hapticFeedback} = useContext(ContextCore);
+  const {letter, textColor, updateLetter, color, evaluatingRow} = props;
   const getStyle = (letter: string, color: string) => {
     return {
       width:
-        letter === ONE || letter === ZERO ? SIZE_QWERTY + Scale(15) : SIZE_QWERTY - Scale(3),
+        letter === ONE || letter === ZERO
+          ? SIZE_QWERTY + Scale(15)
+          : SIZE_QWERTY,
       backgroundColor: color,
     } as ViewStyle;
   };
   const returnLetter = (letter: string): string => letter.toUpperCase();
 
   const letterContainer = getStyle(letter, color);
+
   const returnName = (letter: string): string =>
     letter === ONE ? ENTER_ICON : BACK_ICON;
+
   const returnIcon = (letter: string) => {
     return letter === ZERO ? (
       <Ionicons name={returnName(letter)} size={18} color={Colors.black} />
@@ -52,7 +56,7 @@ const KeyBoardCell = memo((props: Props) => {
         <Animated.View
           entering={evaluatingRow ? undefined : undefined}
           style={[letterContainer, styles.qwertyLetterContainer]}>
-          <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
+          <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
         </Animated.View>
       ) : null}
       {color == Colors.white ? (
@@ -60,7 +64,7 @@ const KeyBoardCell = memo((props: Props) => {
           {letter === ONE || letter === ZERO ? (
             returnIcon(letter)
           ) : (
-            <TextUI style={{ color: textColor }}>{returnLetter(letter)}</TextUI>
+            <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
           )}
         </Animated.View>
       ) : null}

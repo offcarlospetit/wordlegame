@@ -3,13 +3,13 @@ export const wordAdapter = `{
         "code": 200,
         "message": "OK"
     },
-    "data": $not($exists(results[0].lexicalEntries[0].entries[0].senses[0].definitions[0]))
-        ? null /* For errors data will be null */
+    "data": $not($exists( $[0].word)) ? null 
         : {
-            "word":results[0].id,
-            "meaning":results[0].lexicalEntries[0].entries[0].senses[0].definitions[0]
+            "word": $[0].word,
+            "meaning":$[0].meanings[0].definitions[0].definition
             /* Fields: oauth are being omitted */
-        }
+        } 
+       
 }`;
 
 

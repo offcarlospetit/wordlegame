@@ -16,7 +16,7 @@ export class Word extends SDK {
     public async wordRequest(payload: WordReq): Promise<WordResAdapt> {
         const reqConfig: RequestConfig = {
             isPublic: true,
-            url: `/api/v2/entries/${payload.language}/${payload.word}?fields=definitions&strictMatch=false`,
+            url: `/api/v2/entries/${payload.language}/${payload.word}`,
             method: 'GET',
         };
         try {

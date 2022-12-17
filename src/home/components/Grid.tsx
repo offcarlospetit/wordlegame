@@ -1,17 +1,20 @@
-import React, { memo } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { GridCell, Scale } from '../../ui-kit';
-import { GridLayoutType } from '../types';
+import React, {memo} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {GridCell, Scale} from '../../ui-kit';
+import {GridLayoutType} from '../types';
 
 export interface PropsGrid {
   grid: GridLayoutType;
   evaluatingRow: boolean;
+  actualRow: number;
+  actualColumn: number;
+  isFinish: boolean;
 }
 
 const Grid = memo(function GridMemo(props: PropsGrid) {
-  const { grid } = props;
+  const {grid, actualRow, actualColumn, evaluatingRow, isFinish} = props;
   return (
-    <>
+    <View>
       {grid.map((row, index) => {
         const rowIsEvaluated = row.evaluate;
         return (
@@ -23,13 +26,14 @@ const Grid = memo(function GridMemo(props: PropsGrid) {
                   exist={column.exist}
                   rowIsEvaluated={rowIsEvaluated}
                   key={ind + Math.random() + ''}
+                  animated={actualRow === index && isFinish}
                 />
               );
             })}
           </View>
         );
       })}
-    </>
+    </View>
   );
 });
 

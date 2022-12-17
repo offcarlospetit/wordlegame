@@ -9,7 +9,7 @@ export interface WordResponse {
     metadata: {
         operation: string,
         provider: string,
-        schema: string
+        schema: string;
     },
     results: [
         {
@@ -23,40 +23,40 @@ export interface WordResponse {
                                 {
                                     definitions: Array<string>,
                                     id: string,
-                                    subsenses: Array<{ definitions: Array<string>, id: string }>
+                                    subsenses: Array<{ definitions: Array<string>, id: string; }>;
                                 },
-                            ]
+                            ];
                         }
                     ],
                     language: string,
                     lexicalCategory: {
                         id: string,
-                        text: string
+                        text: string;
                     },
-                    text: string
+                    text: string;
                 },
             ],
             type: string,
-            word: string
+            word: string;
         }
     ],
-    word: string
+    word: string;
 }
 
 export interface WordReq {
     word: string;
-    language: 'es' | 'en-u';
+    language: 'es' | 'en-u' | 'en';
 }
 
 export interface WordResAdapt {
     status: {
-        code: number
-        message: string
+        code: number;
+        message: string;
     },
     data: {
-        word: string
-        meanings: string
-    }
+        word: string;
+        meanings: string;
+    };
 }
 
 // SDK available Namespaces

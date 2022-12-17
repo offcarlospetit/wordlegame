@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useLayoutEffect } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
-import { GridLayoutType, CellStruct, DailyWord, RowResult } from '../types';
+import React, {useContext, useEffect, useLayoutEffect} from 'react';
+import {Alert, Button, StyleSheet, Text, View} from 'react-native';
+import {GridLayoutType, CellStruct, DailyWord} from '../types';
 import Grid from '../components/Grid';
 import Qwerty from '../components/Qwerty';
-import { gridBuilder } from '../utils/Builders';
-import { DAILY_WORDS, _QWERTY_EN, _QWERTY_ES } from '../utils/Const';
+import {gridBuilder} from '../utils/Builders';
+import {DAILY_WORDS, _QWERTY_EN, _QWERTY_ES} from '../utils/Const';
 import {
   COLOR_BY_TYPE,
   TEXT_COLOR_BY_TYPE,
@@ -12,19 +12,24 @@ import {
   Container,
   Colors,
   Scale,
+  Header,
 } from '../../ui-kit';
-import { Exist } from '../../ui-kit/types';
-import { ApiCall } from '../../utils/WordReferenceApi';
-import { ContextCore } from '../../core';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { HomeStackParams } from '../../navigation/HomeStack';
-import { Settings } from '../../utils/Settings';
-const { ZERO, ONE } = ConstValues;
-export interface HomeProps extends NativeStackScreenProps<HomeStackParams> { }
+import {Exist} from '../../ui-kit/types';
+import {ApiCall} from '../../utils/WordReferenceApi';
+import {ContextCore} from '../../core';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {HomeStackParams} from '../../navigation/HomeStack';
+import {Settings} from '../../utils/Settings';
+import {BannerAd, TestIds, BannerAdSize} from '@react-native-admob/admob';
+const {ZERO, ONE} = ConstValues;
+
+export interface HomeProps extends NativeStackScreenProps<HomeStackParams> {}
+
 const keyBoard = Settings.language == 'es' ? _QWERTY_ES : _QWERTY_EN;
+
 const Home = (props: HomeProps) => {
-  const { navigation } = props;
-  const { hapticFeedback } = useContext(ContextCore);
+  const {navigation} = props;
+  const {hapticFeedback} = useContext(ContextCore);
   const [grid, setGrid] = React.useState<GridLayoutType>(gridBuilder(6));
   const [qwerty, setQuerty] = React.useState(keyBoard);
   const [isSolved, setIsSolved] = React.useState(false);
@@ -34,6 +39,7 @@ const Home = (props: HomeProps) => {
   const [actualColum, setActualColum] = React.useState(0);
   const [wordOfTheDay, setWordOfTheDay] = React.useState<DailyWord>();
   const [isFinish, setIsFinish] = React.useState(false);
+  const [attempt, setAttempt] = React.useState(0);
 
   useEffect(() => {
     if (!wordOfTheDay) {
@@ -65,14 +71,20 @@ const Home = (props: HomeProps) => {
         qwertyLetters.map(quertyRow => {
           return quertyRow.map(quertyLetter => {
             if (letterMarked.value === quertyLetter.letter.toUpperCase()) {
-              quertyLetter.color = COLOR_BY_TYPE[letterMarked.exist];
-              quertyLetter.textColor = TEXT_COLOR_BY_TYPE[letterMarked.exist];
+              quertyLetter.color =
+                quertyLetter.color === COLOR_BY_TYPE[1]
+                  ? COLOR_BY_TYPE[1]
+                  : COLOR_BY_TYPE[letterMarked.exist];
+              quertyLetter.textColor =
+                quertyLetter.textColor === TEXT_COLOR_BY_TYPE[1]
+                  ? TEXT_COLOR_BY_TYPE[1]
+                  : TEXT_COLOR_BY_TYPE[letterMarked.exist];
             }
           });
         });
       });
-      setIsFinish(true);
       setQuerty(qwerty);
+      setIsFinish(true);
     }
   }, [actualRow]);
 
@@ -92,7 +104,7 @@ const Home = (props: HomeProps) => {
   }, [isSolved]);
 
   useLayoutEffect(() => {
-    navigation.setOptions({ headerTitle: 'Game' });
+    navigation.setOptions({headerTitle: 'Game'});
   }, [navigation]);
 
   const evaluateBackButton = () => {
@@ -115,7 +127,9 @@ const Home = (props: HomeProps) => {
   const evaluateEnterButton = async () => {
     if (isSolved) return;
     const newGrid = [...grid];
-    if (!evaluatingRow) setIsEvaluatingRow(true);
+    if (!evaluatingRow) {
+      setIsEvaluatingRow(true);
+    }
     // si es una palabra valida
     // evaluamos la palabra
     // repintamos el grid
@@ -132,14 +146,18 @@ const Home = (props: HomeProps) => {
       newGrid[actualRow].evaluate = true;
       setGrid(newGrid);
 
+      if (response.same) {
+        setIsSolved(true);
+        return;
+      }
       if (actualRow < 5) {
         setActualRow(actualRow + 1);
         setActualColum(0);
-        if (response.same) setIsSolved(true);
+        setAttempt(attempt + 1);
       }
     } else {
       setIsEvaluatingRow(false);
-      hapticFeedback();
+      hapticFeedback('notificationError');
       Alert.alert('Palabra no valida');
     }
   };
@@ -174,12 +192,12 @@ const Home = (props: HomeProps) => {
     }[];
     same: boolean;
   } => {
-    let charEvaluate: { [key: string]: { index: number; evaluate: Exist } };
+    let charEvaluate: {[key: string]: {index: number; evaluate: Exist}};
     let same = false;
     if (word === wordOfTheDay?.word) same = true;
-    const result: Array<{ letter: string; exist: Exist }> = [];
+    const result: Array<{letter: string; exist: Exist}> = [];
     word.split('').map((char: string, index: number) => {
-      const struct: { letter: string; exist: Exist } = { letter: char, exist: 1 };
+      const struct: {letter: string; exist: Exist} = {letter: char, exist: 1};
       if (!same) {
         const word = wordOfTheDay?.word ?? '';
         let resultFind: Exist = 1;
@@ -197,12 +215,12 @@ const Home = (props: HomeProps) => {
       }
       result.push(struct);
       charEvaluate = {
-        [char]: { index, evaluate: struct.exist },
+        [char]: {index, evaluate: struct.exist},
         ...charEvaluate,
       };
       return struct;
     });
-    return { result, same };
+    return {result, same};
   };
 
   const locations = (
@@ -236,10 +254,22 @@ const Home = (props: HomeProps) => {
     return response;
   };
 
+  console.log({attempt})
+
   return (
-    <Container style={{ backgroundColor: Colors.white }}>
+    <Container style={{backgroundColor: Colors.white}}>
+      <Header />
       <View style={styles.gridContainer}>
-        <Grid grid={grid} evaluatingRow={evaluatingRow} />
+        <Grid
+          grid={grid}
+          evaluatingRow={evaluatingRow}
+          isFinish={isFinish}
+          actualRow={actualRow}
+          actualColumn={actualColum}
+        />
+      </View>
+      <View style={{padding: Scale(18)}}>
+        <Button title="Help" onPress={() => evaluateEnterButton()} />
       </View>
       <View style={styles.qwertyContainer}>
         <Qwerty
@@ -247,6 +277,12 @@ const Home = (props: HomeProps) => {
           updateLetter={updateLetter}
           evaluatingRow={evaluatingRow}
         />
+      </View>
+      <View
+        style={{
+          alignItems: 'center',
+        }}>
+        <BannerAd size={BannerAdSize.BANNER} unitId={TestIds.BANNER} />
       </View>
     </Container>
   );
@@ -256,13 +292,13 @@ export default Home;
 
 const styles = StyleSheet.create({
   gridContainer: {
-    flex: 1,
-    marginTop: Scale(55),
     justifyContent: 'flex-start',
     alignItems: 'center',
+    marginTop: Scale(16),
+    paddingHorizontal: Scale(16),
   },
   qwertyContainer: {
     flex: 1,
-    marginTop: Scale(150),
+    marginTop: Scale(26),
   },
 });
