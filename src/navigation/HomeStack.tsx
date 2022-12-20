@@ -3,8 +3,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Home, Result} from '../home';
 
 export type HomeStackParams = {
-  Result: undefined;
   Home: undefined;
+  Result: {
+    points: number;
+    isSolved: boolean;
+  };
 };
 
 const Stack = createNativeStackNavigator<HomeStackParams>();

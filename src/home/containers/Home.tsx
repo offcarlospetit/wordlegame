@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useLayoutEffect} from 'react';
+import React, {useContext, useEffect, useLayoutEffect, useMemo} from 'react';
 import {Alert, Button, StyleSheet, Text, View} from 'react-native';
 import {GridLayoutType, CellStruct, DailyWord} from '../types';
 import Grid from '../components/Grid';
@@ -23,12 +23,14 @@ import {Settings} from '../../utils/Settings';
 import {BannerAd, TestIds, BannerAdSize} from '@react-native-admob/admob';
 const {ZERO, ONE} = ConstValues;
 
+const MAX_POINTS = 3 * 5 * 6;
+const BONUS_POINTS = 3 * 5;
+
 export interface HomeProps extends NativeStackScreenProps<HomeStackParams> {}
 
 const keyBoard = Settings.language == 'es' ? _QWERTY_ES : _QWERTY_EN;
 
-const Home = (props: HomeProps) => {
-  const {navigation} = props;
+const Home: React.FC<HomeProps> = ({navigation}) => {
   const {hapticFeedback} = useContext(ContextCore);
   const [grid, setGrid] = React.useState<GridLayoutType>(gridBuilder(6));
   const [qwerty, setQuerty] = React.useState(keyBoard);
@@ -40,6 +42,7 @@ const Home = (props: HomeProps) => {
   const [wordOfTheDay, setWordOfTheDay] = React.useState<DailyWord>();
   const [isFinish, setIsFinish] = React.useState(false);
   const [attempt, setAttempt] = React.useState(0);
+  const [totalPoints, setTotalPoints] = React.useState(0);
 
   useEffect(() => {
     if (!wordOfTheDay) {
@@ -97,15 +100,12 @@ const Home = (props: HomeProps) => {
 
   useEffect(() => {
     if (isSolved) {
-      setTimeout(() => {
-        navigation.navigate('Result');
-      }, 1500);
+      navigation.navigate('Result', {
+        points: totalPoints,
+        isSolved,
+      });
     }
   }, [isSolved]);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({headerTitle: 'Game'});
-  }, [navigation]);
 
   const evaluateBackButton = () => {
     if (isSolved) return;
@@ -140,13 +140,22 @@ const Home = (props: HomeProps) => {
 
     if (validWord) {
       const response = findDiff(word);
+      let points = 0;
       response.result.map((wordResult, index) => {
         newGrid[actualRow].row[index].exist = wordResult.exist;
+        if (wordResult.exist == 1) {
+          points += 3;
+        }
+        if (wordResult.exist == 2) {
+          points += 1;
+        }
       });
       newGrid[actualRow].evaluate = true;
+      setTotalPoints(totalPoints + points);
       setGrid(newGrid);
 
       if (response.same) {
+        if (attempt === 0) setTotalPoints(MAX_POINTS + BONUS_POINTS);
         setIsSolved(true);
         return;
       }
@@ -254,7 +263,7 @@ const Home = (props: HomeProps) => {
     return response;
   };
 
-  console.log({attempt})
+  const getHelp = () => {};
 
   return (
     <Container style={{backgroundColor: Colors.white}}>
@@ -269,7 +278,7 @@ const Home = (props: HomeProps) => {
         />
       </View>
       <View style={{padding: Scale(18)}}>
-        <Button title="Help" onPress={() => evaluateEnterButton()} />
+        <Button title="Help ?" onPress={getHelp} />
       </View>
       <View style={styles.qwertyContainer}>
         <Qwerty
@@ -278,12 +287,12 @@ const Home = (props: HomeProps) => {
           evaluatingRow={evaluatingRow}
         />
       </View>
-      <View
+      {/* <View
         style={{
           alignItems: 'center',
         }}>
         <BannerAd size={BannerAdSize.BANNER} unitId={TestIds.BANNER} />
-      </View>
+      </View> */}
     </Container>
   );
 };

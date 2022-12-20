@@ -1,14 +1,15 @@
-import React, { useLayoutEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button, Container, Scale, TextUI } from '../../ui-kit';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { HomeStackParams } from '../../navigation/HomeStack';
+import React, {useLayoutEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {Button, Colors, Container, Scale, TextUI} from '../../ui-kit';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {HomeStackParams} from '../../navigation/HomeStack';
+import Icon from 'react-native-vector-icons/AntDesign';
 
-export interface ResultProps extends NativeStackScreenProps<HomeStackParams> { }
+export interface ResultProps
+  extends NativeStackScreenProps<HomeStackParams, 'Result'> {}
 
-const Result = (props: ResultProps) => {
-  const { navigation } = props;
-
+const Result: React.FC<ResultProps> = ({navigation, route}) => {
+  const {points, isSolved} = route.params;
   useLayoutEffect(() => {
     navigation.setOptions({});
   }, [navigation]);
@@ -16,30 +17,42 @@ const Result = (props: ResultProps) => {
   return (
     <Container>
       <View style={styles.containerWordleResult}>
-        {
-          [...Array(6)].map((row) => {
-            return (
-              <View key={Math.random()} style={styles.rowContainer}>
-                <View style={styles.containerTry}>
-                  <TextUI style={styles.text}>try one</TextUI>
-                </View>
-                <View style={styles.containerWordle}>
-                  <TextUI style={styles.text}>◼◼◼◼◼◼</TextUI>
-                </View>
-                <View style={styles.containerPercent}>
-                  <TextUI style={styles.text}>60%</TextUI>
-                </View>
-              </View>
-            )
-          })
-        }
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <TextUI style={styles.winText}>
+            Congratulations you find the word of the day 🎉🎉🎉
+          </TextUI>
+          <TextUI style={styles.winTextResult}>Your wordle result</TextUI>
+          <TextUI style={styles.winTextResult}>{points}</TextUI>
+        </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Button onPress={() => { null }} text={"Accept"} />
-        <Button size='small' type='success' onPress={() => { null }} text={"Share"} />
+        <View
+          style={{
+            flex: 1,
+          }}>
+          <Button
+            size="medium"
+            onPress={() => {
+              null;
+            }}
+            text={'See the ranking'}
+            icon="barschart"
+          />
+          <Button
+            size="small"
+            onPress={() => {
+              null;
+            }}
+            text={'Accept'}
+          />
+        </View>
       </View>
     </Container>
-  )
+  );
 };
 
 export default Result;
@@ -48,31 +61,41 @@ const styles = StyleSheet.create({
   containerWordleResult: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   rowContainer: {
     marginTop: Scale(16),
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   containerTry: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   containerWordle: {
     flex: 2,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   containerPercent: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   text: {
-    fontSize: 18
+    fontSize: 18,
   },
   buttonContainer: {
-    flex: 1
-  }
+    flex: 1,
+  },
+  winText: {
+    fontSize: 32,
+    color: Colors.success,
+    textAlign: 'center',
+    marginBottom: Scale(16),
+  },
+  winTextResult: {
+    fontSize: 32,
+    color: Colors.success,
+  },
 });
