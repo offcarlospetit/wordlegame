@@ -1,50 +1,59 @@
+// Navigation index file return login view if user is not logged in and return TabNavigator if user is logged in.
+
 import * as React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import HomeStack from './HomeStack';
-import ProfileStack from './ProfileStack';
-import { Colors, TabBar } from '../ui-kit';
-import AboutStack from './AboutStack';
+import {NavigationContainer} from '@react-navigation/native';
+import {Colors} from '../ui-kit';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import BottomTabs from './TabNavigator';
+import {LoginStack} from '../user';
+import {useSelector} from 'react-redux';
+import {RootState} from '../store';
 
-const Tab = createBottomTabNavigator();
+const MainNavigator = createNativeStackNavigator();
 
-function BottomTabs() {
+function MainStack() {
+  const [isLogged, setIsLogged] = React.useState(false);
+  const state = useSelector((state: RootState) => state);
+  React.useEffect(() => {
+    if (state.user.user?.user_metadata.full_name) setIsLogged(true);
+    else {
+      setIsLogged(false);
+    }
+  }, [state]);
+
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{ headerShown: false }}
-        tabBar={props => <TabBar {...props} />}>
-        <Tab.Screen
-          name="Game"
-          component={HomeStack}
-          options={{
-            headerStyle: {
-              backgroundColor: Colors.white,
-            },
-            headerTitleStyle: {
-              fontSize: 24,
-            },
-          }}
-        />
-        {/* <Tab.Screen
-                    name="Profile"
-                    component={ProfileStack}
-                /> */}
-        <Tab.Screen
-          name="About"
-          component={AboutStack}
-          options={{
-            headerStyle: {
-              backgroundColor: Colors.white,
-            },
-            headerTitleStyle: {
-              fontSize: 24,
-            },
-          }}
-        />
-      </Tab.Navigator>
+      <MainNavigator.Navigator screenOptions={{headerShown: false}}>
+        {isLogged ? (
+          <MainNavigator.Screen
+            name="GameStack"
+            component={BottomTabs}
+            options={{
+              headerStyle: {
+                backgroundColor: Colors.white,
+              },
+              headerTitleStyle: {
+                fontSize: 24,
+              },
+            }}
+          />
+        ) : (
+          <MainNavigator.Screen
+            name="LoginStack"
+            component={LoginStack}
+            options={{
+              headerStyle: {
+                backgroundColor: Colors.white,
+              },
+              headerTitleStyle: {
+                fontSize: 24,
+              },
+            }}
+          />
+        )}
+      </MainNavigator.Navigator>
     </NavigationContainer>
   );
 }
 
-export default BottomTabs;
+export default MainStack;

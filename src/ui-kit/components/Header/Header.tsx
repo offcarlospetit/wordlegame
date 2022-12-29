@@ -5,9 +5,17 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Colors from '../../constants/Colors';
 import {SCREEN_WIDTH} from '../../utils/Scale';
 
-type Props = {};
+type Props = {
+  title?: string;
+  leftButton?: boolean;
+  onLeftButtonPress?: () => void;
+};
 
-const Header: React.FC<Props> = ({}) => {
+const Header: React.FC<Props> = ({
+  title = 'Wordle Game',
+  leftButton = true,
+  onLeftButtonPress,
+}) => {
   const {top} = useSafeAreaInsets();
   return (
     <View
@@ -41,23 +49,25 @@ const Header: React.FC<Props> = ({}) => {
             ellipsizeMode="tail"
             numberOfLines={1}
             style={{
-              flex: 1,
               fontSize: 32,
+              lineHeight: 38,
               fontWeight: '900',
             }}>
-            Wordle Game
+            {title}
           </Text>
         </View>
         <View style={{flex: 1}}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Icon name={'reload1'} size={18} color={Colors.black} />
-          </View>
+          {leftButton ? (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Icon name={'reload1'} size={18} color={Colors.black} />
+            </View>
+          ) : null}
         </View>
       </View>
     </View>
