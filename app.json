@@ -1,4 +1,7 @@
 {
   "name": "wordlegame",
-  "displayName": "wordlegame"
+  "displayName": "wordlegame",
+  "expo": {
+    "scheme": "myredirect"
+  }
 }
