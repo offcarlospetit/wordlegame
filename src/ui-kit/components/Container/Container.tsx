@@ -1,14 +1,15 @@
-import React, {ReactNode} from 'react';
-import {StyleSheet, View, ViewProps} from 'react-native';
+import React, { ReactNode } from 'react';
+import { StyleSheet, View, ViewProps } from 'react-native';
 import Scale from '../../utils/Scale';
 import Colors from '../../constants/Colors';
+import Box from '../Box/Box';
 export interface PropsContainer extends ViewProps {
   children?: ReactNode;
 }
 
 const Container = (props: PropsContainer) => {
   return (
-    <View style={[{...styles.container}, props.style]}>{props?.children}</View>
+    <Box style={[{ ...styles.container }, props.style]}>{props?.children}</Box>
   );
 };
 

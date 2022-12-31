@@ -25,7 +25,7 @@ interface Props extends TouchableOpacityProps {
   icon?: string;
 }
 
-const Button: React.FC<Props> = ({
+const ButtonWep: React.FC<Props> = ({
   onPress,
   size = 'large',
   type = 'primary',
@@ -79,7 +79,7 @@ const Button: React.FC<Props> = ({
   );
 };
 
-export default Button;
+export default ButtonWep;
 
 const styles = StyleSheet.create({
   buttonContainer: {

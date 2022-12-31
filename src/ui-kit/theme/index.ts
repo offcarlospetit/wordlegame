@@ -1,4 +1,5 @@
 import { createTheme } from '@shopify/restyle';
+import { TextInputProps } from 'react-native';
 
 export const palette = {
     purpleLight: '#8C6FF7',
@@ -20,6 +21,95 @@ export const palette = {
     baseBackground: '#f8f8f8',
     mainGreen: '#00B833',
     mainRed: '#FF0000',
+
+    // new colors
+    FireOpal: '#EE6352',
+    Emmerald: '#59CD90',
+    CeruleanCrayola: '#3FA7D6',
+    MaximunYellowRoad: '#FAC05E',
+    VividTangerine: '#F79D84',
+
+
+};
+
+const elevatedStyle = {
+    shadowColor: 'mainBlack',
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 4,
+    elevation: 5,
+};
+
+const baseButtonVariant = {
+    borderRadius: 20,
+    height: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+};
+
+const buttonVariants = {
+    defaults: {
+        ...baseButtonVariant,
+        backgroundColor: 'primaryButton',
+    },
+    primary: {
+        ...baseButtonVariant,
+        backgroundColor: 'primaryButton',
+    },
+    primaryElevated: {
+        ...baseButtonVariant,
+        backgroundColor: 'primaryButton',
+        ...elevatedStyle,
+    },
+    danger: {
+        backgroundColor: 'errorButton',
+        ...baseButtonVariant,
+    },
+    dangerElevated: {
+        ...baseButtonVariant,
+        backgroundColor: 'errorButton',
+        ...elevatedStyle,
+    },
+    success: {
+        backgroundColor: 'successButton',
+        ...baseButtonVariant,
+    },
+    successElevated: {
+        ...baseButtonVariant,
+        backgroundColor: 'successButton',
+        ...elevatedStyle,
+    },
+    warning: {
+        backgroundColor: 'warningButton',
+        ...baseButtonVariant,
+    },
+    warningElevated: {
+        backgroundColor: 'warningButton',
+        ...baseButtonVariant,
+        ...elevatedStyle,
+    },
+    loginButton: {
+        backgroundColor: 'primaryButton',
+        ...baseButtonVariant,
+    },
+    loginButtonElevated: {
+        backgroundColor: 'primaryButton',
+        ...baseButtonVariant,
+        ...elevatedStyle,
+    },
+    signUpButton: {
+        backgroundColor: 'white',
+        borderColor: 'primaryButton',
+        borderWidth: 1,
+        ...baseButtonVariant,
+    },
+    signUpButtonElevated: {
+        backgroundColor: 'white',
+        borderColor: 'primaryButton',
+        borderWidth: 1,
+        ...baseButtonVariant,
+        ...elevatedStyle,
+    },
 };
 
 const theme = createTheme({
@@ -31,9 +121,16 @@ const theme = createTheme({
         buttonSecondary: palette.mainBlue,
         mainBlack: palette.black,
         mainCardBackground: palette.mainBlue,
+
+        // new colors
+        primaryButton: palette.CeruleanCrayola,
+        successButton: palette.Emmerald,
+        errorButton: palette.FireOpal,
+        warningButton: palette.MaximunYellowRoad,
         ...palette
     },
     spacing: {
+        xs: 4,
         s: 12,
         m: 16,
         l: 20,
@@ -155,14 +252,31 @@ const theme = createTheme({
             fontSize: 16,
             lineHeight: 21.86,
         },
+        loginButton: {
+            fontWeight: "800",
+            fontSize: 16,
+            lineHeight: 21.86,
+            color: 'white',
+        },
+        signUpButton: {
+            fontWeight: "800",
+            fontSize: 16,
+            lineHeight: 21.86,
+            color: 'black',
+        },
+        primary: {},
+        primaryElevated: {},
+        danger: {},
+        dangerElevated: {},
+        success: {},
+        successElevated: {},
+        warning: {},
+        warningElevated: {},
+        loginButtonElevated: {},
+        signUpButtonElevated: {},
     },
     buttonVariants: {
-        buttonPrimary: {
-
-        },
-        buttonSecondary: {
-
-        },
+        ...buttonVariants
     },
     cardVariants: {
         defaults: {
@@ -198,6 +312,18 @@ const theme = createTheme({
             // elevation: 5,
         },
     },
+    textInputVariants: {
+        defaults: {
+        },
+        regular: {
+            borderColor: 'grayColor',
+            borderBottomWidth: 1,
+            color: 'mainBlack',
+            paddingTop: 'xs',
+            paddingBottom: 'xs',
+            paddingHorizontal: 'xs',
+        } as TextInputProps,
+    }
 });
 
 export type ThemeType = typeof theme;
