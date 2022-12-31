@@ -1,11 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { UserResponse } from '@supabase/supabase-js';
+import { UserResponse, User, Session } from '@supabase/supabase-js';
 import { AuthSessionResult } from 'expo-auth-session';
 
-export type UserState = Partial<AuthSessionResult> & Partial<UserResponse['data']> & {};
 
-const initialState: UserState = {};
+export interface UserState {
+    user: User | null;
+    session: Session | null;
+};
+
+const initialState: UserState = {
+    user: null,
+    session: null,
+};
 
 export const userSlice = createSlice({
     name: 'user',

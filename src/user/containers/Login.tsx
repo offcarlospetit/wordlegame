@@ -1,98 +1,49 @@
-import React, {useState} from 'react';
-import {Alert, StyleSheet, TextInput, View} from 'react-native';
-import {makeRedirectUri, startAsync} from 'expo-auth-session';
-import {SUPABASE_URL, supabase} from '../../utils/initSupBase';
-import {Button} from '../../ui-kit';
-import {loginSuccess} from '../reducers/UserReducer';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../store';
-import {UserResponse} from '@supabase/supabase-js';
+import React from 'react';
+import { Box, Button, Text, TextInput } from '../../ui-kit';
+import useLogin from '../hooks/useLogin';
+import SocialButton from '../components/SocialButton';
 
-export default function Auth() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState('');
-  const dispatch = useDispatch();
+type Props = {};
 
-  const handleLogin = async (type: string, email: string, password: string) => {
-    setLoading(type);
-    const {error, data} =
-      type === 'LOGIN'
-        ? await supabase.auth.signInWithPassword({email, password})
-        : await supabase.auth.signUp({email, password});
-    if (!error && !data) Alert.alert('Check your email for the login link!');
-    if (error) Alert.alert(error.message);
-    setLoading('');
-  };
 
-  async function signInWithGoogle() {
-    const redirectUrl = makeRedirectUri({
-      path: '/',
-    });
-    const authResponse = await startAsync({
-      authUrl: `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${redirectUrl}`,
-      returnUrl: redirectUrl,
-    });
-
-    if (authResponse.type === 'success') {
-      supabase.auth.setSession({
-        access_token: authResponse.params.access_token,
-        refresh_token: authResponse.params.refresh_token,
-      });
-
-      const userInfo: UserResponse = await supabase.auth.getUser(
-        authResponse.params.access_token,
-      );
-      if (!userInfo.data.user) return;
-      dispatch(loginSuccess({...userInfo.data, ...authResponse}));
-    }
-  }
+const Login: React.FC<Props> = ({ }) => {
+  const { handleEmail, handleLogin, handlePassword, signInWithGoogle, email, password, loading } = useLogin();
 
   return (
-    <View style={{flex: 1, paddingHorizontal: 16, justifyContent: 'center'}}>
-      <View style={[styles.verticallySpaced, {marginTop: 20}]}>
+    <Box flex={1} paddingHorizontal="m" justifyContent="center">
+      <Box paddingTop="xs" paddingBottom="xs" alignSelf="stretch" marginTop="l">
         <TextInput
-          onChangeText={text => setEmail(text)}
+          variant="regular"
+          onChangeText={handleEmail}
           value={email}
           placeholder="email@address.com"
           autoCapitalize={'none'}
         />
-      </View>
-      <View style={styles.verticallySpaced}>
+      </Box>
+      <Box paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
         <TextInput
-          onChangeText={text => setPassword(text)}
+          variant="regular"
+          onChangeText={handlePassword}
           value={password}
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={'none'}
         />
-      </View>
-      <View style={[styles.verticallySpaced, {marginTop: 20}]}>
-        <Button
-          text="Sign in"
-          disabled={!!loading.length}
-          onPress={signInWithGoogle}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button
-          text="Sign up"
-          disabled={!!loading.length}
-          onPress={() => handleLogin('SIGNUP', email, password)}
-        />
-      </View>
-    </View>
+      </Box>
+      <Box paddingTop="xs" paddingBottom="xs" alignSelf="stretch" marginTop="l">
+        <Button onPress={() => handleLogin('LOGIN', email, password)} variant="loginButton" label="Log In" />
+      </Box>
+      <Text textAlign="center" marginTop="l" variant="detailTitle" >
+        or
+      </Text>
+      <Box alignItems="center">
+        <SocialButton onPress={signInWithGoogle} type="google" title="Sign In with Google" />
+        <SocialButton onPress={() => {
+          console.log('facebook');
+        }} type="apple" title="Sign In with Apple" />
+      </Box>
+    </Box >
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 40,
-    padding: 20,
-  },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-});
+export default Login;

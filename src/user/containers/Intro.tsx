@@ -1,0 +1,39 @@
+import React from 'react';
+import { Box, Button, Utils } from '../../ui-kit';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { UserStackParams } from '../navigation';
+import { Image } from 'react-native';
+
+export interface IntroProps extends NativeStackScreenProps<UserStackParams> { }
+
+const Intro: React.FC<IntroProps> = ({ navigation }) => {
+    const { bottom } = useSafeAreaInsets();
+
+    const login = () => {
+        navigation.navigate('Login');
+    };
+
+    const register = () => {
+        navigation.navigate('Register');
+    };
+
+    return (
+        <Box flex={1} backgroundColor="white">
+            <Box position="absolute" top={0}>
+                <Image height={1} width={400} style={{ resizeMode: 'cover' }} source={Utils.wallpaper} />
+            </Box>
+
+            <Box paddingHorizontal="m" width="100%" position="absolute" bottom={bottom}>
+                <Box marginBottom="m">
+                    <Button onPress={login} variant="loginButton" label="Log In" />
+                </Box>
+                <Box marginBottom="m">
+                    <Button onPress={register} variant="signUpButton" label="Sign Up" />
+                </Box>
+            </Box>
+        </Box >
+    );
+};
+
+export default Intro;
