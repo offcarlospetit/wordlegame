@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Box, Button, Text, TextInput } from '../../ui-kit';
 import { SocialIcon } from '@rneui/themed';
 import useLogin from '../hooks/useLogin';
@@ -22,7 +22,7 @@ const Register: React.FC<Props> = ({ }) => {
 
     return (
         <Box flex={1} paddingHorizontal="m" justifyContent="center">
-            <View style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
                 <TextInput
                     variant="regular"
                     onChangeText={handleName}
@@ -30,8 +30,8 @@ const Register: React.FC<Props> = ({ }) => {
                     placeholder="Your Name"
                     autoCapitalize={'words'}
                 />
-            </View>
-            <View style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            </Box>
+            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
                 <TextInput
                     variant="regular"
                     onChangeText={handleUsername}
@@ -39,8 +39,8 @@ const Register: React.FC<Props> = ({ }) => {
                     placeholder="your username"
                     autoCapitalize={'none'}
                 />
-            </View>
-            <View style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            </Box>
+            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
                 <TextInput
                     variant="regular"
                     onChangeText={handleEmail}
@@ -48,8 +48,8 @@ const Register: React.FC<Props> = ({ }) => {
                     placeholder="email@address.com"
                     autoCapitalize={'none'}
                 />
-            </View>
-            <View style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            </Box>
+            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
                 <TextInput
                     variant="regular"
                     onChangeText={handlePassword}
@@ -58,17 +58,17 @@ const Register: React.FC<Props> = ({ }) => {
                     placeholder="Password"
                     autoCapitalize={'none'}
                 />
-            </View>
-            <View style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            </Box>
+            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
                 {error ? <Text variant="danger">{error}</Text> : null}
-            </View>
-            <View style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            </Box>
+            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
                 <Button variant="success" label="Sign Up" onPress={() => handleLogin('SIGNUP', email, password)} />
-            </View>
+            </Box>
             <Text variant="detailTitle" style={{ textAlign: 'center', marginTop: 20 }}>
                 or
             </Text>
-            <View style={{ alignItems: 'center' }}>
+            <Box style={{ alignItems: 'center' }}>
                 <SocialIcon
                     button
                     light
@@ -94,7 +94,7 @@ const Register: React.FC<Props> = ({ }) => {
                         console.log('facebook');
                     }}
                 />
-            </View>
+            </Box>
         </Box>
     );
 };
