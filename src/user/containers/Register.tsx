@@ -22,7 +22,7 @@ const Register: React.FC<Props> = ({ }) => {
 
     return (
         <Box flex={1} paddingHorizontal="m" justifyContent="center">
-            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
                 <TextInput
                     variant="regular"
                     onChangeText={handleName}
@@ -31,7 +31,7 @@ const Register: React.FC<Props> = ({ }) => {
                     autoCapitalize={'words'}
                 />
             </Box>
-            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
                 <TextInput
                     variant="regular"
                     onChangeText={handleUsername}
@@ -40,7 +40,7 @@ const Register: React.FC<Props> = ({ }) => {
                     autoCapitalize={'none'}
                 />
             </Box>
-            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
                 <TextInput
                     variant="regular"
                     onChangeText={handleEmail}
@@ -49,7 +49,7 @@ const Register: React.FC<Props> = ({ }) => {
                     autoCapitalize={'none'}
                 />
             </Box>
-            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
                 <TextInput
                     variant="regular"
                     onChangeText={handlePassword}
@@ -59,10 +59,10 @@ const Register: React.FC<Props> = ({ }) => {
                     autoCapitalize={'none'}
                 />
             </Box>
-            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
                 {error ? <Text variant="danger">{error}</Text> : null}
             </Box>
-            <Box style={[styles.verticallySpaced, { marginTop: 20 }]}>
+            <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
                 <Button variant="success" label="Sign Up" onPress={() => handleLogin('SIGNUP', email, password)} />
             </Box>
             <Text variant="detailTitle" style={{ textAlign: 'center', marginTop: 20 }}>
