@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useLayoutEffect, useMemo} from 'react';
-import {Alert, Button, StyleSheet, Text, View} from 'react-native';
-import {GridLayoutType, CellStruct, DailyWord} from '../types';
+import React, { useContext, useEffect, useLayoutEffect, useMemo } from 'react';
+import { Alert, Button, StyleSheet, Text, View } from 'react-native';
+import { GridLayoutType, CellStruct, DailyWord } from '../types';
 import Grid from '../components/Grid';
 import Qwerty from '../components/Qwerty';
-import {gridBuilder} from '../utils/Builders';
-import {DAILY_WORDS, _QWERTY_EN, _QWERTY_ES} from '../utils/Const';
+import { gridBuilder } from '../utils/Builders';
+import { DAILY_WORDS, _QWERTY_EN, _QWERTY_ES } from '../utils/Const';
 import {
   COLOR_BY_TYPE,
   TEXT_COLOR_BY_TYPE,
@@ -14,24 +14,24 @@ import {
   Scale,
   Header,
 } from '../../ui-kit';
-import {Exist} from '../../ui-kit/types';
-import {ApiCall} from '../../utils/WordReferenceApi';
-import {ContextCore} from '../../core';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParams} from '../../navigation/HomeStack';
-import {Settings} from '../../utils/Settings';
-import {BannerAd, TestIds, BannerAdSize} from '@react-native-admob/admob';
-const {ZERO, ONE} = ConstValues;
+import { Exist } from '../../ui-kit/types';
+import { ApiCall } from '../../utils/WordReferenceApi';
+import { ContextCore } from '../../core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HomeStackParams } from '../../navigation/HomeStack';
+import { Settings } from '../../utils/Settings';
+import { BannerAd, TestIds, BannerAdSize } from '@react-native-admob/admob';
+const { ZERO, ONE } = ConstValues;
 
 const MAX_POINTS = 3 * 5 * 6;
 const BONUS_POINTS = 3 * 5;
 
-export interface HomeProps extends NativeStackScreenProps<HomeStackParams> {}
+export interface HomeProps extends NativeStackScreenProps<HomeStackParams> { }
 
 const keyBoard = Settings.language == 'es' ? _QWERTY_ES : _QWERTY_EN;
 
-const Home: React.FC<HomeProps> = ({navigation}) => {
-  const {hapticFeedback} = useContext(ContextCore);
+const Home: React.FC<HomeProps> = ({ navigation }) => {
+  const { hapticFeedback } = useContext(ContextCore);
   const [grid, setGrid] = React.useState<GridLayoutType>(gridBuilder(6));
   const [qwerty, setQuerty] = React.useState(keyBoard);
   const [isSolved, setIsSolved] = React.useState(false);
@@ -201,12 +201,12 @@ const Home: React.FC<HomeProps> = ({navigation}) => {
     }[];
     same: boolean;
   } => {
-    let charEvaluate: {[key: string]: {index: number; evaluate: Exist}};
+    let charEvaluate: { [key: string]: { index: number; evaluate: Exist; }; };
     let same = false;
     if (word === wordOfTheDay?.word) same = true;
-    const result: Array<{letter: string; exist: Exist}> = [];
+    const result: Array<{ letter: string; exist: Exist; }> = [];
     word.split('').map((char: string, index: number) => {
-      const struct: {letter: string; exist: Exist} = {letter: char, exist: 1};
+      const struct: { letter: string; exist: Exist; } = { letter: char, exist: 1 };
       if (!same) {
         const word = wordOfTheDay?.word ?? '';
         let resultFind: Exist = 1;
@@ -224,12 +224,12 @@ const Home: React.FC<HomeProps> = ({navigation}) => {
       }
       result.push(struct);
       charEvaluate = {
-        [char]: {index, evaluate: struct.exist},
+        [char]: { index, evaluate: struct.exist },
         ...charEvaluate,
       };
       return struct;
     });
-    return {result, same};
+    return { result, same };
   };
 
   const locations = (
@@ -263,10 +263,10 @@ const Home: React.FC<HomeProps> = ({navigation}) => {
     return response;
   };
 
-  const getHelp = () => {};
+  const getHelp = () => { };
 
   return (
-    <Container style={{backgroundColor: Colors.white}}>
+    <Container style={{ backgroundColor: Colors.white }}>
       <Header />
       <View style={styles.gridContainer}>
         <Grid
@@ -277,7 +277,7 @@ const Home: React.FC<HomeProps> = ({navigation}) => {
           actualColumn={actualColum}
         />
       </View>
-      <View style={{padding: Scale(18)}}>
+      <View style={{ padding: Scale(18) }}>
         <Button title="Help ?" onPress={getHelp} />
       </View>
       <View style={styles.qwertyContainer}>

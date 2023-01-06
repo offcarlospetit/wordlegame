@@ -1,7 +1,6 @@
-import React, {memo} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {KeyBoardCell, Scale} from '../../ui-kit';
-import {QwertyTypeArray} from '../types';
+import React, { memo } from 'react';
+import { Box, KeyBoardCell } from '../../ui-kit';
+import { QwertyTypeArray } from '../types';
 
 type Props = {
   qwerty: QwertyTypeArray;
@@ -10,19 +9,18 @@ type Props = {
 };
 
 const Qwerty = memo(function QwertyMemo(props: Props) {
-  const {qwerty, updateLetter, evaluatingRow} = props;
+  const { qwerty, updateLetter, evaluatingRow } = props;
   return (
-    <View style={{flex: 1}}>
+    <Box flex={1}>
       {qwerty.map((row, index) => {
         return (
-          <View
+          <Box
             key={index + Math.random()}
-            style={[
-              styles.qwertyRow,
-              {
-                alignItems: 'center'
-              },
-            ]}>
+            flexDirection="row"
+            marginBottom='xs'
+            justifyContent='center'
+            alignItems='center'
+          >
             {row.map(letter => {
               return (
                 <KeyBoardCell
@@ -35,19 +33,11 @@ const Qwerty = memo(function QwertyMemo(props: Props) {
                 />
               );
             })}
-          </View>
+          </Box>
         );
       })}
-    </View>
+    </Box>
   );
 });
 
 export default Qwerty;
-
-const styles = StyleSheet.create({
-  qwertyRow: {
-    flexDirection: 'row',
-    marginBottom: Scale(10),
-    justifyContent: 'center',
-  },
-});

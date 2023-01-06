@@ -1,15 +1,15 @@
-import React, {useLayoutEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Button, Colors, Container, Scale, TextUI} from '../../ui-kit';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {HomeStackParams} from '../../navigation/HomeStack';
+import React, { useLayoutEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Box, Button, Colors, Container, Scale, TextUI } from '../../ui-kit';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HomeStackParams } from '../../navigation/HomeStack';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 export interface ResultProps
-  extends NativeStackScreenProps<HomeStackParams, 'Result'> {}
+  extends NativeStackScreenProps<HomeStackParams, 'Result'> { }
 
-const Result: React.FC<ResultProps> = ({navigation, route}) => {
-  const {points, isSolved} = route.params;
+const Result: React.FC<ResultProps> = ({ navigation, route }) => {
+  const { points, isSolved } = route.params;
   useLayoutEffect(() => {
     navigation.setOptions({});
   }, [navigation]);
@@ -29,29 +29,26 @@ const Result: React.FC<ResultProps> = ({navigation, route}) => {
           <TextUI style={styles.winTextResult}>{points}</TextUI>
         </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <View
-          style={{
-            flex: 1,
-          }}>
+      <Box flex={1} paddingHorizontal="m">
+        <Box flex={1}>
           <Button
-            size="medium"
+            marginBottom={'m'}
+            variant={'success'}
             onPress={() => {
               null;
             }}
-            text={'See the ranking'}
-            icon="barschart"
+            label={'See the ranking'}
           />
           <Button
-            size="small"
+            variant={'primary'}
             onPress={() => {
               null;
             }}
-            text={'Accept'}
+            label={'Accept'}
           />
-        </View>
-      </View>
-    </Container>
+        </Box>
+      </Box>
+    </Container >
   );
 };
 

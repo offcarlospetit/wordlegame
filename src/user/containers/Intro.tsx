@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Utils } from '../../ui-kit';
+import { Box, Button, wallpaper } from '../../ui-kit';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UserStackParams } from '../navigation';
@@ -21,7 +21,7 @@ const Intro: React.FC<IntroProps> = ({ navigation }) => {
     return (
         <Box flex={1} backgroundColor="white">
             <Box position="absolute" top={0}>
-                <Image height={1} width={400} style={{ resizeMode: 'cover' }} source={Utils.wallpaper} />
+                <Image height={1} width={400} style={{ resizeMode: 'cover' }} source={wallpaper} />
             </Box>
 
             <Box paddingHorizontal="m" width="100%" position="absolute" bottom={bottom}>
