@@ -16,8 +16,7 @@ export {
   SCREEN_WIDTH,
 } from './utils/Scale';
 export { default as Scale } from './utils/Scale';
-export { COLOR_BY_TYPE, TEXT_COLOR_BY_TYPE } from './utils/Utils';
-export { default as Utils } from './utils/Utils';
+export { COLOR_BY_TYPE, TEXT_COLOR_BY_TYPE, wallpaper } from './utils/Utils';
 export { BasicShadow } from './constants/ConstValues';
 
 export { default as useUikit } from './hooks/useUikit';
