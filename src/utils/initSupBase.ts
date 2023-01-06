@@ -8,4 +8,8 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     // @ts-ignore
     localStorage: AsyncStorage as any,
+    auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+    },
 });
