@@ -1,11 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, TextStyle, View, ViewStyle} from 'react-native';
-import {Exist} from '../types';
-import {COLOR_BY_TYPE, TextUI, TEXT_COLOR_BY_TYPE} from '../index';
+import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import { Exist } from '../types';
+import { COLOR_BY_TYPE, TextUI, Text, TEXT_COLOR_BY_TYPE } from '../index';
 import Colors from '../constants/Colors';
-import {SIZE} from '../utils/Scale';
+import { SIZE } from '../utils/Scale';
 import Scale from '../utils/Scale';
-import Animated, {BounceIn} from 'react-native-reanimated';
+import Animated, { BounceIn } from 'react-native-reanimated';
 
 type Props = {
   rowIsEvaluated: boolean;
@@ -15,7 +15,7 @@ type Props = {
 };
 
 const GridCell = (props: Props) => {
-  const {rowIsEvaluated, value, exist, animated} = props;
+  const { rowIsEvaluated, value, exist, animated } = props;
   const letterGridDynamic = {
     backgroundColor: rowIsEvaluated ? COLOR_BY_TYPE[exist] : 'white',
   } as ViewStyle;
@@ -25,9 +25,9 @@ const GridCell = (props: Props) => {
   return (
     <Animated.View
       style={[letterGridDynamic, styles.letterGrid]}>
-      <TextUI style={{...letterGridTextDynamic, ...styles.letterGridText}}>
+      <Text style={{ ...letterGridTextDynamic, ...styles.letterGridText }}>
         {value}
-      </TextUI>
+      </Text>
     </Animated.View>
   );
 };

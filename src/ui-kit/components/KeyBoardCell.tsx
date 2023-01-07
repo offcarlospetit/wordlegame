@@ -1,15 +1,17 @@
-import React, {memo, useContext} from 'react';
-import {StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
-import Animated, {FlipInEasyX} from 'react-native-reanimated';
+import React, { memo, useContext } from 'react';
+import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import Animated from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {TextUI} from '../index';
+import { Text } from '../index';
+import theme, { ThemeType } from '../theme';
 import Colors from '../constants/Colors';
 import ConstValues from '../constants/ConstValues';
-import {SIZE_QWERTY} from '../utils/Scale';
+import { SIZE_QWERTY } from '../utils/Scale';
 import Scale from '../utils/Scale';
-import {ContextCore} from '../../core';
-const {ONE, ZERO, BACK_ICON, ENTER_ICON} = ConstValues;
+import { ContextCore } from '../../core';
+const { ONE, ZERO, BACK_ICON, ENTER_ICON } = ConstValues;
+
 type Props = {
   letter: string;
   textColor: string;
@@ -19,8 +21,8 @@ type Props = {
 };
 
 const KeyBoardCell = memo((props: Props) => {
-  const {hapticFeedback} = useContext(ContextCore);
-  const {letter, textColor, updateLetter, color, evaluatingRow} = props;
+  const { hapticFeedback } = useContext(ContextCore);
+  const { letter, textColor, updateLetter, color, evaluatingRow } = props;
   const getStyle = (letter: string, color: string) => {
     return {
       width:
@@ -56,7 +58,7 @@ const KeyBoardCell = memo((props: Props) => {
         <Animated.View
           entering={evaluatingRow ? undefined : undefined}
           style={[letterContainer, styles.qwertyLetterContainer]}>
-          <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
+          <Text style={{ color: textColor }} >{returnLetter(letter)}</Text>
         </Animated.View>
       ) : null}
       {color == Colors.white ? (
@@ -64,7 +66,7 @@ const KeyBoardCell = memo((props: Props) => {
           {letter === ONE || letter === ZERO ? (
             returnIcon(letter)
           ) : (
-            <TextUI style={{color: textColor}}>{returnLetter(letter)}</TextUI>
+            <Text style={{ color: textColor }} >{returnLetter(letter)}</Text>
           )}
         </Animated.View>
       ) : null}
