@@ -274,6 +274,26 @@ const theme = createTheme({
         warningElevated: {},
         loginButtonElevated: {},
         signUpButtonElevated: {},
+        winTextVariant: {
+            fontSize: 32,
+            color: 'Emmerald',
+            textAlign: 'center',
+            marginBottom: 'm',
+            fontWeight: 'bold',
+        },
+        winTextResultVarian: {
+            fontSize: 32,
+            color: 'Emmerald',
+        },
+        profileName: {
+            fontSize: 16,
+            lineHeight: 24,
+        },
+        logOutText: {
+            fontSize: 24,
+            lineHeight: 32,
+            color: 'MaximunYellowRoad',
+        }
     },
     buttonVariants: {
         ...buttonVariants

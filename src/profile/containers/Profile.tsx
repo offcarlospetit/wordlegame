@@ -1,6 +1,6 @@
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import React from 'react';
-import { Colors, Container, Header, TextUI } from '../../ui-kit';
+import { Colors, Box, Container, Header, Text } from '../../ui-kit';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { logOut } from '../../user/reducers/UserReducer';
@@ -21,22 +21,18 @@ const Profile: React.FC<Props> = ({ }) => {
   return (
     <Container>
       <Header title="Profile" leftButton={false} />
-      <View style={{ marginTop: 16, paddingHorizontal: 16 }}>
-        <View style={{ marginTop: 16 }}>
-          <TextUI
-            style={{
-              fontSize: 16,
-              lineHeight: 24,
-            }}>{`Hi, ${an?.full_name}`}</TextUI>
-        </View>
-        <View style={{ marginTop: 16 }}>
+      <Box marginTop="m" paddingHorizontal="m">
+        <Box marginTop="m">
+          <Text variant="profileName">{`Hi, ${an?.full_name}`}</Text>
+        </Box>
+        <Box marginTop="m">
           <TouchableWithoutFeedback onPress={logOutAction}>
-            <TextUI style={{ fontSize: 24, color: Colors.warning }}>
+            <Text variant="logOutText">
               LogOut
-            </TextUI>
+            </Text>
           </TouchableWithoutFeedback>
-        </View>
-      </View>
+        </Box>
+      </Box>
     </Container>
   );
 };
