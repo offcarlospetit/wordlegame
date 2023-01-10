@@ -25,7 +25,7 @@ const GridCell = (props: Props) => {
   return (
     <Animated.View
       style={[letterGridDynamic, styles.letterGrid]}>
-      <Text style={{ ...letterGridTextDynamic, ...styles.letterGridText }}>
+      <Text lineHeight={24} style={{ ...letterGridTextDynamic, ...styles.letterGridText }}>
         {value}
       </Text>
     </Animated.View>

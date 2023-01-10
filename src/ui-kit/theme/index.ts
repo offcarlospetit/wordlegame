@@ -276,6 +276,7 @@ const theme = createTheme({
         signUpButtonElevated: {},
         winTextVariant: {
             fontSize: 32,
+            lineHeight: 43.71,
             color: 'Emmerald',
             textAlign: 'center',
             marginBottom: 'm',
@@ -283,6 +284,7 @@ const theme = createTheme({
         },
         winTextResultVarian: {
             fontSize: 32,
+            lineHeight: 43.71,
             color: 'Emmerald',
         },
         profileName: {

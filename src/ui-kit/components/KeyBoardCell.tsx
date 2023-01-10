@@ -28,7 +28,7 @@ const KeyBoardCell = memo((props: Props) => {
       width:
         letter === ONE || letter === ZERO
           ? SIZE_QWERTY + Scale(15)
-          : SIZE_QWERTY - 5,
+          : SIZE_QWERTY,
       backgroundColor: color,
     } as ViewStyle;
   };

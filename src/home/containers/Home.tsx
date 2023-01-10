@@ -21,6 +21,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeStackParams } from '../../navigation/HomeStack';
 import { Settings } from '../../utils/Settings';
 import { BannerAd, TestIds, BannerAdSize } from '@react-native-admob/admob';
+import { supabase } from '../../utils/initSupBase';
+import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
 const { ZERO, ONE } = ConstValues;
 
 const MAX_POINTS = 3 * 5 * 6;
@@ -31,6 +34,7 @@ export interface HomeProps extends NativeStackScreenProps<HomeStackParams> { }
 const keyBoard = Settings.language == 'es' ? _QWERTY_ES : _QWERTY_EN;
 
 const Home: React.FC<HomeProps> = ({ navigation }) => {
+  const state = useSelector((state: RootState) => state);
   const { hapticFeedback } = useContext(ContextCore);
   const [grid, setGrid] = React.useState<GridLayoutType>(gridBuilder(6));
   const [qwerty, setQuerty] = React.useState(keyBoard);
@@ -98,12 +102,55 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     }
   }, [qwerty, isFinish]);
 
+  const navigateToResult = () => {
+    navigation.navigate('Result', {
+      points: totalPoints,
+      isSolved,
+    });
+  };
+
+
+  const updateRecord = async () => {
+    const { data, error } = await supabase
+      .from('rank')
+      .select('*')
+      .eq('user_id', state.user.user?.id);
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    const user = data[0];
+    if (user) {
+      const { data, error } = await supabase
+        .from('rank')
+        .update({ points: totalPoints + user.points })
+        .eq('user_id', state.user.user?.id)
+        .select();
+      if (error) {
+        console.log("1", error);
+      }
+      navigateToResult();
+    } else {
+      // insert
+      const { data, error } = await supabase
+        .from('rank')
+        .insert({ points: totalPoints, user_id: state.user.user?.id });
+      if (error) {
+        console.log("1", error);
+      }
+      navigateToResult();
+      if (error) {
+        console.log("2", error);
+        return;
+      }
+      console.log({ data });
+    }
+  };
+
   useEffect(() => {
     if (isSolved) {
-      navigation.navigate('Result', {
-        points: totalPoints,
-        isSolved,
-      });
+      updateRecord();
     }
   }, [isSolved]);
 
@@ -159,11 +206,14 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
         setIsSolved(true);
         return;
       }
+
       if (actualRow < 5) {
         setActualRow(actualRow + 1);
         setActualColum(0);
         setAttempt(attempt + 1);
       }
+
+
     } else {
       setIsEvaluatingRow(false);
       hapticFeedback('notificationError');
