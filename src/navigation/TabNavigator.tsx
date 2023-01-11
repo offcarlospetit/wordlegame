@@ -1,16 +1,17 @@
 import * as React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeStack from './HomeStack';
 import ProfileStack from './ProfileStack';
-import {Colors, TabBar} from '../ui-kit';
+import { Colors, TabBar } from '../ui-kit';
 import AboutStack from './AboutStack';
+import RankStack from './RankStack';
 
 const Tab = createBottomTabNavigator();
 
 function BottomTabs() {
   return (
     <Tab.Navigator
-      screenOptions={{headerShown: false}}
+      screenOptions={{ headerShown: false }}
       tabBar={props => <TabBar {...props} />}>
       <Tab.Screen
         name="Game"
@@ -36,6 +37,7 @@ function BottomTabs() {
           },
         }}
       />
+      <Tab.Screen name="Rank" component={RankStack} />
       <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>
   );

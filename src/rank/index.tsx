@@ -1,0 +1,1 @@
+export { default as Rank } from './containers/Rank';
