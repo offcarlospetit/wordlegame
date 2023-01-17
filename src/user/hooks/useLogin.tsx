@@ -2,7 +2,7 @@
 import { useDispatch } from 'react-redux';
 import { makeRedirectUri, startAsync } from 'expo-auth-session';
 import { UserResponse } from '@supabase/supabase-js';
-import { SUPABASE_URL, supabase } from '../../utils/initSupBase';
+import supabase, { SUPABASE_URL } from '../../utils/initSupBase';
 import { loginSuccess } from '../reducers/UserReducer';
 import { useState } from 'react';
 
@@ -69,7 +69,10 @@ const useLogin = () => {
             setLoading('');
             return;
         }
-        if (!data.session) return;
+        if (!data.session) {
+            console.log({ data });
+            return;
+        }
         await supabase.auth.setSession({
             access_token: data.session.access_token,
             refresh_token: data.session.refresh_token,
