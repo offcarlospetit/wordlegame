@@ -1,15 +1,16 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Colors, Scale, TextUI } from '../../index';
 
-type StackNames = 'Game' | 'Profile' | 'About';
+type StackNames = 'Game' | 'Profile' | 'About' | 'RankStack';
 
 const iconNameMap: Record<StackNames, string> = {
   Game: 'grid-outline',
   Profile: 'person-circle-outline',
   About: 'information-circle-outline',
+  RankStack: 'podium-outline',
 };
 
 function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
@@ -63,14 +64,14 @@ function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
               marginTop: Scale(4),
               alignItems: 'center',
             }}>
-            <Icon
+            <Ionicons
               name={iconNameMap[route.name as StackNames]}
               color={isFocused ? Colors.black : Colors.silverSand}
               size={24}
             />
             <TextUI
               style={{ color: isFocused ? Colors.black : Colors.silverSand }}>
-              {label}
+              {label as string}
             </TextUI>
           </TouchableOpacity>
         );

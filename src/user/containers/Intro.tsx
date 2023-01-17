@@ -5,9 +5,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UserStackParams } from '../navigation';
 import { Image } from 'react-native';
 
-export interface IntroProps extends NativeStackScreenProps<UserStackParams> { }
+export interface IntroProps extends NativeStackScreenProps<UserStackParams, 'Intro'> { }
 
-const Intro: React.FC<IntroProps> = ({ navigation }) => {
+const IntroComponent: React.FC<IntroProps> = ({ navigation }) => {
     const { bottom } = useSafeAreaInsets();
 
     const login = () => {
@@ -21,7 +21,7 @@ const Intro: React.FC<IntroProps> = ({ navigation }) => {
     return (
         <Box flex={1} backgroundColor="white">
             <Box position="absolute" top={0}>
-                <Image height={1} width={400} style={{ resizeMode: 'cover' }} source={wallpaper} />
+                <Image style={{ resizeMode: 'cover' }} source={wallpaper} />
             </Box>
 
             <Box paddingHorizontal="m" width="100%" position="absolute" bottom={bottom}>
@@ -36,4 +36,4 @@ const Intro: React.FC<IntroProps> = ({ navigation }) => {
     );
 };
 
-export default Intro;
+export default IntroComponent;

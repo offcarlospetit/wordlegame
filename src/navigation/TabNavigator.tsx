@@ -6,6 +6,13 @@ import { Colors, TabBar } from '../ui-kit';
 import AboutStack from './AboutStack';
 import RankStack from './RankStack';
 
+export type BottomTabParamList = {
+  Game: undefined;
+  About: undefined;
+  RankStack: undefined;
+  Profile: undefined;
+};
+
 const Tab = createBottomTabNavigator();
 
 function BottomTabs() {
@@ -23,6 +30,7 @@ function BottomTabs() {
           headerTitleStyle: {
             fontSize: 24,
           },
+          tabBarLabel: "Game"
         }}
       />
       <Tab.Screen
@@ -35,9 +43,10 @@ function BottomTabs() {
           headerTitleStyle: {
             fontSize: 24,
           },
+          tabBarLabel: "About"
         }}
       />
-      <Tab.Screen name="Rank" component={RankStack} />
+      <Tab.Screen options={{ tabBarLabel: "Rank" }} name="RankStack" component={RankStack} />
       <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>
   );
