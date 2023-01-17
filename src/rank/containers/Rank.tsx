@@ -1,37 +1,40 @@
-import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import React from 'react';
-import { Colors, Box, Container, Header, Text } from '../../ui-kit';
-import { useDispatch, useSelector } from 'react-redux';
+import { StyleSheet, FlatList } from 'react-native';
+import React, { useEffect } from 'react';
+import { Box, Card, Container, Header, Text } from '../../ui-kit';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { logOut } from '../../user/reducers/UserReducer';
-import { supabase } from '../../utils/initSupBase';
+import { useSupaBase } from '../../core/hooks/useSupaBase';
+import { Rank } from '../../core/types/RankTypes';
 
 type Props = {};
 
 const Profile: React.FC<Props> = ({ }) => {
-  const an = useSelector((state: RootState) => state.user.user?.user_metadata);
-  const dispatch = useDispatch();
+  const { getRank, rank } = useSupaBase();
 
-  const logOutAction = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) return;
-    dispatch(logOut());
+
+  useEffect(() => {
+    if (!rank.length) getRank();
+  }, []);
+
+  const renderItem = ({ item, index }: { item: Rank, index: number; }) => {
+    // card rank item
+    return (
+      <Card variant="rankItem" flex={1}>
+        <Text>{item.points}</Text>
+      </Card>
+    );
+
   };
 
   return (
     <Container>
       <Header title="Profile" leftButton={false} />
-      <Box marginTop="m" paddingHorizontal="m">
-        <Box marginTop="m">
-          <Text variant="profileName">{`Hi, ${an?.full_name}`}</Text>
-        </Box>
-        <Box marginTop="m">
-          <TouchableWithoutFeedback onPress={logOutAction}>
-            <Text variant="logOutText">
-              LogOut
-            </Text>
-          </TouchableWithoutFeedback>
-        </Box>
+      <Box flex={1} marginTop="m" paddingHorizontal="m">
+        <FlatList
+          data={rank}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+        />
       </Box>
     </Container>
   );
