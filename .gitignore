@@ -3,12 +3,6 @@
 .DS_Store
 
 # Xcode
-!**/*.xcodeproj
-!**/*.pbxproj
-!**/*.xcworkspacedata
-!**/*.xcsettings
-!**/*.xcscheme
-project.xcworkspace
 #
 build/
 *.pbxuser
@@ -26,60 +20,25 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+ios/.xcode.env.local
 
 # Android/IntelliJ
 #
 build/
-/build/
-/packages/react-native-gradle-plugin/build/
-/packages/rn-tester/android/app/.cxx/
-/packages/rn-tester/android/app/build/
-/packages/rn-tester/android/app/gradle/
-/packages/rn-tester/android/app/gradlew
-/packages/rn-tester/android/app/gradlew.bat
-/ReactAndroid/build/
-/ReactAndroid/.cxx/
-/ReactAndroid/gradle/
-/ReactAndroid/gradlew
-/ReactAndroid/gradlew.bat
-/android/app/build/
-/android/build/
 .idea
 .gradle
 local.properties
 *.iml
-
-# Android Studio
-.project
-.settings
-.classpath
-
-# Buck
-.buckd
-buck-out
-/.lsp.buckd
-/.lsp-buck-out
-/ReactAndroid/src/main/jni/prebuilt/lib/
-/ReactAndroid/src/main/gen
-
-# Visual Studio Code
-#
-.vscode/
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
 
 # node.js
 #
 node_modules/
 npm-debug.log
 yarn-error.log
-
-# Jest cache
-.jest
-coverage/
-# BUCK
-buck-out/
-\.buckd/
-*.keystore
-!debug.keystore
 
 # fastlane
 #
@@ -88,42 +47,17 @@ buck-out/
 # For more information about the recommended setup visit:
 # https://docs.fastlane.tools/best-practices/source-control/
 
-*/fastlane/report.xml
-*/fastlane/Preview.html
-*/fastlane/screenshots
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
 
 # Bundle artifact
 *.jsbundle
 
-# CocoaPods
+# Ruby / CocoaPods
 /ios/Pods/
-/ios/Pods/
-/ios/Podfile.lock
-/packages/rn-tester/Gemfile.lock
+/vendor/bundle/
 
-# generated files by bob builder
-./lib/
-dist
-
-# Development utility mtsl
-.mtslconfig.json
-# Environment variables
-.env
-android/app/google-services.json
-ios/GoogleService-Info.plist
-
-*/*/GoogleService-Info.plist
-*/*/google-services.json
-*/*/.env
-
-# Sonar artifact
-.scannerwork
-
-# Coverage and Tests outputs
-junit.xml
-**/android/key.properties
-
-yarn.lock
-
-
-
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
