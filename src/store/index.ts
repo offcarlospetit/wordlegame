@@ -15,6 +15,7 @@ import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import logger from 'redux-logger';
 import { gameSlice } from "../home";
 import { UserReducer } from "../user";
+import { rankSlice } from "../rank";
 
 const persistConfig = {
     key: 'root',
@@ -25,6 +26,7 @@ const reducers = combineReducers({
     // [productApi.reducerPath]: productApi.reducer,
     [gameSlice.name]: gameSlice.reducer,
     [UserReducer.name]: UserReducer.reducer,
+    [rankSlice.name]: rankSlice.reducer,
 });
 
 const middlewares = getDefaultMiddleware({
