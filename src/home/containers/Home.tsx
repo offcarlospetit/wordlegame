@@ -21,7 +21,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeStackParams } from '../../navigation/HomeStack';
 import { Settings } from '../../utils/Settings';
 import { BannerAd, TestIds, BannerAdSize } from '@react-native-admob/admob';
-import { supabase } from '../../utils/initSupBase';
+import supabase from '../../utils/initSupBase';
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
 const { ZERO, ONE } = ConstValues;
