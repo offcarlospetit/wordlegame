@@ -308,15 +308,18 @@ const theme = createTheme({
             // We can refer to other values in the theme here, and use responsive props
 
         },
+        rankItem: {
+            backgroundColor: 'CeruleanCrayola',
+            paddingTop: 'm',
+            paddingBottom: 'm',
+            paddingLeft: 'm',
+            paddingRight: 'm',
+            borderRadius: 10,
+            width: '100%',
+            marginVertical: 'xs'
+        },
         bigPlainCard: {
-            // height: 350,
-            // backgroundColor: 'pureWhite',
-            // borderRadius: 20,
-            // width: '100%',
-            // padding: {
-            //     phone: 's',
-            //     tablet: 'm',
-            // },
+
         },
         elevated: {
             // height: 143,
