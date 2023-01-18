@@ -33,13 +33,13 @@ export const gameSlice = createSlice({
     reducers: {
         startGame: (state, action: PayloadAction<GameState>) => {
             return {
-                ...initialState,
+                ...action.payload,
             };
         },
         endGame: (state, action: PayloadAction<Game>) => {
+            console.log({ payload: action.payload });
             return {
                 ...action.payload,
-                dateEnd: new Date(),
             };
         },
         updateGame: (state, action: PayloadAction<Game>) => {

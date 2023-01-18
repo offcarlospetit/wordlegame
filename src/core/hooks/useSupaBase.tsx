@@ -16,7 +16,6 @@ export const useSupaBase = () => {
     }, [rank]);
 
     const getRank = async () => {
-        console.log("aers");
         const { data, error } = await supabase
             .from("rank")
             .select("*")

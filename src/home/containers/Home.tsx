@@ -14,12 +14,14 @@ import { HomeStackParams } from '../../navigation/HomeStack';
 import { BannerAd, TestIds, BannerAdSize } from '@react-native-admob/admob';
 import { palette } from '../../ui-kit/theme';
 import useGame from '../hooks/useGame';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 export interface HomeProps extends NativeStackScreenProps<HomeStackParams, 'Home'> { }
 
 
 const Home: React.FC<HomeProps> = ({ navigation }) => {
+  const game = useSelector((state: RootState) => state.game);
   const {
     grid,
     evaluatingRow,
@@ -33,7 +35,6 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     canNavigate,
     getHelp,
     clearGame
-
   } = useGame();
 
   useEffect(() => {
@@ -50,7 +51,8 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     clearGame();
   };
 
-  console.log("dsadasdasd")
+
+  console.log("dsadasdasd", JSON.stringify(game));
 
   return (
     <Container style={{ backgroundColor: Colors.white }}>

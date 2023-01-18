@@ -91,7 +91,6 @@ const Register: React.FC<Props> = ({ }) => {
                     //@ts-ignore
                     type="apple"
                     onPress={() => {
-                        console.log('facebook');
                     }}
                 />
             </Box>

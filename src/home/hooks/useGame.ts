@@ -222,25 +222,69 @@ const useGame = () => {
     //save game status in redux
     useEffect(() => {
         if (!game.dateStart && actualRow > 0) {
-            console.log("aqui la primera vez");
-            // dispatch(startGame({
-            //     wordOfTheDay: wordOfTheDay,
-            //     wordOfTheDayUseDate: '',
-            //     wordOfTheDayLanguage: Settings.language,
-            //     score: totalPoints,
-            //     time: 0,
-            //     grid: grid,
-            //     actualRow: actualRow,
-            //     actualColumn: actualColumn,
-            //     evaluatingRow: evaluatingRow,
-            //     isSolved: isSolved,
-            //     attempts: attempt,
-            //     totalPoints: totalPoints,
-            //     letters: letters,
-            //     qwerty: qwerty,
-            //     dateEnd: undefined,
-            // }));
+            dispatch(startGame({
+                wordOfTheDay: wordOfTheDay,
+                wordOfTheDayUseDate: '',
+                wordOfTheDayLanguage: Settings.language,
+                score: totalPoints,
+                time: 0,
+                grid: grid,
+                actualRow: actualRow,
+                actualColumn: actualColumn,
+                evaluatingRow: evaluatingRow,
+                isSolved: isSolved,
+                attempts: attempt,
+                totalPoints: totalPoints,
+                letters: letters,
+                qwerty: qwerty,
+                dateEnd: undefined,
+            }));
         }
+
+        if (!isSolved && game.dateStart && actualRow > 0) {
+            dispatch(updateGame({
+                wordOfTheDay: wordOfTheDay,
+                wordOfTheDayUseDate: '',
+                wordOfTheDayLanguage: Settings.language,
+                score: totalPoints,
+                time: 0,
+                grid: grid,
+                actualRow: actualRow,
+                actualColumn: actualColumn,
+                evaluatingRow: evaluatingRow,
+                isSolved: isSolved,
+                attempts: attempt,
+                totalPoints: totalPoints,
+                letters: letters,
+                qwerty: qwerty,
+                dateEnd: undefined,
+            }));
+        }
+        if (isSolved) {
+            console.log({ isSolved });
+            console.log("is solved?");
+            dispatch(endGame(
+                {
+                    wordOfTheDay: wordOfTheDay,
+                    wordOfTheDayUseDate: '',
+                    wordOfTheDayLanguage: Settings.language,
+                    score: totalPoints,
+                    time: 0,
+                    grid: grid,
+                    actualRow: actualRow,
+                    actualColumn: actualColumn,
+                    evaluatingRow: evaluatingRow,
+                    isSolved: isSolved,
+                    attempts: attempt,
+                    totalPoints: totalPoints,
+                    letters: letters,
+                    qwerty: qwerty,
+                    dateEnd: new Date(),
+
+                }
+            ));
+        }
+
     }, [
         grid,
         actualRow,
@@ -352,7 +396,12 @@ const useGame = () => {
 
     const getHelp = () => { };
 
-    console.log({ game, actualRow, actualColumn });
+
+    useEffect(() => {
+        console.log("///////",JSON.stringify(game));
+
+    }, [game]);
+
 
     return {
         grid,

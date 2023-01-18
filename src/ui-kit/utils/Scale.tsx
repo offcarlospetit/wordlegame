@@ -18,6 +18,5 @@ export default function Scale(
 }
 
 const { width } = Dimensions.get('window');
-console.log({ width, wid: width / 10 });
 export const SIZE = Scale(55);
 export const SIZE_QWERTY = Scale(width / 10) - 4;

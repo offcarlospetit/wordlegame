@@ -70,7 +70,6 @@ const useLogin = () => {
             return;
         }
         if (!data.session) {
-            console.log({ data });
             return;
         }
         await supabase.auth.setSession({
