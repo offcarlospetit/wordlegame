@@ -6,12 +6,23 @@ export interface GameState extends Game {
 }
 
 const initialState: GameState = {
-    wordOfTheDay: '',
+    wordOfTheDay: undefined,
     wordOfTheDayUseDate: '',
     wordOfTheDayLanguage: 'es',
     retry: 0,
     score: 0,
     time: 0,
+    grid: [],
+    actualRow: 0,
+    actualColumn: 0,
+    evaluatingRow: false,
+    isSolved: false,
+    attempts: 0,
+    totalPoints: 0,
+    letters: [],
+    qwerty: [],
+    dateStart: undefined,
+    dateEnd: undefined,
 };
 
 
@@ -21,10 +32,15 @@ export const gameSlice = createSlice({
     initialState,
     reducers: {
         startGame: (state, action: PayloadAction<GameState>) => {
-            return initialState;
+            return {
+                ...initialState,
+            };
         },
         endGame: (state, action: PayloadAction<Game>) => {
-            return action.payload;
+            return {
+                ...action.payload,
+                dateEnd: new Date(),
+            };
         },
         updateGame: (state, action: PayloadAction<Game>) => {
             return action.payload;

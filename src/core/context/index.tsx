@@ -48,7 +48,6 @@ export function ContextCoreWrapper(props: ProviderProps) {
   supabase
     .channel('*')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'rank' }, payload => {
-      console.log({ payload });
       getRank();
     })
     .subscribe();

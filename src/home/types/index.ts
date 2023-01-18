@@ -27,10 +27,21 @@ export type QwertyType = { letter: string; color: string; textColor: string; };
 export type QwertyTypeArray = Array<Array<QwertyType>>;
 
 export interface Game {
-  wordOfTheDay: string;
-  wordOfTheDayUseDate: string;
-  wordOfTheDayLanguage: Language;
-  retry: number;
-  score: number;
-  time: number;
+  wordOfTheDay?: DailyWord | undefined;
+  wordOfTheDayUseDate?: string;
+  wordOfTheDayLanguage?: Language;
+  retry?: number;
+  score?: number;
+  time?: number;
+  grid?: GridLayoutType;
+  actualRow?: number;
+  actualColumn?: number;
+  evaluatingRow?: boolean;
+  isSolved?: boolean;
+  attempts?: number;
+  totalPoints?: number;
+  letters?: Array<CellStruct>;
+  qwerty?: QwertyTypeArray;
+  dateStart?: Date | undefined;
+  dateEnd?: Date | undefined;
 }

@@ -38,7 +38,7 @@ const middlewares = getDefaultMiddleware({
 });
 
 if (__DEV__) {
-    const createDebugger = require("redux-flipper").default;
+    const createDebugger = require('redux-flipper').default;
     middlewares.push(createDebugger());
 }
 
@@ -51,8 +51,7 @@ export const store = configureStore({
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
             },
-        })
-    // .concat(productApi.middleware, logger)
+        }).concat(logger)
 });
 
 export type RootState = ReturnType<typeof store.getState>;
