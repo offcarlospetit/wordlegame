@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, Button, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Button } from 'react-native';
 import Grid from '../components/Grid';
 import Qwerty from '../components/Qwerty';
 import {
   Container,
   Colors,
-  Scale,
   Header,
   Box,
   Text,
@@ -55,7 +54,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
   return (
     <Container style={{ backgroundColor: Colors.white }}>
       <Header />
-      <Box style={styles.gridContainer}>
+      <Box justifyContent="flex-start" alignItems="center" marginTop="m" paddingHorizontal="m">
         <Grid
           grid={grid}
           evaluatingRow={evaluatingRow}
@@ -88,16 +87,3 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-  gridContainer: {
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginTop: Scale(16),
-    paddingHorizontal: Scale(16),
-  },
-  qwertyContainer: {
-    flex: 1,
-    marginTop: Scale(26),
-  },
-});
