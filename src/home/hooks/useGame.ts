@@ -54,7 +54,6 @@ const useGame = () => {
     const [canNavigate, setCanNavigate] = React.useState(false);
     const [isEvaluated, setIsEvaluated] = React.useState(false);
     const [updateRecords, setUpdateRecords] = React.useState(false);
-    const [massiveData, setMassiveData] = React.useState(false);
 
     useEffect(() => {
         if (!wordOfTheDay) {
