@@ -55,7 +55,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
   return (
     <Container style={{ backgroundColor: Colors.white }}>
       <Header />
-      <View style={styles.gridContainer}>
+      <Box style={styles.gridContainer}>
         <Grid
           grid={grid}
           evaluatingRow={evaluatingRow}
@@ -66,28 +66,23 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
         <Box position="absolute" top={0} marginTop={"xl"}>
           <ActivityIndicator size="large" animating={evaluatingRow} color={palette.Emmerald} />
         </Box>
-      </View>
-      <View style={{ padding: Scale(18) }}>
+      </Box>
+      <Box padding="m">
         <Button title="Help ?" onPress={getHelp} />
         {
           __DEV__ && <Text variant="danger">{`Puntos: ${game.totalPoints}`}</Text>
         }
-
-      </View>
-      <View style={styles.qwertyContainer}>
+      </Box>
+      <Box flex={1} marginTop='xl'>
         <Qwerty
           qwerty={qwerty}
           updateLetter={updateLetter}
           evaluatingRow={evaluatingRow}
         />
-      </View>
-      <View
-        style={{
-          alignItems: 'center',
-        }}>
+      </Box>
+      <Box alignContent='center' paddingHorizontal="xl">
         <BannerAd size={BannerAdSize.BANNER} unitId={TestIds.BANNER} />
-      </View>
-
+      </Box>
     </Container>
   );
 };
