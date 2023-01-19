@@ -80,7 +80,7 @@ export const _QWERTY_EN: QwertyTypeArray = [
 
 
 export const DAILY_WORDS: Array<DailyWord> = [
-    { word: 'RIVER', useDate: '' },
+    { word: 'river', useDate: '' },
     { word: 'night', useDate: '' },
     { word: 'hotel', useDate: '' },
     { word: 'tooth', useDate: '' },
