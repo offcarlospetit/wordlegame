@@ -174,7 +174,7 @@ const useGame = () => {
     const updateDailyWordAnswer = async () => {
         const { data, error } = await supabase
             .from('daily_answer')
-            .insert({ points: totalPoints, user_id: state.user.user?.id });
+            .insert({ day: "", word: state.user.user?.id, user_id: state.user.user?.id });
         if (error) { return; }
         setCanNavigate(true);
     };
