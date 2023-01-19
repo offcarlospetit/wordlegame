@@ -8,6 +8,7 @@ import {
   Scale,
   Header,
   Box,
+  Text,
 } from '../../ui-kit';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeStackParams } from '../../navigation/HomeStack';
@@ -34,7 +35,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     totalPoints,
     canNavigate,
     getHelp,
-    clearGame
+    clearGame,
   } = useGame();
 
   useEffect(() => {
@@ -68,6 +69,10 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
       </View>
       <View style={{ padding: Scale(18) }}>
         <Button title="Help ?" onPress={getHelp} />
+        {
+          __DEV__ && <Text variant="danger">{`Puntos: ${game.totalPoints}`}</Text>
+        }
+
       </View>
       <View style={styles.qwertyContainer}>
         <Qwerty
