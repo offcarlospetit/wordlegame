@@ -11,7 +11,7 @@ import supabase from "../../utils/initSupBase";
 import { Alert } from "react-native";
 import { Exist } from "../../ui-kit/types";
 import { ApiCall } from "../../utils/WordReferenceApi";
-import { endGame, startGame, updateGame } from "../reducer/HomeReducer";
+import { endGame, startGame, updateGame, clearGame as clearStorageGame } from "../reducer/HomeReducer";
 import { useDispatch } from "react-redux";
 const { ZERO, ONE } = ConstValues;
 // create a simple hook to get the game data
@@ -22,25 +22,53 @@ const BONUS_POINTS = 3 * 5;
 const useGame = () => {
     const state = useSelector((state: RootState) => state);
     const { game } = state;
+    const {
+        actualColumn: _actualColumn,
+        actualRow: _actualRow,
+        attempts,
+        evaluatingRow: _evaluatingRow,
+        grid: _grid,
+        isSolved: _isSolved,
+        letters: _letters,
+        qwerty: _qwerty,
+        totalPoints: _totalPoints,
+        wordOfTheDay: _wordOfTheDay,
+        dateStart,
+        dateEnd,
+    } = game;
     const dispatch = useDispatch();
     const { hapticFeedback } = useContext(ContextCore);
-    const [grid, setGrid] = React.useState<GridLayoutType>(gridBuilder(6));
-    const [qwerty, setQuerty] = React.useState([...keyBoard]);
-    const [isSolved, setIsSolved] = React.useState(false);
-    const [letters, setLetters] = React.useState<Array<CellStruct>>([]);
-    const [evaluatingRow, setIsEvaluatingRow] = React.useState(false);
-    const [actualRow, setActualRow] = React.useState(0);
-    const [actualColumn, setActualColum] = React.useState(0);
-    const [wordOfTheDay, setWordOfTheDay] = React.useState<DailyWord>();
+    const [grid, setGrid] = React.useState<GridLayoutType>(_grid ? _grid : gridBuilder(6));
+    const [qwerty, setQuerty] = React.useState(_qwerty ? _qwerty : [...keyBoard]);
+    const [isSolved, setIsSolved] = React.useState(_isSolved ? _isSolved : false);
+    const [letters, setLetters] = React.useState<Array<CellStruct>>(_letters ? _letters : []);
+    const [evaluatingRow, setIsEvaluatingRow] = React.useState(_evaluatingRow ? _evaluatingRow : false);
+    const [actualRow, setActualRow] = React.useState(_actualRow ? _actualRow : 0);
+    const [actualColumn, setActualColum] = React.useState(_actualColumn ? _actualColumn : 0);
+    const [wordOfTheDay, setWordOfTheDay] = React.useState<DailyWord | undefined>();
     const [isFinish, setIsFinish] = React.useState(false);
-    const [attempt, setAttempt] = React.useState(0);
-    const [totalPoints, setTotalPoints] = React.useState(0);
+    const [attempt, setAttempt] = React.useState(attempts ? attempts : 0);
+    const [totalPoints, setTotalPoints] = React.useState(_totalPoints ? _totalPoints : 0);
     const [canNavigate, setCanNavigate] = React.useState(false);
+    const [isEvaluated, setIsEvaluated] = React.useState(false);
 
     useEffect(() => {
         if (!wordOfTheDay) {
             const dw = DAILY_WORDS.find(wd => wd.useDate === '');
             setWordOfTheDay(dw);
+        }
+
+        // in case that the user has played the game another day
+        if (!isEvaluated) {
+            const actualDate = new Date();
+            if (dateStart) {
+                const dateStartGame = new Date(dateStart);
+                if (actualDate.getDate() !== dateStartGame.getDate() || dateEnd !== undefined) {
+                    clearGame();
+                    dispatch(clearStorageGame());
+                    setIsEvaluated(true);
+                }
+            }
         }
     }, []);
 
@@ -94,7 +122,7 @@ const useGame = () => {
 
     const clearGame = () => {
         setGrid(gridBuilder(6));
-        setQuerty(keyBoard);
+        setQuerty([...keyBoard]);
         setIsSolved(false);
         setLetters([]);
         setIsEvaluatingRow(false);
@@ -222,23 +250,26 @@ const useGame = () => {
     //save game status in redux
     useEffect(() => {
         if (!game.dateStart && actualRow > 0) {
-            dispatch(startGame({
-                wordOfTheDay: wordOfTheDay,
-                wordOfTheDayUseDate: '',
-                wordOfTheDayLanguage: Settings.language,
-                score: totalPoints,
-                time: 0,
-                grid: grid,
-                actualRow: actualRow,
-                actualColumn: actualColumn,
-                evaluatingRow: evaluatingRow,
-                isSolved: isSolved,
-                attempts: attempt,
-                totalPoints: totalPoints,
-                letters: letters,
-                qwerty: qwerty,
-                dateEnd: undefined,
-            }));
+            dispatch(
+                startGame({
+                    wordOfTheDay: wordOfTheDay,
+                    wordOfTheDayUseDate: '',
+                    wordOfTheDayLanguage: Settings.language,
+                    score: totalPoints,
+                    time: 0,
+                    grid: grid,
+                    actualRow: actualRow,
+                    actualColumn: actualColumn,
+                    evaluatingRow: evaluatingRow,
+                    isSolved: isSolved,
+                    attempts: attempt,
+                    totalPoints: totalPoints,
+                    letters: letters,
+                    qwerty: qwerty,
+                    dateEnd: undefined,
+                    dateStart: new Date().toUTCString(),
+                })
+            );
         }
 
         if (!isSolved && game.dateStart && actualRow > 0) {
@@ -261,8 +292,6 @@ const useGame = () => {
             }));
         }
         if (isSolved) {
-            console.log({ isSolved });
-            console.log("is solved?");
             dispatch(endGame(
                 {
                     wordOfTheDay: wordOfTheDay,
@@ -279,8 +308,7 @@ const useGame = () => {
                     totalPoints: totalPoints,
                     letters: letters,
                     qwerty: qwerty,
-                    dateEnd: new Date(),
-
+                    dateEnd: new Date().toUTCString(),
                 }
             ));
         }
@@ -395,13 +423,6 @@ const useGame = () => {
     };
 
     const getHelp = () => { };
-
-
-    useEffect(() => {
-        console.log("///////",JSON.stringify(game));
-
-    }, [game]);
-
 
     return {
         grid,

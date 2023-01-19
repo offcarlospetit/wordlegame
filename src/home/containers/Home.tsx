@@ -51,9 +51,6 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     clearGame();
   };
 
-
-  console.log("dsadasdasd", JSON.stringify(game));
-
   return (
     <Container style={{ backgroundColor: Colors.white }}>
       <Header />

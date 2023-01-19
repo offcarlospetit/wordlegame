@@ -42,6 +42,6 @@ export interface Game {
   totalPoints?: number;
   letters?: Array<CellStruct>;
   qwerty?: QwertyTypeArray;
-  dateStart?: Date | undefined;
-  dateEnd?: Date | undefined;
+  dateStart?: string | undefined;
+  dateEnd?: string | undefined;
 }
