@@ -13,6 +13,8 @@ import { Exist } from "../../ui-kit/types";
 import { ApiCall } from "../../utils/WordReferenceApi";
 import { endGame, startGame, updateGame, clearGame as clearStorageGame } from "../reducer/HomeReducer";
 import { useDispatch } from "react-redux";
+import * as luxon from 'luxon';
+const DateTime = luxon.DateTime;
 const { ZERO, ONE } = ConstValues;
 // create a simple hook to get the game data
 const keyBoard = Settings.language == 'es' ? _QWERTY_ES : _QWERTY_EN;
@@ -51,6 +53,8 @@ const useGame = () => {
     const [totalPoints, setTotalPoints] = React.useState(_totalPoints ? _totalPoints : 0);
     const [canNavigate, setCanNavigate] = React.useState(false);
     const [isEvaluated, setIsEvaluated] = React.useState(false);
+    const [updateRecords, setUpdateRecords] = React.useState(false);
+    const [massiveData, setMassiveData] = React.useState(false);
 
     useEffect(() => {
         if (!wordOfTheDay) {
@@ -116,6 +120,7 @@ const useGame = () => {
         if (isFinish) {
             setIsFinish(false);
             setIsEvaluatingRow(false);
+            setUpdateRecords(true);
         }
     }, [qwerty, isFinish]);
 
@@ -133,10 +138,11 @@ const useGame = () => {
         setAttempt(0);
         setTotalPoints(0);
         setCanNavigate(false);
+        dispatch(clearStorageGame());
     };
 
 
-    const updateRecord = async () => {
+    const updateRecord = async (totalPoints: number) => {
         const { data, error } = await supabase
             .from('rank')
             .select('*')
@@ -153,30 +159,29 @@ const useGame = () => {
                 .update({ points: totalPoints + user.points })
                 .eq('user_id', state.user.user?.id)
                 .select();
-            if (error) {
-                console.log("1", error);
-            }
-            setCanNavigate(true);
+            if (error) { return; }
+            updateDailyWordAnswer();
         } else {
             // insert
             const { data, error } = await supabase
                 .from('rank')
                 .insert({ points: totalPoints, user_id: state.user.user?.id });
-            if (error) {
-                console.log("1", error);
-            }
-            setCanNavigate(true);
-            if (error) {
-                console.log("2", error);
-                return;
-            }
-            console.log({ data });
+            if (error) { return; }
+            updateDailyWordAnswer();
         }
+    };
+
+    const updateDailyWordAnswer = async () => {
+        const { data, error } = await supabase
+            .from('daily_answer')
+            .insert({ points: totalPoints, user_id: state.user.user?.id });
+        if (error) { return; }
+        setCanNavigate(true);
     };
 
     useEffect(() => {
         if (isSolved) {
-            updateRecord();
+            updateRecord(totalPoints);
         }
     }, [isSolved]);
 
@@ -247,7 +252,32 @@ const useGame = () => {
         }
     };
 
-    //save game status in redux
+    useEffect(() => {
+        if (updateRecords) {
+            if (!isSolved && game.dateStart && actualRow > 0) {
+                dispatch(
+                    updateGame({
+                        wordOfTheDay: wordOfTheDay,
+                        wordOfTheDayUseDate: '',
+                        wordOfTheDayLanguage: Settings.language,
+                        score: totalPoints,
+                        time: 0,
+                        grid: grid,
+                        actualRow: actualRow,
+                        actualColumn: actualColumn,
+                        evaluatingRow: evaluatingRow,
+                        isSolved: isSolved,
+                        attempts: attempt,
+                        totalPoints: totalPoints,
+                        letters: letters,
+                        qwerty: qwerty,
+                        dateEnd: undefined,
+                    })
+                );
+            }
+        }
+    }, [updateRecords, wordOfTheDay, totalPoints, grid, actualRow, actualColumn, evaluatingRow, isSolved, attempt, letters, qwerty]);
+
     useEffect(() => {
         if (!game.dateStart && actualRow > 0) {
             dispatch(
@@ -270,26 +300,6 @@ const useGame = () => {
                     dateStart: new Date().toUTCString(),
                 })
             );
-        }
-
-        if (!isSolved && game.dateStart && actualRow > 0) {
-            dispatch(updateGame({
-                wordOfTheDay: wordOfTheDay,
-                wordOfTheDayUseDate: '',
-                wordOfTheDayLanguage: Settings.language,
-                score: totalPoints,
-                time: 0,
-                grid: grid,
-                actualRow: actualRow,
-                actualColumn: actualColumn,
-                evaluatingRow: evaluatingRow,
-                isSolved: isSolved,
-                attempts: attempt,
-                totalPoints: totalPoints,
-                letters: letters,
-                qwerty: qwerty,
-                dateEnd: undefined,
-            }));
         }
         if (isSolved) {
             dispatch(endGame(
