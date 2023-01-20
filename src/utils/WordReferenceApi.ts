@@ -17,7 +17,7 @@ export const ApiCall = async (wordPayload: string): Promise<boolean> => {
 
         return false;
     } catch (error) {
-        console.log({ error });
+        console.log({ ApiCallError: error });
         return false;
     }
 }
