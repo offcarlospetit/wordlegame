@@ -2,11 +2,12 @@ import * as React from 'react';
 import ReactNativeHapticFeedback, {
   HapticFeedbackTypes,
 } from 'react-native-haptic-feedback';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import supabase from '../../utils/initSupBase';
-import { setRank } from '../../rank/reducer/RankReducer';
-import { Rank } from '../types/RankTypes';
 import { useSupaBase } from '../hooks/useSupaBase';
+import { useWord } from '../../home/hooks/useWord';
+import { DailyWord } from '../../home/types';
+import { RootState } from '../../store';
 
 export interface HapticOptions {
   enableVibrateFallback: boolean;
@@ -22,13 +23,18 @@ export interface ContextCoreProps {
     hapticType?: HapticFeedbackTypes,
     options?: HapticOptions,
   ) => void;
+  word: DailyWord | undefined;
 }
 
 export const ContextCore = React.createContext({} as ContextCoreProps);
 
 export function ContextCoreWrapper(props: ProviderProps) {
+  const [word, setWord] = React.useState<DailyWord>();
+  const state = useSelector((state: RootState) => state);
   const { children } = props;
   const { getRank } = useSupaBase();
+  const { getWord, canPlayToday } = useWord();
+  const [canPlay, setCanPlay] = React.useState<boolean>(false);
 
   const hapticFeedback = (
     hapticType: HapticFeedbackTypes = 'impactHeavy',
@@ -41,6 +47,23 @@ export function ContextCoreWrapper(props: ProviderProps) {
   };
 
   React.useEffect(() => {
+    let word: DailyWord | undefined;
+    getWord().then((res) => {
+      if (res) {
+        setWord({
+          word: res.word,
+          id: res.id,
+        });
+        word = res;
+      }
+    }).finally(() => {
+      if (!word) return;
+      canPlayToday(word.id, state.user.user?.id).then((resCanPlay) => {
+        setCanPlay(resCanPlay);
+      });
+    });
+
+
 
     return () => {
     };
@@ -56,6 +79,7 @@ export function ContextCoreWrapper(props: ProviderProps) {
     <ContextCore.Provider
       value={{
         hapticFeedback,
+        word
       }}>
       {children}
     </ContextCore.Provider>
