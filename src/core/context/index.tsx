@@ -24,6 +24,7 @@ export interface ContextCoreProps {
     options?: HapticOptions,
   ) => void;
   word: DailyWord | undefined;
+  canPlay: boolean;
 }
 
 export const ContextCore = React.createContext({} as ContextCoreProps);
@@ -51,7 +52,7 @@ export function ContextCoreWrapper(props: ProviderProps) {
     getWord().then((res) => {
       if (res) {
         setWord({
-          word: res.word,
+          word: res.word.toUpperCase(),
           id: res.id,
         });
         word = res;
@@ -59,6 +60,7 @@ export function ContextCoreWrapper(props: ProviderProps) {
     }).finally(() => {
       if (!word) return;
       canPlayToday(word.id, state.user.user?.id).then((resCanPlay) => {
+        console.log({ resCanPlay });
         setCanPlay(resCanPlay);
       });
     });
@@ -68,18 +70,20 @@ export function ContextCoreWrapper(props: ProviderProps) {
     return () => {
     };
   }, []);
+
   supabase
     .channel('*')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'rank' }, payload => {
+      console.log("//////////////////////////////////////////////////////", { payload });
       getRank();
-    })
-    .subscribe();
+    }).subscribe();
 
   return (
     <ContextCore.Provider
       value={{
         hapticFeedback,
-        word
+        word,
+        canPlay,
       }}>
       {children}
     </ContextCore.Provider>
