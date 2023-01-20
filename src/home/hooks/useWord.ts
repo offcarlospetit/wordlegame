@@ -1,6 +1,7 @@
 // hook to get a random word from the API
 import supabase from "../../utils/initSupBase";
 import { DateTime } from "luxon";
+import { DailyWord } from "../types";
 export const useWord = () => {
     // get today day from luxon 
     // get a random word from the API
@@ -12,28 +13,28 @@ export const useWord = () => {
             .select('*')
             .eq('day', today);
         if (error) {
-            console.log(error);
-            return;
+            console.log({ getWordError: error });
+            return undefined;
         }
         if (data) {
-            console.log(data);
-            return;
+            return data[0] as DailyWord;
         }
     };
 
-    const canPlayToday = async () => {
+    const canPlayToday = async (wordId: number | undefined, user_id: string | undefined) => {
+        if (!wordId || !user_id) return false;
         const { data, error } = await supabase
-            .from('daily_answers')
-            .select('*');
-        // .eq('user_id', state.user.user?.id);
+            .from('daily_answer')
+            .select('*')
+            .match({ word: wordId, user_id: user_id });
         if (error) {
-            console.log(error);
-            return;
+            console.log({ canPlayTodayError: error });
+            return false;
         }
         if (data) {
-            console.log(data);
-            return;
+            return data.length > 0 ? false : true;
         }
+        return false;
     };
-    return { getWord };
+    return { getWord, canPlayToday };
 };

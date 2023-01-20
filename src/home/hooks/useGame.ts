@@ -3,7 +3,7 @@ import { ContextCore } from "../../core";
 import { RootState } from "../../store";
 import { CellStruct, DailyWord, GridLayoutType } from "../types";
 import { Settings } from "../../utils/Settings";
-import { DAILY_WORDS, _QWERTY_EN, _QWERTY_ES } from "../utils/Const";
+import { _QWERTY_EN, _QWERTY_ES } from "../utils/Const";
 import { gridBuilder } from "../utils/Builders";
 import { useSelector } from 'react-redux';
 import { COLOR_BY_TYPE, ConstValues, TEXT_COLOR_BY_TYPE } from "../../ui-kit";
@@ -39,7 +39,7 @@ const useGame = () => {
         dateEnd,
     } = game;
     const dispatch = useDispatch();
-    const { hapticFeedback } = useContext(ContextCore);
+    const { hapticFeedback, word } = useContext(ContextCore);
     const [grid, setGrid] = React.useState<GridLayoutType>(_grid ? _grid : gridBuilder(6));
     const [qwerty, setQuerty] = React.useState(_qwerty ? _qwerty : [...keyBoard]);
     const [isSolved, setIsSolved] = React.useState(_isSolved ? _isSolved : false);
@@ -56,9 +56,8 @@ const useGame = () => {
     const [updateRecords, setUpdateRecords] = React.useState(false);
 
     useEffect(() => {
-        if (!wordOfTheDay) {
-            const dw = DAILY_WORDS.find(wd => wd.useDate === '');
-            setWordOfTheDay(dw);
+        if (!wordOfTheDay && word) {
+            setWordOfTheDay(word);
         }
 
         // in case that the user has played the game another day
@@ -447,6 +446,7 @@ const useGame = () => {
         clearGame,
         canNavigate,
         getHelp,
+        wordOfTheDay
     };
 };
 
