@@ -39,7 +39,6 @@ const Login: React.FC<Props> = ({ }) => {
       <Box alignItems="center">
         <SocialButton onPress={signInWithGoogle} type="google" title="Sign In with Google" />
         <SocialButton onPress={() => {
-          console.log('facebook');
         }} type="apple" title="Sign In with Apple" />
       </Box>
     </Box >
