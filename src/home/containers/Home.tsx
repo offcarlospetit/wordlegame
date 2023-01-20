@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, Button } from 'react-native';
+import { ActivityIndicator, Button as RNButton } from 'react-native';
 import Grid from '../components/Grid';
 import Qwerty from '../components/Qwerty';
 import {
@@ -8,6 +8,7 @@ import {
   Header,
   Box,
   Text,
+  Button,
 } from '../../ui-kit';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeStackParams } from '../../navigation/HomeStack';
@@ -16,7 +17,10 @@ import { palette } from '../../ui-kit/theme';
 import useGame from '../hooks/useGame';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-
+import { useWord } from '../hooks/useWord';
+import * as luxon from 'luxon';
+import useCountdown from '../hooks/useCountdown';
+const { DateTime } = luxon;
 export interface HomeProps extends NativeStackScreenProps<HomeStackParams, 'Home'> { }
 
 
@@ -35,12 +39,21 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     canNavigate,
     getHelp,
     clearGame,
-    wordOfTheDay
+    wordOfTheDay,
+    canPlay
   } = useGame();
+  // create a date for tomorrow at 3pm local time with luxon 
+  const tomorrow = DateTime.local().plus({ days: 1 }).set({ hour: 15, minute: 0, second: 0 });
+  const [days, hours, minutes, seconds] = useCountdown(tomorrow);
 
+  const [dateState, setDateState] = React.useState(new Date());
+  useEffect(() => {
+    setInterval(() => setDateState(new Date()), 30000);
+  }, []);
   useEffect(() => {
     if (canNavigate) {
       navigateToResult();
+
     }
   }, [isFinish, canNavigate]);
 
@@ -51,6 +64,34 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     });
     clearGame();
   };
+
+  if (!canPlay) {
+    return (
+      <Container>
+        <Box flex={1} justifyContent='center' alignItems='center'>
+          <Box justifyContent='center' alignItems='center'>
+            <Text variant='winTextVariant'>
+              The reaming time to the next game is:
+            </Text>
+          </Box>
+          <Box width="100%" paddingHorizontal="xl" flexDirection="row" justifyContent='space-around'>
+            <Box justifyContent="center" alignItems="center">
+              <Text variant="winTextResultVarian">{hours} h:</Text>
+            </Box>
+            <Box justifyContent="center" alignItems="center">
+              <Text variant="winTextResultVarian">{minutes}m:</Text>
+            </Box>
+            <Box justifyContent="center" alignItems="center">
+              <Text variant="winTextResultVarian">{seconds}s</Text>
+            </Box>
+          </Box>
+        </Box>
+        <Box flex={1} paddingHorizontal="m">
+
+        </Box>
+      </Container >
+    );
+  }
 
   return (
     <Container style={{ backgroundColor: Colors.white }}>
@@ -68,7 +109,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
         </Box>
       </Box>
       <Box padding="m">
-        <Button title="Help ?" onPress={getHelp} />
+        <RNButton title="Help ?" onPress={getHelp} />
         {
           __DEV__ && <Text variant="danger">{`Puntos: ${game.totalPoints}`}</Text>
         }
