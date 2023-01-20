@@ -35,6 +35,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     canNavigate,
     getHelp,
     clearGame,
+    wordOfTheDay
   } = useGame();
 
   useEffect(() => {
@@ -70,6 +71,9 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
         <Button title="Help ?" onPress={getHelp} />
         {
           __DEV__ && <Text variant="danger">{`Puntos: ${game.totalPoints}`}</Text>
+        }
+        {
+          __DEV__ && <Text variant="danger">{`Puntos: ${wordOfTheDay?.word}`}</Text>
         }
       </Box>
       <Box flex={1} marginTop='xl'>
