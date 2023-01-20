@@ -4,7 +4,7 @@ import { Colors, Box, Container, Header, Text } from '../../ui-kit';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { logOut } from '../../user/reducers/UserReducer';
-import { supabase } from '../../utils/initSupBase';
+import supabase from '../../utils/initSupBase';
 
 type Props = {};
 
