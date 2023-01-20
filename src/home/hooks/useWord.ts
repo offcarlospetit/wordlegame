@@ -32,6 +32,7 @@ export const useWord = () => {
             return false;
         }
         if (data) {
+            console.log({ data });
             return data.length > 0 ? false : true;
         }
         return false;

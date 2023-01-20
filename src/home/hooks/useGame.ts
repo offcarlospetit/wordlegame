@@ -34,12 +34,11 @@ const useGame = () => {
         letters: _letters,
         qwerty: _qwerty,
         totalPoints: _totalPoints,
-        wordOfTheDay: _wordOfTheDay,
         dateStart,
         dateEnd,
     } = game;
     const dispatch = useDispatch();
-    const { hapticFeedback, word } = useContext(ContextCore);
+    const { hapticFeedback, word, canPlay } = useContext(ContextCore);
     const [grid, setGrid] = React.useState<GridLayoutType>(_grid ? _grid : gridBuilder(6));
     const [qwerty, setQuerty] = React.useState(_qwerty ? _qwerty : [...keyBoard]);
     const [isSolved, setIsSolved] = React.useState(_isSolved ? _isSolved : false);
@@ -146,7 +145,7 @@ const useGame = () => {
             .select('*')
             .eq('user_id', state.user.user?.id);
         if (error) {
-            console.log(error);
+            console.log({ erroRrank: error });
             return;
         }
 
@@ -157,23 +156,37 @@ const useGame = () => {
                 .update({ points: totalPoints + user.points })
                 .eq('user_id', state.user.user?.id)
                 .select();
-            if (error) { return; }
-            updateDailyWordAnswer();
+            if (error) {
+                console.log({ rankUpdateError: error });
+                return;
+            }
+            if (data)
+                updateDailyWordAnswer();
         } else {
             // insert
             const { data, error } = await supabase
                 .from('rank')
                 .insert({ points: totalPoints, user_id: state.user.user?.id });
-            if (error) { return; }
-            updateDailyWordAnswer();
+            if (error) {
+                console.log({ rankInsertError: error });
+                return;
+            }
+            if (data)
+                updateDailyWordAnswer();
         }
     };
 
     const updateDailyWordAnswer = async () => {
+        const today = DateTime.local().toFormat('dd-MM-yyyy');
         const { data, error } = await supabase
             .from('daily_answer')
-            .insert({ day: "", word: state.user.user?.id, user_id: state.user.user?.id });
-        if (error) { return; }
+            .insert({ day: today, word: wordOfTheDay?.id, user_id: state.user.user?.id })
+            .throwOnError();
+        if (error) {
+            console.log({ daily_answerError: error });
+            return;
+        }
+        console.log({ daily_answer: data });
         setCanNavigate(true);
     };
 
@@ -278,6 +291,7 @@ const useGame = () => {
 
     useEffect(() => {
         if (!game.dateStart && actualRow > 0) {
+            console.log({ wordOfTheDay });
             dispatch(
                 startGame({
                     wordOfTheDay: wordOfTheDay,
@@ -371,6 +385,7 @@ const useGame = () => {
         let charEvaluate: { [key: string]: { index: number; evaluate: Exist; }; };
         let same = false;
         if (word === wordOfTheDay?.word) same = true;
+        console.log({ wordOfTheDay });
         const result: Array<{ letter: string; exist: Exist; }> = [];
         word.split('').map((char: string, index: number) => {
             const struct: { letter: string; exist: Exist; } = { letter: char, exist: 1 };
@@ -396,6 +411,7 @@ const useGame = () => {
             };
             return struct;
         });
+        console.log({ result });
         return { result, same };
     };
 
@@ -446,7 +462,8 @@ const useGame = () => {
         clearGame,
         canNavigate,
         getHelp,
-        wordOfTheDay
+        wordOfTheDay,
+        canPlay
     };
 };
 
