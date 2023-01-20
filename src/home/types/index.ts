@@ -21,7 +21,7 @@ export interface RowResult {
 }
 
 export type GridLayoutType = Array<GridLayout>;
-export type DailyWord = { word: string; useDate?: string; id?: number; };
+export type DailyWord = { word: string; useDate?: string; id?: number; day?: string; language?: Language; };
 
 export type QwertyType = { letter: string; color: string; textColor: string; };
 export type QwertyTypeArray = Array<Array<QwertyType>>;
