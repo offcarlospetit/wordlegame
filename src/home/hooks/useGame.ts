@@ -473,13 +473,11 @@ const useGame = () => {
 
     useEffect(() => {
         if (curRow > 0) {
-            console.log("aersdasddnaksdjasdhaskdhkasjdhjkasd///////////////////////////////");
             checkGameState();
         }
     }, [curRow]);
 
     const checkGameState = () => {
-        console.log("checkIfWon", checkIfWon());
         if (checkIfWon() && gameState !== "won") {
             Alert.alert("Huraaay", "You won!", [
                 { text: "Share", onPress: () => console.log("Share") },
