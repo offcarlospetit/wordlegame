@@ -1,23 +1,25 @@
 import React from 'react';
 import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { Exist } from '../types';
-import { COLOR_BY_TYPE, TextUI, Text, TEXT_COLOR_BY_TYPE } from '../index';
-import Colors from '../constants/Colors';
+import { COLOR_BY_TYPE, TextUI, Text, TEXT_COLOR_BY_TYPE, Colors } from '../index';
 import { SIZE } from '../utils/Scale';
 import Scale from '../utils/Scale';
 import Animated, { BounceIn } from 'react-native-reanimated';
+import { palette } from '../theme';
 
 type Props = {
   rowIsEvaluated: boolean;
   value: string;
   exist: Exist;
   animated?: boolean;
+  actualRow?: boolean;
 };
 
 const GridCell = (props: Props) => {
-  const { rowIsEvaluated, value, exist, animated } = props;
+  const { rowIsEvaluated, value, exist, animated, actualRow } = props;
   const letterGridDynamic = {
     backgroundColor: rowIsEvaluated ? COLOR_BY_TYPE[exist] : 'white',
+    borderColor: actualRow ? palette.CeruleanCrayola : Colors.silver,
   } as ViewStyle;
   const letterGridTextDynamic = {
     color: rowIsEvaluated ? TEXT_COLOR_BY_TYPE[exist] : Colors.black,
@@ -38,7 +40,6 @@ const styles = StyleSheet.create({
   letterGrid: {
     borderWidth: Scale(1),
     justifyContent: 'center',
-    borderColor: Colors.silver,
     width: SIZE,
     height: SIZE,
     marginRight: Scale(3),
