@@ -28,3 +28,4 @@ export { default as Button } from './components/Button/Buttons';
 export { default as Card } from './components/Card/Card';
 export { default as ThemeProviderApp } from './theme/ThemeProvider';
 export { default as TextInput } from './components/TextInput/TextInput';
+export { default as Keyboard } from './components/Keyboard/Keyboard';
