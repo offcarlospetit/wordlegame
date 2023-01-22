@@ -14,6 +14,7 @@ import { ApiCall } from "../../utils/WordReferenceApi";
 import { endGame, startGame, updateGame, clearGame as clearStorageGame } from "../reducer/HomeReducer";
 import { useDispatch } from "react-redux";
 import * as luxon from 'luxon';
+import { palette } from "../../ui-kit/theme";
 const DateTime = luxon.DateTime;
 const { ZERO, ONE } = ConstValues;
 // create a simple hook to get the game data
@@ -53,6 +54,10 @@ const useGame = () => {
     const [canNavigate, setCanNavigate] = React.useState(false);
     const [isEvaluated, setIsEvaluated] = React.useState(false);
     const [updateRecords, setUpdateRecords] = React.useState(false);
+
+    useEffect(() => {
+        setWordOfTheDay(word);
+    }, [word]);
 
     useEffect(() => {
         if (!wordOfTheDay && word) {
@@ -264,76 +269,76 @@ const useGame = () => {
     };
 
     useEffect(() => {
-        if (updateRecords) {
-            if (!isSolved && game.dateStart && actualRow > 0) {
-                dispatch(
-                    updateGame({
-                        wordOfTheDay: wordOfTheDay,
-                        wordOfTheDayUseDate: '',
-                        wordOfTheDayLanguage: Settings.language,
-                        score: totalPoints,
-                        time: 0,
-                        grid: grid,
-                        actualRow: actualRow,
-                        actualColumn: actualColumn,
-                        evaluatingRow: evaluatingRow,
-                        isSolved: isSolved,
-                        attempts: attempt,
-                        totalPoints: totalPoints,
-                        letters: letters,
-                        qwerty: qwerty,
-                        dateEnd: undefined,
-                    })
-                );
-            }
-        }
+        // if (updateRecords) {
+        //     if (!isSolved && game.dateStart && actualRow > 0) {
+        //         dispatch(
+        //             updateGame({
+        //                 wordOfTheDay: wordOfTheDay,
+        //                 wordOfTheDayUseDate: '',
+        //                 wordOfTheDayLanguage: Settings.language,
+        //                 score: totalPoints,
+        //                 time: 0,
+        //                 grid: grid,
+        //                 actualRow: actualRow,
+        //                 actualColumn: actualColumn,
+        //                 evaluatingRow: evaluatingRow,
+        //                 isSolved: isSolved,
+        //                 attempts: attempt,
+        //                 totalPoints: totalPoints,
+        //                 letters: letters,
+        //                 qwerty: qwerty,
+        //                 dateEnd: undefined,
+        //             })
+        //         );
+        //     }
+        // }
     }, [updateRecords, wordOfTheDay, totalPoints, grid, actualRow, actualColumn, evaluatingRow, isSolved, attempt, letters, qwerty]);
 
     useEffect(() => {
-        if (!game.dateStart && actualRow > 0) {
-            console.log({ wordOfTheDay });
-            dispatch(
-                startGame({
-                    wordOfTheDay: wordOfTheDay,
-                    wordOfTheDayUseDate: '',
-                    wordOfTheDayLanguage: Settings.language,
-                    score: totalPoints,
-                    time: 0,
-                    grid: grid,
-                    actualRow: actualRow,
-                    actualColumn: actualColumn,
-                    evaluatingRow: evaluatingRow,
-                    isSolved: isSolved,
-                    attempts: attempt,
-                    totalPoints: totalPoints,
-                    letters: letters,
-                    qwerty: qwerty,
-                    dateEnd: undefined,
-                    dateStart: new Date().toUTCString(),
-                })
-            );
-        }
-        if (isSolved) {
-            dispatch(endGame(
-                {
-                    wordOfTheDay: wordOfTheDay,
-                    wordOfTheDayUseDate: '',
-                    wordOfTheDayLanguage: Settings.language,
-                    score: totalPoints,
-                    time: 0,
-                    grid: grid,
-                    actualRow: actualRow,
-                    actualColumn: actualColumn,
-                    evaluatingRow: evaluatingRow,
-                    isSolved: isSolved,
-                    attempts: attempt,
-                    totalPoints: totalPoints,
-                    letters: letters,
-                    qwerty: qwerty,
-                    dateEnd: new Date().toUTCString(),
-                }
-            ));
-        }
+        // if (!game.dateStart && actualRow > 0) {
+        //     console.log({ wordOfTheDay });
+        //     dispatch(
+        //         startGame({
+        //             wordOfTheDay: wordOfTheDay,
+        //             wordOfTheDayUseDate: '',
+        //             wordOfTheDayLanguage: Settings.language,
+        //             score: totalPoints,
+        //             time: 0,
+        //             grid: grid,
+        //             actualRow: actualRow,
+        //             actualColumn: actualColumn,
+        //             evaluatingRow: evaluatingRow,
+        //             isSolved: isSolved,
+        //             attempts: attempt,
+        //             totalPoints: totalPoints,
+        //             letters: letters,
+        //             qwerty: qwerty,
+        //             dateEnd: undefined,
+        //             dateStart: new Date().toUTCString(),
+        //         })
+        //     );
+        // }
+        // if (isSolved) {
+        //     dispatch(endGame(
+        //         {
+        //             wordOfTheDay: wordOfTheDay,
+        //             wordOfTheDayUseDate: '',
+        //             wordOfTheDayLanguage: Settings.language,
+        //             score: totalPoints,
+        //             time: 0,
+        //             grid: grid,
+        //             actualRow: actualRow,
+        //             actualColumn: actualColumn,
+        //             evaluatingRow: evaluatingRow,
+        //             isSolved: isSolved,
+        //             attempts: attempt,
+        //             totalPoints: totalPoints,
+        //             letters: letters,
+        //             qwerty: qwerty,
+        //             dateEnd: new Date().toUTCString(),
+        //         }
+        //     ));
+        // }
 
     }, [
         grid,
@@ -385,7 +390,6 @@ const useGame = () => {
         let charEvaluate: { [key: string]: { index: number; evaluate: Exist; }; };
         let same = false;
         if (word === wordOfTheDay?.word) same = true;
-        console.log({ wordOfTheDay });
         const result: Array<{ letter: string; exist: Exist; }> = [];
         word.split('').map((char: string, index: number) => {
             const struct: { letter: string; exist: Exist; } = { letter: char, exist: 1 };
@@ -411,7 +415,6 @@ const useGame = () => {
             };
             return struct;
         });
-        console.log({ result });
         return { result, same };
     };
 
@@ -448,22 +451,161 @@ const useGame = () => {
 
     const getHelp = () => { };
 
+
+
+
+
+    /////// New logic 
+    const ENTER = "ENTER";
+    const CLEAR = "CLEAR";
+    const NUMBER_OF_TRIES = 6;
+    const [gameState, setGameState] = React.useState<'playing' | 'won' | 'lost'>("playing");
+    const copyArray = (arr: any) => {
+        return [...arr.map((rows: any) => [...rows])];
+    };
+    const lettersNew = wordOfTheDay ? wordOfTheDay.word.split("") : []; // ['h', 'e', 'l', 'l', 'o']
+    const [rows, setRows] = React.useState(
+        new Array(NUMBER_OF_TRIES).fill(new Array(5).fill(""))
+    );
+    const [curRow, setCurRow] = React.useState(0);
+    const [curCol, setCurCol] = React.useState(0);
+    const [evaluating, setEvaluating] = React.useState(false);
+
+    useEffect(() => {
+        if (curRow > 0) {
+            console.log("aersdasddnaksdjasdhaskdhkasjdhjkasd///////////////////////////////");
+            checkGameState();
+        }
+    }, [curRow]);
+
+    const checkGameState = () => {
+        console.log("checkIfWon", checkIfWon());
+        if (checkIfWon() && gameState !== "won") {
+            Alert.alert("Huraaay", "You won!", [
+                { text: "Share", onPress: () => console.log("Share") },
+            ]);
+            setGameState("won");
+            updateRecord(150);
+        } else if (checkIfLost() && gameState !== "lost") {
+            Alert.alert("Meh", "Try again tomorrow!");
+            setGameState("lost");
+            updateRecord(0);
+        }
+        setEvaluating(false);
+    };
+
+    const checkIfWon = () => {
+        const row = rows[curRow - 1];
+
+        return row.every((letter: string, i: any) => letter.toUpperCase() === lettersNew[i]);
+    };
+
+    const checkIfLost = () => {
+        return !checkIfWon() && curRow === rows.length;
+    };
+
+    const updateLetters = async (key: string) => {
+        if (gameState !== "playing") {
+            return;
+        }
+
+        const updatedRows = copyArray(rows);
+
+        if (key === CLEAR) {
+            const prevCol = curCol - 1;
+            if (prevCol >= 0) {
+                updatedRows[curRow][prevCol] = "";
+                setRows(updatedRows);
+                setCurCol(prevCol);
+            }
+            return;
+        }
+
+        if (key === ENTER) {
+            if (curCol === rows[0].length) {
+                const row = rows[curRow];
+                const word = row.join("");
+                setEvaluating(true);
+                const validWord = await makeApiCall(word);
+                if (!validWord) {
+                    console.log("aersdasddnaksdjasdhaskdhkasjdhjkasd");
+                    hapticFeedback('notificationError');
+                    Alert.alert('Palabra no valida');
+                    setEvaluating(false);
+                    return;
+                }
+                setCurRow(curRow + 1);
+                setCurCol(0);
+            }
+
+            return;
+        }
+
+        if (curCol < rows[0].length) {
+            updatedRows[curRow][curCol] = key;
+            setRows(updatedRows);
+            setCurCol(curCol + 1);
+        }
+    };
+
+
+    const isCellActive = (row: number, col: number) => {
+        return row === curRow && col === curCol;
+    };
+
+    const getCellBGColor = (row: number, col: number) => {
+        const letter = (rows[row][col] as string).toUpperCase();
+
+        if (row >= curRow) {
+            return palette.black;
+        }
+        if (letter === lettersNew[col]) {
+            return palette.primary;
+        }
+        if (lettersNew.includes(letter)) {
+            return palette.secondary;
+        }
+        return palette.darkgrey;
+    };
+
+    const getAllLettersWithColor = (color: string) => {
+        return rows.flatMap((row, i) =>
+            row.filter((cell: string, j: number) => getCellBGColor(i, j) === color)
+        );
+    };
+
+    const greenCaps = getAllLettersWithColor(palette.primary);
+    const yellowCaps = getAllLettersWithColor(palette.secondary);
+    const greyCaps = getAllLettersWithColor(palette.darkgrey);
+
+    ////
+
     return {
-        grid,
-        updateLetter,
+        // grid,
+        // updateLetter,
+        // isSolved,
+        // attempt,
+        // isFinish,
+        // actualRow,
+        // actualColumn,
+        // qwerty,
+        // evaluatingRow,
+        gameState,
+        evaluating,
         totalPoints,
-        isSolved,
-        attempt,
-        evaluatingRow,
-        isFinish,
-        actualRow,
-        actualColumn,
-        qwerty,
-        clearGame,
         canNavigate,
+        clearGame,
         getHelp,
         wordOfTheDay,
-        canPlay
+        canPlay,
+        //
+        rows,
+        isCellActive,
+        getCellBGColor,
+        greenCaps,
+        yellowCaps,
+        greyCaps,
+        updateLetters
     };
 };
 
