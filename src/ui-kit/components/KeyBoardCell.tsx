@@ -51,8 +51,8 @@ const KeyBoardCell = memo((props: Props) => {
     <TouchableOpacity
       key={letter}
       onPress={() => {
-        hapticFeedback();
         updateLetter(letter);
+        hapticFeedback();
       }}>
       {color !== Colors.white ? (
         <Animated.View
