@@ -26,6 +26,7 @@ const Grid = memo(function GridMemo(props: PropsGrid) {
                   rowIsEvaluated={rowIsEvaluated}
                   key={ind + Math.random() + ''}
                   animated={actualRow === index && isFinish}
+                  actualRow={actualColumn === ind && actualRow === index}
                 />
               );
             })}
