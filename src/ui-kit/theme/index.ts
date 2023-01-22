@@ -30,6 +30,12 @@ export const palette = {
     VividTangerine: '#F79D84',
 
 
+    blackVariant: "#121214",
+    darkgrey: "#3A3A3D",
+    grey: "#818384",
+    lightgrey: "#D7DADC",
+    primary: "#538D4E",
+    secondary: "#B59F3B",
 };
 
 const elevatedStyle = {
@@ -135,6 +141,7 @@ const theme = createTheme({
         m: 16,
         l: 20,
         xl: 24,
+        auto: 'auto',
     },
     breakpoints: {
         phone: 0,
@@ -295,6 +302,16 @@ const theme = createTheme({
             fontSize: 24,
             lineHeight: 32,
             color: 'MaximunYellowRoad',
+        },
+        textKeyCell: {
+            color: "lightgrey",
+            fontWeight: 'bold',
+        },
+        cellText: {
+            color: "lightgrey",
+            fontWeight: "bold",
+            fontSize: 28,
+            lineHeight: 28,
         }
     },
     buttonVariants: {
