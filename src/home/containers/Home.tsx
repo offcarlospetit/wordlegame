@@ -21,7 +21,7 @@ import { RootState } from '../../store';
 import { useWord } from '../hooks/useWord';
 import * as luxon from 'luxon';
 import useCountdown from '../hooks/useCountdown';
-import Animated, { Easing, FadeInUp, withTiming, withRepeat, useAnimatedStyle, useSharedValue, withSequence } from 'react-native-reanimated';
+import Animated, { Easing, FadeInUp, withTiming, withRepeat, useAnimatedStyle, useSharedValue, withSequence, Layout } from 'react-native-reanimated';
 import Board from '../components/Board';
 import { View } from 'react-native';
 const { DateTime } = luxon;
@@ -35,6 +35,10 @@ export const CLEAR = "CLEAR";
 const copyArray = (arr: any) => {
   return [...arr.map((rows: any) => [...rows])];
 };
+
+import { useInterval } from 'usehooks-ts';
+
+
 const Home: React.FC<HomeProps> = ({ navigation }) => {
   const game = useSelector((state: RootState) => state.game);
   const {
@@ -52,19 +56,19 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     yellowCaps,
     greyCaps,
     gameState,
-    updateLetters
+    updateLetters,
+    curRow
   } = useGame();
   // create a date for tomorrow at 3pm local time with luxon 
-  const tomorrow = DateTime.local().plus({ days: 1 }).set({ hour: 15, minute: 0, second: 0 });
-  // const [days, hours, minutes, seconds] = useCountdown(tomorrow);
-
-  // useEffect(() => {
-  //   animated();
-  // }, [minutes]);
-
+  const tomorrow = DateTime.utc().plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 });
+  const { values, stopInterval } = useCountdown(tomorrow, true);
+  const [days, hours, minutes, seconds] = values;
 
   useEffect(() => {
-    console.log(gameState);
+    // animated();
+  }, [minutes]);
+
+  useEffect(() => {
     if (gameState === "won") {
       navigateToResult();
     }
@@ -73,39 +77,49 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
   const navigateToResult = () => {
     navigation.navigate('Result', {
       points: totalPoints,
-      isSolved: true,
+      isSolved: gameState === "won" ? true : false,
     });
     clearGame();
   };
 
-  // const rotation = useSharedValue(1);
+  // stopInterval();
 
-  // const style = useAnimatedStyle(() => {
-  //   return {
-  //     transform: [{ rotateZ: `${rotation.value}deg` }],
-  //   };
-  // });
+  const rotation = useSharedValue(1);
 
-  // const animated = () => {
-  //   rotation.value = withSequence(
-  //     // deviate left to start from -ANGLE
-  //     withTiming(-ANGLE, { duration: TIME / 2, easing: EASING }),
-  //     // wobble between -ANGLE and ANGLE 7 times
-  //     withRepeat(
-  //       withTiming(ANGLE, {
-  //         duration: TIME,
-  //         easing: EASING,
-  //       }),
-  //       7,
-  //       true
-  //     ),
-  //     // go back to 0 at the end
-  //     withTiming(0, { duration: TIME / 2, easing: EASING })
-  //   );
-  // };
+  const style = useAnimatedStyle(() => {
+    return {
+      transform: [{ rotateZ: `${rotation.value}deg` }],
+    };
+  });
+
+  const animated = () => {
+    rotation.value = withSequence(
+      // deviate left to start from -ANGLE
+      withTiming(-ANGLE, { duration: TIME / 2, easing: EASING }),
+      // wobble between -ANGLE and ANGLE 7 times
+      withRepeat(
+        withTiming(ANGLE, {
+          duration: TIME,
+          easing: EASING,
+        }),
+        7,
+        true
+      ),
+      // go back to 0 at the end
+      withTiming(0, { duration: TIME / 2, easing: EASING })
+    );
+  };
+
+  const blockGame = () => {
+    if (DateTime.utc() >= DateTime.utc().set({ hour: 20, minute: 0, second: 0 }) && DateTime.utc() <= DateTime.utc().set({ hour: 0, minute: 0, second: 0 })) {
+      return false;
+    }
+    return true;
+  };
 
 
-  // if (canPlay) {
+
+  // if (blockGame()) {
   //   return (
   //     <Container>
   //       <Header />
@@ -128,16 +142,11 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
   //         </Box>
   //       </Box>
   //       <Box flex={1} paddingHorizontal="m">
-  //         <Animated.View style={[styles.box, style]} />
-  //       </Box>
-  //       <Box flex={1} paddingHorizontal="m">
   //         {/* <BannerAd size={BannerAdSize.BANNER} unitId={TestIds.BANNER} />`` */}
   //       </Box>
   //     </Container >
   //   );
   // }
-
-
 
   return (
     <Container style={{ backgroundColor: palette.white }}>
@@ -146,29 +155,41 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
         <Box alignSelf="stretch" marginBottom="xl">
           {rows.map((row, i) => (
             <Box alignSelf="stretch" flexDirection="row" justifyContent="center" key={`row-${i}`}>
-              {row.map((letter: any, j: any) => (
-                <Box
-                  key={`cell-${i}-${j}`}
-                  borderWidth={3}
-                  borderColor={"darkgrey"}
-                  flex={1}
-                  maxWidth={60}
-                  aspectRatio={1}
-                  margin={"xs"}
-                  justifyContent="center"
-                  alignItems="center"
-                  style={[
-                    {
-                      borderColor: isCellActive(i, j)
-                        ? palette.grey
-                        : palette.darkgrey,
-                      backgroundColor: getCellBGColor(i, j),
-                    },
-                  ]}
-                >
-                  <Text variant="cellText">{letter.toUpperCase()}</Text>
-                </Box>
-              ))}
+              {row.map((letter: any, j: any) => {
+                return (
+                  <Animated.View
+                    // entering={FadeInUp.delay(100 * j).springify()}
+                    // layout={FadeInUp.delay(100 * j).springify()}
+                    // entering={evaluating && i === curRow - 1 ? FadeInUp.delay(100 * j).springify() : undefined}
+                    key={`cell-${i}-${j}`}
+                    // borderWidth={3}
+                    // borderColor={"darkgrey"}
+                    // flex={1}
+                    // maxWidth={60}
+                    // aspectRatio={1}
+                    // margin={"xs"}
+                    // justifyContent="center"
+                    // alignItems="center"=
+                    style={[
+                      {
+                        borderWidth: 3,
+                        flex: 1,
+                        maxWidth: 60,
+                        aspectRatio: 1,
+                        margin: 4,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderColor: isCellActive(i, j)
+                          ? palette.grey
+                          : palette.darkgrey,
+                        backgroundColor: getCellBGColor(i, j),
+                      },
+                    ]}
+                  >
+                    <Text variant="cellText">{letter.toUpperCase()}</Text>
+                  </Animated.View>
+                );
+              })}
             </Box>
           ))}
         </Box>
