@@ -25,6 +25,7 @@ export interface ContextCoreProps {
   ) => void;
   word: DailyWord | undefined;
   canPlay: boolean;
+  getWordAsync: () => void;
 }
 
 export const ContextCore = React.createContext({} as ContextCoreProps);
@@ -47,7 +48,7 @@ export function ContextCoreWrapper(props: ProviderProps) {
     ReactNativeHapticFeedback.trigger(hapticType, options);
   };
 
-  React.useEffect(() => {
+  const getWordAsync = async () => {
     let word: DailyWord | undefined;
     getWord().then((res) => {
       if (res) {
@@ -60,13 +61,13 @@ export function ContextCoreWrapper(props: ProviderProps) {
     }).finally(() => {
       if (!word) return;
       canPlayToday(word.id, state.user.user?.id).then((resCanPlay) => {
-        console.log({ resCanPlay });
         setCanPlay(resCanPlay);
       });
     });
+  };
 
-
-
+  React.useEffect(() => {
+    getWordAsync();
     return () => {
     };
   }, []);
@@ -84,6 +85,7 @@ export function ContextCoreWrapper(props: ProviderProps) {
         hapticFeedback,
         word,
         canPlay,
+        getWordAsync,
       }}>
       {children}
     </ContextCore.Provider>
