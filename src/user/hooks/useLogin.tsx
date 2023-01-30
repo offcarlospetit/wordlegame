@@ -13,6 +13,7 @@ const useLogin = () => {
     const [error, setError] = useState('');
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
+    const [avatar, setAvatar] = useState('');
     const dispatch = useDispatch();
 
     async function signInWithGoogle() {
@@ -55,7 +56,8 @@ const useLogin = () => {
             email, password, options: {
                 data: {
                     full_name: name,
-                    username
+                    username,
+                    avatar_url: 'https://i.pravatar.cc/150?img=3',
                 }
             }
         });
@@ -110,6 +112,11 @@ const useLogin = () => {
         setUsername(text);
     };
 
+    const handleAvatar = (text: string) => {
+        setAvatar(text);
+    };
+
+
     return {
         signInWithGoogle,
         handleLogin,
@@ -117,6 +124,7 @@ const useLogin = () => {
         handleName,
         handleUsername,
         handleEmail,
+        handleAvatar,
         email,
         password,
         loading,
