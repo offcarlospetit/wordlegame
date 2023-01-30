@@ -3,6 +3,12 @@ import { Exist } from "../types";
 
 export const wallpaper = require('../../assets/wallpaper.png');
 
+export const Avatars = [
+    require('../../assets/wallpaper.png'),
+    require('../../assets/wallpaper.png'),
+    require('../../assets/wallpaper.png'),
+];
+
 export const COLOR_BY_TYPE: Record<Exist, string> = {
     0: palette.FireOpal,
     1: palette.Emmerald,
