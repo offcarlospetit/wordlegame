@@ -1,8 +1,9 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Box, Button, Text, TextInput } from '../../ui-kit';
+import React, { useEffect } from 'react';
+import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Avatar, Box, Button, Card, Text, TextInput } from '../../ui-kit';
 import { SocialIcon } from '@rneui/themed';
 import useLogin from '../hooks/useLogin';
+import { Avatars } from '../../ui-kit/utils/Utils';
 
 type Props = {};
 const Register: React.FC<Props> = ({ }) => {
@@ -17,7 +18,7 @@ const Register: React.FC<Props> = ({ }) => {
         handleUsername,
         name,
         username,
-        error
+        error,
     } = useLogin();
 
     return (
@@ -59,12 +60,25 @@ const Register: React.FC<Props> = ({ }) => {
                     autoCapitalize={'none'}
                 />
             </Box>
+            <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch">
+                {/* <FlatList horizontal data={Avatars} renderItem={({ item, index }) => {
+
+                    return (
+                        <Box marginHorizontal="m">
+                            <Card variant="roundedAvatar" >
+                                <Image source={item} style={{ width: 50, height: 50 }} />
+                            </Card>
+                        </Box>
+                    );
+                }} /> */}
+            </Box>
             <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
                 {error ? <Text variant="danger">{error}</Text> : null}
             </Box>
             <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
                 <Button variant="success" label="Sign Up" onPress={() => handleLogin('SIGNUP', email, password)} />
             </Box>
+
             <Text variant="detailTitle" style={{ textAlign: 'center', marginTop: 20 }}>
                 or
             </Text>
