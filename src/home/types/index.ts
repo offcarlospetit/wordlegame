@@ -1,4 +1,4 @@
-import { Exist } from "../../ui-kit/types";
+import { Exist } from '../../ui-kit/types';
 
 export interface CellStruct {
   x: number;
@@ -26,6 +26,10 @@ export type DailyWord = { word: string; useDate?: string; id?: number; day?: str
 export type QwertyType = { letter: string; color: string; textColor: string; };
 export type QwertyTypeArray = Array<Array<QwertyType>>;
 
+export type GameType = 'playing' | 'won' | 'lost' | 'not-started';
+export type ManageStateType = 'end' | 'update' | 'start' | '';
+export type GameBoard = string[][];
+
 export interface Game {
   wordOfTheDay?: DailyWord | undefined;
   wordOfTheDayUseDate?: string;
@@ -44,4 +48,10 @@ export interface Game {
   qwerty?: QwertyTypeArray;
   dateStart?: string | undefined;
   dateEnd?: string | undefined;
+
+  rows?: GameBoard;
+  gameState?: GameType;
+  curRow?: number;
+  curCol?: number;
+  manageState?: ManageStateType;
 }
