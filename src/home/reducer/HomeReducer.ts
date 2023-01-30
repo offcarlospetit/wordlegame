@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { Game } from '../../home/types';
 import { gridBuilder } from '../utils/Builders';
 import { Settings } from '../../utils/Settings';
-import { _QWERTY_EN, _QWERTY_ES } from "../utils/Const";
+import { NUMBER_OF_TRIES, _QWERTY_EN, _QWERTY_ES } from "../utils/Const";
 const keyBoard = Settings.language == 'es' ? _QWERTY_ES : _QWERTY_EN;
 export interface GameState extends Game {
 }
@@ -26,6 +26,10 @@ const initialState: GameState = {
     qwerty: [...keyBoard],
     dateStart: undefined,
     dateEnd: undefined,
+    rows: new Array(NUMBER_OF_TRIES).fill(new Array(5).fill("")),
+    gameState: 'playing',
+    curRow: 0,
+    curCol: 0
 };
 
 
