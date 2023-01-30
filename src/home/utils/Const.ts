@@ -447,4 +447,8 @@ export const DAILY_WORDS: Array<DailyWord> = [
     { word: 'jaded', useDate: '' },
     { word: 'geese', useDate: '' },
     { word: 'blind', useDate: '' }
-]
+];
+
+export const ENTER = "ENTER";
+export const CLEAR = "CLEAR";
+export const NUMBER_OF_TRIES = 6;
