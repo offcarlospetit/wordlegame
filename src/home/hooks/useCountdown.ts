@@ -1,21 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const useCountdown = (targetDate: luxon.DateTime) => {
+const useCountdown = (targetDate: luxon.DateTime, turnOffInterval: boolean) => {
     const countDownDate = targetDate.toMillis();
+    let intervalRef = useRef<NodeJS.Timeout>();
 
     const [countDown, setCountDown] = useState(
         countDownDate - new Date().getTime()
     );
 
+    let interval: NodeJS.Timeout;
+
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCountDown(countDownDate - new Date().getTime());
-        }, 1000);
+        if (!turnOffInterval)
+            intervalRef.current = setInterval(() => {
+                setCountDown(countDownDate - new Date().getTime());
+            }, 1000);
 
         return () => clearInterval(interval);
     }, [countDownDate]);
 
-    return getReturnValues(countDown);
+    const stopInterval = () => {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+        }
+    };
+
+    return { values: getReturnValues(countDown), stopInterval };
 };
 
 const getReturnValues = (countDown: number) => {
