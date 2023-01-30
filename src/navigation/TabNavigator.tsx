@@ -33,7 +33,7 @@ function BottomTabs() {
           tabBarLabel: "Game"
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="About"
         component={AboutStack}
         options={{
@@ -45,7 +45,7 @@ function BottomTabs() {
           },
           tabBarLabel: "About"
         }}
-      />
+      /> */}
       <Tab.Screen options={{ tabBarLabel: "Rank" }} name="RankStack" component={RankStack} />
       <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>
