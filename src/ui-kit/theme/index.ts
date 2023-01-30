@@ -1,4 +1,4 @@
-import { createTheme } from '@shopify/restyle';
+import { createTheme, shadow } from '@shopify/restyle';
 import { TextInputProps } from 'react-native';
 
 export const palette = {
@@ -326,14 +326,26 @@ const theme = createTheme({
 
         },
         rankItem: {
-            backgroundColor: 'CeruleanCrayola',
-            paddingTop: 'm',
-            paddingBottom: 'm',
-            paddingLeft: 'm',
-            paddingRight: 'm',
+            backgroundColor: 'Emmerald',
+            padding: 's',
             borderRadius: 10,
             width: '100%',
-            marginVertical: 'xs'
+            marginVertical: 's',
+            shadowColor: 'mainBlack',
+            shadowOpacity: 0.5,
+            shadowOffset: { width: 0, height: 5 },
+            shadowRadius: 4,
+            elevation: 5,
+        },
+        roundedAvatar: {
+            backgroundColor: 'white',
+            borderRadius: 45 / 2,
+            width: 45,
+            height: 45,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderColor: 'grayColor',
+            borderWidth: 0.5,
         },
         bigPlainCard: {
 
