@@ -1,10 +1,11 @@
 import { StyleSheet, FlatList } from 'react-native';
 import React, { useEffect } from 'react';
-import { Box, Card, Container, Header, Text } from '../../ui-kit';
+import { Avatar, Box, Card, Container, Header, Text } from '../../ui-kit';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useSupaBase } from '../../core/hooks/useSupaBase';
 import { Rank } from '../../core/types/RankTypes';
+import { Avatars } from '../../ui-kit/utils/Utils';
 
 type Props = {};
 
@@ -15,16 +16,25 @@ const RankScreen: React.FC<Props> = ({ }) => {
     if (!rank.length) getRank();
   }, []);
 
+  const getAvatar = (item: Rank) => {
+    if (item.profiles.avatar_url) {
+      const requireAvatar = Avatars.find((avatar) => {
+        if (avatar.name === item.profiles.avatar_url) return avatar;
+      }
+      );
+      return requireAvatar;
+    }
+    return null;
+  };
+
   const renderItem = ({ item, index }: { item: Rank, index: number; }) => {
+    const avatar = getAvatar(item);
+    console.log({ avatar });
     return (
       <Box flex={1} alignItems="center" paddingHorizontal="m">
         <Card variant="rankItem" flex={1}>
           <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-            <Box>
-              <Card variant="roundedAvatar" flex={1}>
-                <Text variant="cellText">L</Text>
-              </Card>
-            </Box>
+            <Avatar source={avatar?.item} />
             <Box flex={1} paddingLeft="s" justifyContent="center">
               <Text variant="cellText">{item.points}</Text>
             </Box>
