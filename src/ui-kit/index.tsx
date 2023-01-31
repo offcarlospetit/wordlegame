@@ -2,7 +2,6 @@ export { default as KeyBoardCell } from './components/KeyBoardCell';
 export { default as GridCell } from './components/GridCell';
 export { default as TextUI } from './components/Text/TextUI';
 export { default as TabBar } from './components/TabBar/TabBar';
-// export {default as ButtonUI} from './components/Button/Button';
 export { default as Container } from './components/Container/Container';
 export { default as Header } from './components/Header/Header';
 
@@ -30,3 +29,4 @@ export { default as ThemeProviderApp } from './theme/ThemeProvider';
 export { default as TextInput } from './components/TextInput/TextInput';
 export { default as Keyboard } from './components/Keyboard/Keyboard';
 export { default as Avatar } from './components/Avatar/Avatar';
+export { default as Alert } from './components/Alert/Alert';
