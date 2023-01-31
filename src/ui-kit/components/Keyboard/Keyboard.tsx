@@ -1,7 +1,6 @@
-import { Pressable, Dimensions } from "react-native";
+import { Pressable, Dimensions, TouchableOpacity } from "react-native";
 import Box from "../Box/Box";
 import Text from "../Text/Text";
-import Icon from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ConstValues from "../../constants/ConstValues";
 import { palette } from "../../theme";
@@ -75,7 +74,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
       {keys.map((keyRow, i) => (
         <Box alignSelf='stretch' flexDirection="row" justifyContent="center" key={`row-${i}`}>
           {keyRow.map((key) => (
-            <Pressable
+            <TouchableOpacity
               onPress={() => onKeyPressed(key)}
               disabled={greyCaps.includes(key)}
               key={key}
@@ -98,7 +97,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
               ) : (
                 <Text variant="textKeyCell">{key.toUpperCase()}</Text>
               )}
-            </Pressable>
+            </TouchableOpacity>
           ))}
         </Box>
       ))}
