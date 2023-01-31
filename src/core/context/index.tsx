@@ -8,6 +8,7 @@ import { useSupaBase } from '../hooks/useSupaBase';
 import { useWord } from '../../home/hooks/useWord';
 import { DailyWord } from '../../home/types';
 import { RootState } from '../../store';
+import { Alert } from '../../ui-kit';
 
 export interface HapticOptions {
   enableVibrateFallback: boolean;
@@ -26,6 +27,7 @@ export interface ContextCoreProps {
   word: DailyWord | undefined;
   canPlay: boolean;
   getWordAsync: () => void;
+  showAlert: (title: string, body: string, primaryButtonLabel: string, secondaryButtonLabel: string, primaryButtonOnPress: () => void, secondaryButtonOnPress: () => {}) => void;
 }
 
 export const ContextCore = React.createContext({} as ContextCoreProps);
@@ -37,6 +39,15 @@ export function ContextCoreWrapper(props: ProviderProps) {
   const { getRank } = useSupaBase();
   const { getWord, canPlayToday } = useWord();
   const [canPlay, setCanPlay] = React.useState<boolean>(false);
+  const [showAlertModal, setShowAlertModal] = React.useState<boolean>(false);
+  const [title, setTitle] = React.useState<string>('');
+  const [body, setBody] = React.useState<string>('');
+  const [primaryButtonLabel, setPrimaryButtonLabel] = React.useState<string>('');
+  const [secondaryButtonLabel, setSecondaryButtonLabel] = React.useState<string>('');
+  const [primaryButtonOnPress, setPrimaryButtonOnPress] = React.useState<() => void>(() => () => { });
+  const [secondaryButtonOnPress, setSecondaryButtonOnPress] = React.useState<() => void>(() => () => { });
+
+
 
   const hapticFeedback = (
     hapticType: HapticFeedbackTypes = 'impactHeavy',
@@ -78,6 +89,16 @@ export function ContextCoreWrapper(props: ProviderProps) {
       getRank();
     }).subscribe();
 
+  const showAlert = (title: string, body: string, primaryButtonLabel: string, secondaryButtonLabel: string, primaryButtonOnPress: () => void, secondaryButtonOnPress: () => {}) => {
+    setTitle(title);
+    setBody(body);
+    setPrimaryButtonLabel(primaryButtonLabel);
+    setSecondaryButtonLabel(secondaryButtonLabel);
+    setPrimaryButtonOnPress(primaryButtonOnPress);
+    setSecondaryButtonOnPress(secondaryButtonOnPress);
+    setShowAlertModal(true);
+  };
+
   return (
     <ContextCore.Provider
       value={{
@@ -85,8 +106,19 @@ export function ContextCoreWrapper(props: ProviderProps) {
         word,
         canPlay,
         getWordAsync,
+        showAlert
       }}>
       {children}
+      {
+        showAlertModal &&
+        <Alert
+          title={title}
+          body={body}
+          primaryButtonLabel={primaryButtonLabel}
+          primaryButtonOnPress={primaryButtonOnPress}
+          secondaryButtonLabel={secondaryButtonLabel}
+          secondaryButtonOnPress={secondaryButtonOnPress}
+        />}
     </ContextCore.Provider>
   );
 }
