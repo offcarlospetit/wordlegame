@@ -3,7 +3,6 @@ import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Avatar, Box, Button, Card, Text, TextInput } from '../../ui-kit';
 import { SocialIcon } from '@rneui/themed';
 import useLogin from '../hooks/useLogin';
-import { Avatars } from '../../ui-kit/utils/Utils';
 
 type Props = {};
 const Register: React.FC<Props> = ({ }) => {
@@ -12,14 +11,19 @@ const Register: React.FC<Props> = ({ }) => {
         handleLogin,
         handlePassword,
         signInWithGoogle,
-        email,
-        password,
+        handleAvatar,
         handleName,
         handleUsername,
+        email,
+        password,
         name,
         username,
         error,
+        avatars,
+        avatar,
     } = useLogin();
+
+    console.log({ error });
 
     return (
         <Box flex={1} paddingHorizontal="m" justifyContent="center">
@@ -60,25 +64,33 @@ const Register: React.FC<Props> = ({ }) => {
                     autoCapitalize={'none'}
                 />
             </Box>
-            <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch">
-                {/* <FlatList horizontal data={Avatars} renderItem={({ item, index }) => {
-
-                    return (
-                        <Box marginHorizontal="m">
-                            <Card variant="roundedAvatar" >
-                                <Image source={item} style={{ width: 50, height: 50 }} />
-                            </Card>
-                        </Box>
-                    );
-                }} /> */}
+            <Box marginTop="m" paddingBottom="xs" alignSelf="stretch">
+                <Text variant="detailTitle" textAlign="center" marginVertical="xs">
+                    Pick your Avatar
+                </Text>
+                <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    keyExtractor={(item) => item.index.toString()}
+                    extraData={avatars}
+                    data={avatars}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <Box marginHorizontal="xs" flex={1} padding="s">
+                                <Avatar source={item.item} isSelected={item.isSelected} onPress={() => {
+                                    handleAvatar(index);
+                                }} />
+                            </Box>
+                        );
+                    }} />
             </Box>
             <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
                 {error ? <Text variant="danger">{error}</Text> : null}
             </Box>
             <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
-                <Button variant="success" label="Sign Up" onPress={() => handleLogin('SIGNUP', email, password)} />
+                <Button variant="success" label="Sign Up" onPress={() => handleLogin('SIGNUP', email, password, avatar)} />
             </Box>
-
+            {/* 
             <Text variant="detailTitle" style={{ textAlign: 'center', marginTop: 20 }}>
                 or
             </Text>
@@ -107,7 +119,7 @@ const Register: React.FC<Props> = ({ }) => {
                     onPress={() => {
                     }}
                 />
-            </Box>
+            </Box> */}
         </Box>
     );
 };
