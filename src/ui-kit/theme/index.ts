@@ -36,6 +36,7 @@ export const palette = {
     lightgrey: "#D7DADC",
     primary: "#538D4E",
     secondary: "#B59F3B",
+    transparentGray: "rgba(0, 0, 0, 0.5)",
 };
 
 const elevatedStyle = {
@@ -308,11 +309,29 @@ const theme = createTheme({
             fontWeight: 'bold',
         },
         cellText: {
+            color: "black",
+            fontWeight: "bold",
+            fontSize: 28,
+            lineHeight: 28,
+        },
+        cellTextBlocked: {
             color: "lightgrey",
             fontWeight: "bold",
             fontSize: 28,
             lineHeight: 28,
-        }
+        },
+        alertTitle: {
+            fontWeight: "800",
+            fontSize: 14,
+            lineHeight: 19.2,
+            color: 'mainBlackText',
+        },
+        alertBody: {
+            fontWeight: "800",
+            fontSize: 14,
+            lineHeight: 19.2,
+            color: 'mainBlackText',
+        },
     },
     buttonVariants: {
         ...buttonVariants
@@ -326,16 +345,16 @@ const theme = createTheme({
 
         },
         rankItem: {
-            backgroundColor: 'Emmerald',
+            backgroundColor: 'baseBackground',
             padding: 's',
             borderRadius: 10,
             width: '100%',
             marginVertical: 's',
             shadowColor: 'mainBlack',
-            shadowOpacity: 0.5,
-            shadowOffset: { width: 0, height: 5 },
-            shadowRadius: 4,
-            elevation: 5,
+            shadowOpacity: 0.2,
+            shadowOffset: { width: 0, height: 1 },
+            shadowRadius: 2,
+            elevation: 1,
         },
         roundedAvatar: {
             backgroundColor: 'white',
@@ -367,23 +386,18 @@ const theme = createTheme({
             shadowRadius: 4,
             elevation: 5,
         },
+        alertVariant: {
+            backgroundColor: 'white',
+            borderRadius: 10,
+            borderColor: 'grayColor',
+            borderWidth: 0.5,
+            padding: 'xl',
+            height: 200,
+        },
         bigPlainCard: {
 
         },
         elevated: {
-            // height: 143,
-            // backgroundColor: 'mainCardBackground',
-            // borderRadius: 20,
-            // width: '100%',
-            // padding: {
-            //     phone: 's',
-            //     tablet: 'm',
-            // },
-            // shadowColor: 'mainBlack',
-            // shadowOpacity: 0.5,
-            // shadowOffset: { width: 0, height: 5 },
-            // shadowRadius: 4,
-            // elevation: 5,
         },
     },
     textInputVariants: {
