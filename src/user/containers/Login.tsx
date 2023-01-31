@@ -33,14 +33,14 @@ const Login: React.FC<Props> = ({ }) => {
       <Box paddingTop="xs" paddingBottom="xs" alignSelf="stretch" marginTop="l">
         <Button onPress={() => handleLogin('LOGIN', email, password)} variant="loginButton" label="Log In" />
       </Box>
-      <Text textAlign="center" marginTop="l" variant="detailTitle" >
+      {/* <Text textAlign="center" marginTop="l" variant="detailTitle" >
         or
       </Text>
       <Box alignItems="center">
         <SocialButton onPress={signInWithGoogle} type="google" title="Sign In with Google" />
         <SocialButton onPress={() => {
         }} type="apple" title="Sign In with Apple" />
-      </Box>
+      </Box> */}
     </Box >
   );
 };

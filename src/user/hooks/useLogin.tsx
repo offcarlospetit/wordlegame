@@ -116,9 +116,9 @@ const useLogin = () => {
         dispatch(loginSuccess({ ...data }));
     };
 
-    const handleLogin = async (type: string, email: string, password: string, avatar: string) => {
+    const handleLogin = async (type: string, email: string, password: string, avatar?: string) => {
         setLoading(type);
-        if (type === 'SIGNUP') signUp(email, password, avatar);
+        if (type === 'SIGNUP' && avatar) signUp(email, password, avatar);
         else signInWithPassword(email, password);
     };
 
