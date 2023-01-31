@@ -186,7 +186,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
                       },
                     ]}
                   >
-                    <Text variant="cellText">{letter.toUpperCase()}</Text>
+                    <Text variant={i === curRow ? "cellText" : "cellTextBlocked"}>{letter.toUpperCase()}</Text>
                   </Animated.View>
                 );
               })}

@@ -27,15 +27,24 @@ const RankScreen: React.FC<Props> = ({ }) => {
     return null;
   };
 
+  const parseNumberWithDecimal = (number: number) => {
+    return new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 }).format(number);
+  };
+
   const renderItem = ({ item, index }: { item: Rank, index: number; }) => {
     const avatar = getAvatar(item);
     return (
       <Box flex={1} alignItems="center" paddingHorizontal="m">
         <Card variant="rankItem" flex={1}>
-          <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+          <Box flexDirection="row" justifyContent="space-between" >
             <Avatar source={avatar?.item} />
-            <Box flex={1} paddingLeft="s" justifyContent="center">
-              <Text variant="cellText">{item.points}</Text>
+            <Box flex={1} flexDirection="row" paddingLeft="s" justifyContent="center">
+              <Box flex={1} justifyContent="center">
+                <Text variant="itemTitle">{item.profiles.username ?? item.profiles.full_name}</Text>
+              </Box>
+              <Box justifyContent="center">
+                <Text variant="itemTitle">{parseNumberWithDecimal(item.points) + " Pts"}</Text>
+              </Box>
             </Box>
           </Box>
         </Card>
@@ -47,7 +56,7 @@ const RankScreen: React.FC<Props> = ({ }) => {
   return (
     <Container>
       <Header title="Ranking" leftButton={false} />
-      <Box flex={1} marginTop="m"  >
+      <Box flex={1} marginTop="m">
         <FlatList
           data={rank}
           keyExtractor={(item, index) => index.toString()}
