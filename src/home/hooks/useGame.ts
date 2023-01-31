@@ -209,7 +209,7 @@ const useGame = () => {
         const letter = (rows[row][col] as string).toUpperCase();
 
         if (row >= curRow) {
-            return palette.black;
+            return palette.white;
         }
         if (letter === lettersNew[col]) {
             return palette.primary;
