@@ -113,7 +113,6 @@ const useGame = () => {
             console.log({ daily_answerError: error });
             return;
         }
-        console.log({ daily_answer: data });
         setCanNavigate(true);
     };
 
@@ -160,7 +159,6 @@ const useGame = () => {
 
     const updateLetters = async (key: string) => {
         if (gameState !== "playing") {
-            console.log({ key, gameState });
             return;
         }
 

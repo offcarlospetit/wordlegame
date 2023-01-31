@@ -29,7 +29,6 @@ const RankScreen: React.FC<Props> = ({ }) => {
 
   const renderItem = ({ item, index }: { item: Rank, index: number; }) => {
     const avatar = getAvatar(item);
-    console.log({ avatar });
     return (
       <Box flex={1} alignItems="center" paddingHorizontal="m">
         <Card variant="rankItem" flex={1}>

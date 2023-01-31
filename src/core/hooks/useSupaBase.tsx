@@ -24,7 +24,6 @@ export const useSupaBase = () => {
             console.log(error);
         }
         if (!data) return;
-        console.log(JSON.stringify(data));
         dispatch(setRank({ rank: data as Rank[] }));
     };
 

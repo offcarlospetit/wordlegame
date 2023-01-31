@@ -91,7 +91,6 @@ const useLogin = () => {
         }
 
         try {
-            console.log("setSession");
             supabase.auth.setSession({
                 access_token: data.session.access_token,
                 refresh_token: data.session.refresh_token,
@@ -103,7 +102,6 @@ const useLogin = () => {
 
             dispatch(loginSuccess({ ...data }));
 
-            console.log("dispatch");
         } catch (error) {
             console.log("TCERROR", { error });
         }
