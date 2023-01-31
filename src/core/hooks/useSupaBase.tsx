@@ -18,13 +18,13 @@ export const useSupaBase = () => {
     const getRank = async () => {
         const { data, error } = await supabase
             .from("rank")
-            .select("*")
+            .select(`*, profiles(*)`)
             .order("points", { ascending: false });
         if (error) {
             console.log(error);
         }
         if (!data) return;
-
+        console.log(JSON.stringify(data));
         dispatch(setRank({ rank: data as Rank[] }));
     };
 
