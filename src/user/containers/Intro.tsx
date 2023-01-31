@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Button, wallpaper } from '../../ui-kit';
+import { Box, Button } from '../../ui-kit';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UserStackParams } from '../navigation';
-import { Image } from 'react-native';
+import LottieView from "lottie-react-native";
 
 export interface IntroProps extends NativeStackScreenProps<UserStackParams, 'Intro'> { }
 
@@ -20,10 +20,11 @@ const IntroComponent: React.FC<IntroProps> = ({ navigation }) => {
 
     return (
         <Box flex={1} backgroundColor="white">
-            <Box position="absolute" top={0}>
-                <Image style={{ resizeMode: 'cover' }} source={wallpaper} />
-            </Box>
-
+            <LottieView
+                source={require('../../assets/animation_intro.json')}
+                autoPlay
+                loop
+            />
             <Box paddingHorizontal="m" width="100%" position="absolute" bottom={bottom}>
                 <Box marginBottom="m">
                     <Button onPress={login} variant="loginButton" label="Log In" />
