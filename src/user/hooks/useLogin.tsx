@@ -5,6 +5,7 @@ import { UserResponse } from '@supabase/supabase-js';
 import supabase, { SUPABASE_URL } from '../../utils/initSupBase';
 import { loginSuccess } from '../reducers/UserReducer';
 import { useState } from 'react';
+import { Avatars } from '../../ui-kit/utils/Utils';
 
 const useLogin = () => {
     const [email, setEmail] = useState('');
@@ -14,7 +15,17 @@ const useLogin = () => {
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
     const [avatar, setAvatar] = useState('');
+    const [avatars, setAvatars] = useState(Avatars.map((item, index) => {
+        return {
+            index,
+            item: item.item,
+            name: item.name,
+            isSelected: false,
+        };
+    }));
+
     const dispatch = useDispatch();
+
 
     async function signInWithGoogle() {
         const redirectUrl = makeRedirectUri({
@@ -50,17 +61,18 @@ const useLogin = () => {
         }
     }
 
-    const signUp = async (email: string, password: string) => {
+    const signUp = async (email: string, password: string, avatar: string) => {
         setLoading('SIGNUP');
         const { error, data } = await supabase.auth.signUp({
             email, password, options: {
                 data: {
                     full_name: name,
                     username,
-                    avatar_url: 'https://i.pravatar.cc/150?img=3',
+                    avatar_url: avatar,
                 }
             }
         });
+
         if (!error && !data) {
             setError('Check your email for the login link!');
             setLoading('');
@@ -72,13 +84,29 @@ const useLogin = () => {
             return;
         }
         if (!data.session) {
+            console.log('no session', data);
+            setError("1");
+            setLoading('');
             return;
         }
-        await supabase.auth.setSession({
-            access_token: data.session.access_token,
-            refresh_token: data.session.refresh_token,
-        });
-        dispatch(loginSuccess({ ...data }));
+
+        try {
+            console.log("setSession");
+            supabase.auth.setSession({
+                access_token: data.session.access_token,
+                refresh_token: data.session.refresh_token,
+            }).then((res) => {
+                console.log("setSession", res);
+            }).catch((err) => {
+                console.log("setSession", err);
+            });
+
+            dispatch(loginSuccess({ ...data }));
+
+            console.log("dispatch");
+        } catch (error) {
+            console.log("TCERROR", { error });
+        }
     };
 
     const signInWithPassword = async (email: string, password: string) => {
@@ -90,9 +118,9 @@ const useLogin = () => {
         dispatch(loginSuccess({ ...data }));
     };
 
-    const handleLogin = async (type: string, email: string, password: string) => {
+    const handleLogin = async (type: string, email: string, password: string, avatar: string) => {
         setLoading(type);
-        if (type === 'SIGNUP') signUp(email, password);
+        if (type === 'SIGNUP') signUp(email, password, avatar);
         else signInWithPassword(email, password);
     };
 
@@ -112,8 +140,16 @@ const useLogin = () => {
         setUsername(text);
     };
 
-    const handleAvatar = (text: string) => {
-        setAvatar(text);
+    const handleAvatar = (index: number) => {
+        const avatarSelected = avatars[index];
+        const newAvatars = avatars.map((item) => {
+            return {
+                ...item,
+                isSelected: item.index === index,
+            };
+        });
+        setAvatars(newAvatars);
+        setAvatar(avatarSelected.name);
     };
 
 
@@ -131,6 +167,8 @@ const useLogin = () => {
         error,
         name,
         username,
+        avatars,
+        avatar,
     };
 };
 
