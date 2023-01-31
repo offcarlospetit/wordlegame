@@ -332,6 +332,12 @@ const theme = createTheme({
             lineHeight: 19.2,
             color: 'mainBlackText',
         },
+        headerTitle: {
+            fontWeight: "800",
+            fontSize: 24,
+            lineHeight: 32.78,
+            color: 'mainBlackText',
+        }
     },
     buttonVariants: {
         ...buttonVariants
@@ -393,6 +399,11 @@ const theme = createTheme({
             borderWidth: 0.5,
             padding: 'xl',
             height: 200,
+        },
+        headerCard: {
+            position: 'absolute',
+            width: '100%',
+            zIndex: 1,
         },
         bigPlainCard: {
 
