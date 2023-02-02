@@ -98,7 +98,7 @@ export function ContextCoreWrapper(props: ProviderProps) {
     setSecondaryButtonOnPress(secondaryButtonOnPress);
     setShowAlertModal(true);
   };
-
+  
   return (
     <ContextCore.Provider
       value={{

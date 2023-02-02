@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Button as RNButton, StyleSheet } from 'react-native';
 import Grid from '../components/Grid';
 import Qwerty from '../components/Qwerty';
@@ -37,10 +37,12 @@ const copyArray = (arr: any) => {
 };
 
 import { useInterval } from 'usehooks-ts';
+import { ContextCore } from '../../core';
 
 
 const Home: React.FC<HomeProps> = ({ navigation }) => {
   const game = useSelector((state: RootState) => state.game);
+  const { canPlay, getWordAsync } = useContext(ContextCore);
   const {
     evaluating,
     totalPoints,
@@ -48,7 +50,6 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     getHelp,
     clearGame,
     wordOfTheDay,
-    canPlay,
     rows,
     isCellActive,
     getCellBGColor,
@@ -60,7 +61,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     curRow
   } = useGame();
   // create a date for tomorrow at 3pm local time with luxon 
-  const tomorrow = DateTime.utc().plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 });
+  const tomorrow = DateTime.utc().set({ hour: 20, minute: 0, second: 0 });
   const { values, stopInterval } = useCountdown(tomorrow, true);
   const [days, hours, minutes, seconds] = values;
 
@@ -70,6 +71,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (gameState === "won") {
+      getWordAsync();
       navigateToResult();
     }
   }, [gameState, canNavigate]);
@@ -111,42 +113,34 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
   };
 
   const blockGame = () => {
-    if (DateTime.utc() >= DateTime.utc().set({ hour: 20, minute: 0, second: 0 }) && DateTime.utc() <= DateTime.utc().set({ hour: 0, minute: 0, second: 0 })) {
+    if (
+      canPlay &&
+      DateTime.utc() >= DateTime.utc().set({ hour: 15, minute: 0, second: 0 }) &&
+      DateTime.utc() <= DateTime.utc().set({ hour: 23, minute: 59, second: 59 })
+    ) {
       return false;
     }
     return true;
   };
 
+  if (blockGame()) {
+    return (
+      <Container>
+        <Header />
+        <Box flex={1} justifyContent='center' alignItems='center'>
+          <Box justifyContent='center' alignItems='center'>
+            <Text variant='winTextVariant'>
+              Your next DailyWord will be available at 3pm
+            </Text>
+          </Box>
 
-
-  // if (blockGame()) {
-  //   return (
-  //     <Container>
-  //       <Header />
-  //       <Box flex={1} justifyContent='center' alignItems='center'>
-  //         <Box justifyContent='center' alignItems='center'>
-  //           <Text variant='winTextVariant'>
-  //             The reaming time to the next game is:
-  //           </Text>
-  //         </Box>
-  //         <Box width="100%" paddingHorizontal="xl" flexDirection="row" justifyContent='space-around'>
-  //           <Box justifyContent="center" alignItems="center">
-  //             <Text variant="winTextResultVarian">{hours} h:</Text>
-  //           </Box>
-  //           <Box justifyContent="center" alignItems="center">
-  //             <Text variant="winTextResultVarian">{minutes}m:</Text>
-  //           </Box>
-  //           <Box justifyContent="center" alignItems="center">
-  //             <Text variant="winTextResultVarian">{seconds}s</Text>
-  //           </Box>
-  //         </Box>
-  //       </Box>
-  //       <Box flex={1} paddingHorizontal="m">
-  //         {/* <BannerAd size={BannerAdSize.BANNER} unitId={TestIds.BANNER} />`` */}
-  //       </Box>
-  //     </Container >
-  //   );
-  // }
+        </Box>
+        <Box flex={1} justifyContent="flex-end" alignItems="center">
+          <BannerAd size={BannerAdSize.BANNER} unitId={TestIds.BANNER} />
+        </Box>
+      </Container >
+    );
+  }
 
   return (
     <Container style={{ backgroundColor: palette.white }}>
