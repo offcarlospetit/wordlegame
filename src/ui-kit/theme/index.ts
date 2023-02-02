@@ -155,6 +155,12 @@ const theme = createTheme({
             lineHeight: 16,
             color: 'mainBlackText',
         },
+        title: {
+            fontWeight: "800",
+            fontSize: 25,
+            lineHeight: 27.32,
+            color: 'mainBlackText',
+        },
         itemTitle: {
             fontWeight: "800",
             fontSize: 14,
@@ -347,7 +353,6 @@ const theme = createTheme({
 
         },
         regular: {
-            // We can refer to other values in the theme here, and use responsive props
 
         },
         rankItem: {
@@ -421,6 +426,9 @@ const theme = createTheme({
             paddingTop: 'xs',
             paddingBottom: 'xs',
             paddingHorizontal: 'xs',
+            fontSize: 18,
+            fontWeight: '600',
+            lineHeight: 24,
         } as TextInputProps,
     }
 });
