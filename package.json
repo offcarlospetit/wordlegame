@@ -26,6 +26,7 @@
     "expo": "^47.0.0",
     "expo-auth-session": "~3.8.0",
     "expo-constants": "~14.0.2",
+    "expo-localization": "~14.0.0",
     "expo-random": "~13.0.0",
     "i18n-js": "^4.2.2",
     "jsonata": "^2.0.1",
