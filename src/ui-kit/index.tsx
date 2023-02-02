@@ -30,3 +30,4 @@ export { default as TextInput } from './components/TextInput/TextInput';
 export { default as Keyboard } from './components/Keyboard/Keyboard';
 export { default as Avatar } from './components/Avatar/Avatar';
 export { default as Alert } from './components/Alert/Alert';
+export { default as BasicHeader } from './components/BasicHeader/BasicHeader';
