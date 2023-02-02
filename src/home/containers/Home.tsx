@@ -1,42 +1,33 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Button as RNButton, StyleSheet } from 'react-native';
-import Grid from '../components/Grid';
-import Qwerty from '../components/Qwerty';
+import React, { useContext, useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import Animated, { Easing, withTiming, withRepeat, useAnimatedStyle, useSharedValue, withSequence } from 'react-native-reanimated';
+import { BannerAd, TestIds, BannerAdSize } from '@react-native-admob/admob';
+import { useSelector } from 'react-redux';
+import * as luxon from 'luxon';
 import {
   Container,
-  Colors,
   Header,
   Box,
   Text,
-  Button,
   Keyboard,
 } from '../../ui-kit';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { HomeStackParams } from '../../navigation/HomeStack';
-import { BannerAd, TestIds, BannerAdSize } from '@react-native-admob/admob';
 import { palette } from '../../ui-kit/theme';
 import useGame from '../hooks/useGame';
-import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { useWord } from '../hooks/useWord';
-import * as luxon from 'luxon';
 import useCountdown from '../hooks/useCountdown';
-import Animated, { Easing, FadeInUp, withTiming, withRepeat, useAnimatedStyle, useSharedValue, withSequence, Layout } from 'react-native-reanimated';
-import Board from '../components/Board';
-import { View } from 'react-native';
+
+
 const { DateTime } = luxon;
+
+
 export interface HomeProps extends NativeStackScreenProps<HomeStackParams, 'Home'> { }
+
+
 const EASING = Easing.elastic(1.5);
 const ANGLE = 9;
 const TIME = 100;
-const NUMBER_OF_TRIES = 6;
-export const ENTER = "ENTER";
-export const CLEAR = "CLEAR";
-const copyArray = (arr: any) => {
-  return [...arr.map((rows: any) => [...rows])];
-};
-
-import { useInterval } from 'usehooks-ts';
 import { ContextCore } from '../../core';
 
 
@@ -65,9 +56,6 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
   const { values, stopInterval } = useCountdown(tomorrow, true);
   const [days, hours, minutes, seconds] = values;
 
-  useEffect(() => {
-    // animated();
-  }, [minutes]);
 
   useEffect(() => {
     if (gameState === "won") {
@@ -83,8 +71,6 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     });
     clearGame();
   };
-
-  // stopInterval();
 
   const rotation = useSharedValue(1);
 
@@ -155,7 +141,6 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
                     // entering={FadeInUp.delay(100 * j).springify()}
                     // layout={FadeInUp.delay(100 * j).springify()}
                     // entering={evaluating && i === curRow - 1 ? FadeInUp.delay(100 * j).springify() : undefined}
-                    key={`cell-${i}-${j}`}
                     // borderWidth={3}
                     // borderColor={"darkgrey"}
                     // flex={1}
@@ -164,6 +149,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
                     // margin={"xs"}
                     // justifyContent="center"
                     // alignItems="center"=
+                    key={`cell-${i}-${j}`}
                     style={[
                       {
                         borderWidth: 3,
