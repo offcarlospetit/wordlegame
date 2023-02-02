@@ -5,6 +5,7 @@ import ProfileStack from './ProfileStack';
 import { Colors, TabBar } from '../ui-kit';
 import AboutStack from './AboutStack';
 import RankStack from './RankStack';
+import S from '../i18n';
 
 export type BottomTabParamList = {
   Game: undefined;
@@ -30,7 +31,7 @@ function BottomTabs() {
           headerTitleStyle: {
             fontSize: 24,
           },
-          tabBarLabel: "Game"
+          tabBarLabel: S.Home.home
         }}
       />
       {/* <Tab.Screen

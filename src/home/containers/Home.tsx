@@ -29,6 +29,7 @@ const EASING = Easing.elastic(1.5);
 const ANGLE = 9;
 const TIME = 100;
 import { ContextCore } from '../../core';
+import S from '../../i18n';
 
 
 const Home: React.FC<HomeProps> = ({ navigation }) => {
@@ -112,11 +113,11 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
   if (blockGame()) {
     return (
       <Container>
-        <Header />
+        <Header title={S.Home.homeTitle} />
         <Box flex={1} justifyContent='center' alignItems='center'>
           <Box justifyContent='center' alignItems='center'>
             <Text variant='winTextVariant'>
-              Your next DailyWord will be available at 3pm
+              {S.Home.homeBlockGameDescription + "3:00 PM"}
             </Text>
           </Box>
 
