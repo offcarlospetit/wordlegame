@@ -4,10 +4,21 @@ import HomeStrings from "../home/i18n";
 import { english as HomeEnglish } from "../home/i18n/en";
 import { spanish as HomeSpanish } from "../home/i18n/es";
 
+import ProfileStrings from "../profile/i18n";
+import { english as ProfileEnglish } from "../profile/i18n/en";
+import { spanish as ProfileSpanish } from "../profile/i18n/es";
+
+import RankStrings from "../rank/i18n";
+import { english as RankEnglish } from "../rank/i18n/en";
+import { spanish as RankSpanish } from "../rank/i18n/es";
+
+import UserStrings from "../user/i18n";
+import { english as UserEnglish } from "../rank/i18n/en";
+import { spanish as Userpanish } from "../rank/i18n/es";
 
 const translations = {
-    en: { ...HomeEnglish },
-    es: { ...HomeSpanish },
+    en: { ...HomeEnglish, ...ProfileEnglish, ...RankEnglish, ...UserEnglish },
+    es: { ...HomeSpanish, ...ProfileSpanish, ...RankSpanish, ...Userpanish },
 };
 const i18n = new I18n(translations);
 
@@ -33,8 +44,7 @@ const translate = (obj_from: object, obj_to: object) => {
     }, obj_to);
 };
 
-// const S = {} as typeof HomeStrings & typeof CartStrings;
-const S = {} as typeof HomeStrings;
+const S = {} as typeof HomeStrings & typeof ProfileStrings & typeof RankStrings & typeof UserStrings;
 translate(HomeStrings, S);
 
 export default S;
