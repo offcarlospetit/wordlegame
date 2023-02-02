@@ -30,6 +30,7 @@ const ANGLE = 9;
 const TIME = 100;
 import { ContextCore } from '../../core';
 import S from '../../i18n';
+import AnimatedLottieView from 'lottie-react-native';
 
 
 const Home: React.FC<HomeProps> = ({ navigation }) => {
@@ -114,13 +115,18 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     return (
       <Container>
         <Header title={S.Home.homeTitle} />
+
         <Box flex={1} justifyContent='center' alignItems='center'>
           <Box justifyContent='center' alignItems='center'>
             <Text variant='winTextVariant'>
               {S.Home.homeBlockGameDescription + "3:00 PM"}
             </Text>
           </Box>
-
+          {/* <AnimatedLottieView
+            source={require('../../assets/wait1.json')}
+            autoPlay
+            loop
+          /> */}
         </Box>
         <Box flex={1} justifyContent="flex-end" alignItems="center">
           <BannerAd size={BannerAdSize.BANNER} unitId={TestIds.BANNER} />
