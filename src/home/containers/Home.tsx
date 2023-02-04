@@ -101,10 +101,11 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
   };
 
   const blockGame = () => {
+    console.log({ canPlay });
     if (
       canPlay &&
-      DateTime.utc() >= DateTime.utc().set({ hour: 15, minute: 0, second: 0 }) &&
-      DateTime.utc() <= DateTime.utc().set({ hour: 23, minute: 59, second: 59 })
+      DateTime.utc() >= DateTime.local().set({ hour: 15, minute: 0, second: 0 }) &&
+      DateTime.utc() <= DateTime.local().set({ hour: 23, minute: 59, second: 59 })
     ) {
       return false;
     }
