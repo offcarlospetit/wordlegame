@@ -4,10 +4,12 @@ import { makeRedirectUri, startAsync } from 'expo-auth-session';
 import { UserResponse } from '@supabase/supabase-js';
 import supabase, { SUPABASE_URL } from '../../utils/initSupBase';
 import { loginSuccess } from '../reducers/UserReducer';
-import { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Avatars } from '../../ui-kit/utils/Utils';
+import { ContextCore } from '../../core';
 
 const useLogin = () => {
+    const { showAlert } = useContext(ContextCore);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState('');
@@ -138,6 +140,11 @@ const useLogin = () => {
         setUsername(text);
     };
 
+    const handleError = (text: string) => {
+        setError(text);
+    };
+
+
     const handleAvatar = (index: number) => {
         const avatarSelected = avatars[index];
         const newAvatars = avatars.map((item) => {
@@ -150,6 +157,18 @@ const useLogin = () => {
         setAvatar(avatarSelected.name);
     };
 
+    React.useEffect(() => {
+        console.log({ object: error });
+        if (error && error !== '') {
+            showAlert({
+                title: "Error",
+                body: error,
+                primaryButtonLabel: "OK",
+                primaryButtonOnPress: () => handleError(''),
+            });
+        }
+    }, [error]);
+
 
     return {
         signInWithGoogle,
@@ -159,6 +178,7 @@ const useLogin = () => {
         handleUsername,
         handleEmail,
         handleAvatar,
+        handleError,
         email,
         password,
         loading,
