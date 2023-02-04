@@ -5,6 +5,7 @@ import { SocialIcon } from '@rneui/themed';
 import useLogin from '../hooks/useLogin';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UserStackParams } from '../navigation';
+import S from '../../i18n';
 
 export interface RegisterProps extends NativeStackScreenProps<UserStackParams, 'Register'> { }
 
@@ -35,14 +36,14 @@ const Register: React.FC<RegisterProps> = ({ navigation }) => {
             <Box flex={1} paddingHorizontal="m" justifyContent="center">
 
                 <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
-                    <Text variant="title">Sign Up</Text>
+                    <Text variant="title">{S.User.userRegister}</Text>
                 </Box>
                 <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
                     <TextInput
                         variant="regular"
                         onChangeText={handleName}
                         value={name}
-                        placeholder="Your Name"
+                        placeholder={S.User.userName}
                         autoCapitalize={'words'}
                     />
                 </Box>
@@ -51,7 +52,7 @@ const Register: React.FC<RegisterProps> = ({ navigation }) => {
                         variant="regular"
                         onChangeText={handleUsername}
                         value={username}
-                        placeholder="your username"
+                        placeholder={S.User.userFullName}
                         autoCapitalize={'none'}
                     />
                 </Box>
@@ -60,7 +61,7 @@ const Register: React.FC<RegisterProps> = ({ navigation }) => {
                         variant="regular"
                         onChangeText={handleEmail}
                         value={email}
-                        placeholder="email@address.com"
+                        placeholder={S.User.userEmail}
                         autoCapitalize={'none'}
                     />
                 </Box>
@@ -70,13 +71,13 @@ const Register: React.FC<RegisterProps> = ({ navigation }) => {
                         onChangeText={handlePassword}
                         value={password}
                         secureTextEntry={true}
-                        placeholder="Password"
+                        placeholder={S.User.userPasswordPlaceholder}
                         autoCapitalize={'none'}
                     />
                 </Box>
                 <Box marginTop="m" paddingBottom="xs" alignSelf="stretch">
                     <Text variant="detailTitle" textAlign="center" marginVertical="xs">
-                        Pick your Avatar
+                        {S.User.userPickAvatar}
                     </Text>
                     <FlatList
                         horizontal
@@ -98,7 +99,7 @@ const Register: React.FC<RegisterProps> = ({ navigation }) => {
                     {error ? <Text variant="danger">{error}</Text> : null}
                 </Box>
                 <Box marginTop="l" paddingTop="xs" paddingBottom="xs" alignSelf="stretch" >
-                    <Button variant="success" label="Sign Up" onPress={() => handleLogin('SIGNUP', email, password, avatar)} />
+                    <Button variant="success" label={S.User.userRegister} onPress={() => handleLogin('SIGNUP', email, password, avatar)} />
                 </Box>
                 {/* 
             <Text variant="detailTitle" style={{ textAlign: 'center', marginTop: 20 }}>
