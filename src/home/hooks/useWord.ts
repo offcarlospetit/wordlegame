@@ -2,9 +2,11 @@
 import supabase from "../../utils/initSupBase";
 import { DateTime } from "luxon";
 import { DailyWord } from "../types";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 export const useWord = () => {
-    // get today day from luxon 
-    // get a random word from the API
+    const { game } = useSelector((state: RootState) => state);
+    const { wordOfTheDay } = game;
 
     const getWord = async () => {
         const today = DateTime.local().toFormat('dd-MM-yyyy');
@@ -13,7 +15,6 @@ export const useWord = () => {
             .select('*')
             .eq('day', today);
         if (error) {
-            console.log({ getWordError: error });
             return undefined;
         }
         if (data) {
@@ -22,7 +23,8 @@ export const useWord = () => {
     };
 
     const canPlayToday = async (wordId: number | undefined, user_id: string | undefined) => {
-        if (!wordId || !user_id) return false;
+        if (wordOfTheDay?.word) return true;
+        if (!wordId || !user_id || !wordOfTheDay?.word) return false;
         const { data, error } = await supabase
             .from('daily_answer')
             .select('*')
