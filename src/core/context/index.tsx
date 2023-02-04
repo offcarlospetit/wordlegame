@@ -19,6 +19,15 @@ export interface ProviderProps {
   children: React.ReactNode;
 }
 
+export interface ShowAlert {
+  title: string,
+  body: string,
+  primaryButtonLabel: string,
+  secondaryButtonLabel?: string,
+  primaryButtonOnPress: () => void,
+  secondaryButtonOnPress?: () => void,
+}
+
 export interface ContextCoreProps {
   hapticFeedback: (
     hapticType?: HapticFeedbackTypes,
@@ -27,8 +36,10 @@ export interface ContextCoreProps {
   word: DailyWord | undefined;
   canPlay: boolean;
   getWordAsync: () => void;
-  showAlert: (title: string, body: string, primaryButtonLabel: string, secondaryButtonLabel: string, primaryButtonOnPress: () => void, secondaryButtonOnPress: () => {}) => void;
+  showAlert: (params: ShowAlert) => void;
 }
+
+export type SecondaryButton = null | (() => void);
 
 export const ContextCore = React.createContext({} as ContextCoreProps);
 
@@ -45,7 +56,7 @@ export function ContextCoreWrapper(props: ProviderProps) {
   const [primaryButtonLabel, setPrimaryButtonLabel] = React.useState<string>('');
   const [secondaryButtonLabel, setSecondaryButtonLabel] = React.useState<string>('');
   const [primaryButtonOnPress, setPrimaryButtonOnPress] = React.useState<() => void>(() => () => { });
-  const [secondaryButtonOnPress, setSecondaryButtonOnPress] = React.useState<() => void>(() => () => { });
+  const [secondaryButtonOnPress, setSecondaryButtonOnPress] = React.useState<SecondaryButton>(() => () => { });
 
 
 
@@ -92,13 +103,18 @@ export function ContextCoreWrapper(props: ProviderProps) {
       getRank();
     }).subscribe();
 
-  const showAlert = (title: string, body: string, primaryButtonLabel: string, secondaryButtonLabel: string, primaryButtonOnPress: () => void, secondaryButtonOnPress: () => {}) => {
+  const hideAlert = () => {
+    setShowAlertModal(false);
+  };
+
+  const showAlert = (params: ShowAlert) => {
+    const { title, body, primaryButtonLabel, secondaryButtonLabel, primaryButtonOnPress, secondaryButtonOnPress } = params;
     setTitle(title);
     setBody(body);
     setPrimaryButtonLabel(primaryButtonLabel);
-    setSecondaryButtonLabel(secondaryButtonLabel);
+    setSecondaryButtonLabel(secondaryButtonLabel ?? '');
     setPrimaryButtonOnPress(primaryButtonOnPress);
-    setSecondaryButtonOnPress(secondaryButtonOnPress);
+    setSecondaryButtonOnPress(secondaryButtonOnPress ?? null);
     setShowAlertModal(true);
   };
 
@@ -118,7 +134,7 @@ export function ContextCoreWrapper(props: ProviderProps) {
           title={title}
           body={body}
           primaryButtonLabel={primaryButtonLabel}
-          primaryButtonOnPress={primaryButtonOnPress}
+          primaryButtonOnPress={hideAlert}
           secondaryButtonLabel={secondaryButtonLabel}
           secondaryButtonOnPress={secondaryButtonOnPress}
         />}
