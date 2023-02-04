@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UserStackParams } from '../navigation';
 import LottieView from "lottie-react-native";
+import S from '../../i18n';
 
 export interface IntroProps extends NativeStackScreenProps<UserStackParams, 'Intro'> { }
 
@@ -27,10 +28,10 @@ const IntroComponent: React.FC<IntroProps> = ({ navigation }) => {
             />
             <Box paddingHorizontal="m" width="100%" position="absolute" bottom={bottom}>
                 <Box marginBottom="m">
-                    <Button onPress={login} variant="loginButton" label="Log In" />
+                    <Button onPress={login} variant="loginButton" label={S.User.userLogin} />
                 </Box>
                 <Box marginBottom="m">
-                    <Button onPress={register} variant="signUpButton" label="Sign Up" />
+                    <Button onPress={register} variant="signUpButton" label={S.User.userRegister} />
                 </Box>
             </Box>
         </Box >
