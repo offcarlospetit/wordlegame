@@ -13,8 +13,8 @@ import { english as RankEnglish } from "../rank/i18n/en";
 import { spanish as RankSpanish } from "../rank/i18n/es";
 
 import UserStrings from "../user/i18n";
-import { english as UserEnglish } from "../rank/i18n/en";
-import { spanish as Userpanish } from "../rank/i18n/es";
+import { english as UserEnglish } from "../user/i18n/en";
+import { spanish as Userpanish } from "../user/i18n/es";
 
 const translations = {
     en: { ...HomeEnglish, ...ProfileEnglish, ...RankEnglish, ...UserEnglish },
@@ -45,6 +45,7 @@ const translate = (obj_from: object, obj_to: object) => {
 };
 
 const S = {} as typeof HomeStrings & typeof ProfileStrings & typeof RankStrings & typeof UserStrings;
-translate(HomeStrings, S);
+translate({ ...UserStrings, ...HomeStrings, ...ProfileStrings, ...RankStrings }, S);
+
 
 export default S;
