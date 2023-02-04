@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BasicHeader, Box, Button, Container, Text, TextInput } from '../../ui-kit';
 import useLogin from '../hooks/useLogin';
 import SocialButton from '../components/SocialButton';
@@ -7,15 +7,18 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { UserStackParams } from '../navigation';
 import { Keyboard, KeyboardAvoidingView, Pressable } from 'react-native';
 import S from '../../i18n';
+import { ContextCore } from '../../core';
 
 export interface LoginProps extends NativeStackScreenProps<UserStackParams, 'Login'> { }
 
 const Login: React.FC<LoginProps> = ({ navigation }) => {
-  const { handleEmail, handleLogin, handlePassword, signInWithGoogle, email, password, loading } = useLogin();
+
+  const { handleEmail, handleLogin, handlePassword, email, password, loading, error, handleError } = useLogin();
 
   const handleNavigation = () => {
     navigation.navigate('Intro');
   };
+
 
   return (
     <Container>
