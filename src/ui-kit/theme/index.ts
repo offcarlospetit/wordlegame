@@ -343,6 +343,24 @@ const theme = createTheme({
             fontSize: 24,
             lineHeight: 32.78,
             color: 'mainBlackText',
+        },
+        profileEmail: {
+            fontWeight: "400",
+            fontSize: 14,
+            lineHeight: 19.2,
+            color: 'mainBlackText',
+        },
+        profilePoints: {
+            fontWeight: "800",
+            fontSize: 16,
+            lineHeight: 21.86,
+            color: 'mainBlackText',
+        },
+        profilePosition: {
+            fontWeight: "400",
+            fontSize: 14,
+            lineHeight: 19.2,
+            color: 'mainBlackText',
         }
     },
     buttonVariants: {
