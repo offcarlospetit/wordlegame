@@ -22,7 +22,7 @@ export const useSupaBase = () => {
             .select(`*, profiles(*)`)
             .order("points", { ascending: false });
         if (error) {
-            console.log(error);
+            console.log({ getRankError: error });
         }
         if (!data) return;
         dispatch(setRank({ rank: data as Rank[] }));
@@ -34,7 +34,7 @@ export const useSupaBase = () => {
             .select(`*, profiles(*)`)
             .order("points", { ascending: false });
         if (error) {
-            console.log(error);
+            console.log({ getRankByUserError: error });
         }
         if (!data) return;
         data.forEach((item: Rank, index) => {

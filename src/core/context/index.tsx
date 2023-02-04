@@ -69,15 +69,13 @@ export function ContextCoreWrapper(props: ProviderProps) {
         });
         word = res;
       }
-      console.log("??????????", { res });
     }).finally(() => {
       if (!word) return;
-      console.log("??????????", { word });
       canPlayToday(word.id, state.user.user?.id).then((resCanPlay) => {
         setCanPlay(resCanPlay);
       });
     }).catch((err) => {
-      console.log("??????????", { err });
+      console.log("getWordAsync Error", { err });
     }
     );
   };
