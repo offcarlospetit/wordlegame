@@ -13,7 +13,7 @@ type Props = {
 
 const Header: React.FC<Props> = ({
   title = 'Wordle Game',
-  leftButton = true,
+  leftButton = false,
   onLeftButtonPress,
 }) => {
   const {top} = useSafeAreaInsets();
