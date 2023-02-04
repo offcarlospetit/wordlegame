@@ -3,6 +3,7 @@ import Box from '../Box/Box';
 import Card from '../Card/Card';
 import Text from '../Text/Text';
 import Button from '../Button/Buttons';
+import { SecondaryButton } from '../../../core/context';
 
 type Props = {
     title?: string;
@@ -10,10 +11,11 @@ type Props = {
     primaryButtonLabel?: string;
     primaryButtonOnPress?: () => void;
     secondaryButtonLabel?: string;
-    secondaryButtonOnPress?: () => void;
+    secondaryButtonOnPress?: SecondaryButton;
 };
 
 const Alert: React.FC<Props> = ({ body, title, primaryButtonLabel, primaryButtonOnPress, secondaryButtonLabel, secondaryButtonOnPress }) => {
+    console.log({ primaryButtonLabel, primaryButtonOnPress });
     return (
         <Box position="absolute" backgroundColor="transparentGray" top={0} width="100%" height="100%">
             <Box flex={1} paddingHorizontal="m" justifyContent="center" >
@@ -33,7 +35,7 @@ const Alert: React.FC<Props> = ({ body, title, primaryButtonLabel, primaryButton
                     <Box flexDirection="row">
                         {secondaryButtonLabel && secondaryButtonOnPress &&
                             <Box paddingHorizontal="s" flex={1}>
-                                <Button label={secondaryButtonLabel} variant="danger" onPress={secondaryButtonOnPress} />
+                                <Button label={secondaryButtonLabel} variant="danger" onPress={() => secondaryButtonOnPress()} />
                             </Box>
                         }
                         {
