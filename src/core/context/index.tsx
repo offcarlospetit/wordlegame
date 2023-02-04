@@ -69,12 +69,17 @@ export function ContextCoreWrapper(props: ProviderProps) {
         });
         word = res;
       }
+      console.log("??????????", { res });
     }).finally(() => {
       if (!word) return;
+      console.log("??????????", { word });
       canPlayToday(word.id, state.user.user?.id).then((resCanPlay) => {
         setCanPlay(resCanPlay);
       });
-    });
+    }).catch((err) => {
+      console.log("??????????", { err });
+    }
+    );
   };
 
   React.useEffect(() => {
@@ -98,7 +103,7 @@ export function ContextCoreWrapper(props: ProviderProps) {
     setSecondaryButtonOnPress(secondaryButtonOnPress);
     setShowAlertModal(true);
   };
-  
+
   return (
     <ContextCore.Provider
       value={{
