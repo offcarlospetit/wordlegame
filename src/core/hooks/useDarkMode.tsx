@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Appearance } from 'react-native'
+import { Appearance } from 'react-native';
 
 const useDarkMode = () => {
     const mode = Appearance.getColorScheme();
@@ -13,16 +13,15 @@ const useDarkMode = () => {
         const updateMode = (mode: any) => {
             if (mode === 'dark') setDarkMode(true);
             else setDarkMode(false);
-        }
+        };
 
         Appearance.addChangeListener(updateMode);
 
         return () => {
-            Appearance.removeChangeListener(updateMode);
         };
     }, []);
 
     return { darkMode, toggle };
-}
+};
 
 export default useDarkMode;
