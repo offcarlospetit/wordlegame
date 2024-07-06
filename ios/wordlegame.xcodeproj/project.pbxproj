@@ -523,6 +523,8 @@
 				DEVELOPMENT_TEAM = 5V483VY873;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = wordlegame/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Word-le";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -551,6 +553,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5V483VY873;
 				INFOPLIST_FILE = wordlegame/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Word-le";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
